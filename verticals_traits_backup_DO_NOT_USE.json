@@ -1,0 +1,1632 @@
+{
+  "HeadType": {
+    "Common": [
+      {
+        "name": "Roundhead (base)",
+        "description": "Matte black circular head, flat shadow base style",
+        "compatibility_notes": "Fully compatible with all eye and accessory types"
+      },
+      {
+        "name": "Knit Cap Dome",
+        "description": "Rounded head with texture resembling ribbed fabric",
+        "compatibility_notes": "Avoid bulky accessories that would obscure the cap"
+      },
+      {
+        "name": "Graffiti Dome",
+        "description": "Head covered in faint graffiti markings, no eyes",
+        "compatibility_notes": "Skip high-contrast or glowing eyes"
+      },
+      {
+        "name": "Slick Chrome",
+        "description": "Gloss black with a single light reflection edge",
+        "compatibility_notes": "Avoid complex auras or reflectivity clashes"
+      },
+      {
+        "name": "Bandaged",
+        "description": "Wrapped in grungy street-style bandages, subtle tears",
+        "compatibility_notes": "Skip glasses or overlapping facial accessories"
+      },
+      {
+        "name": "Smooth Vinyl",
+        "description": "Shiny, dark vinyl surface with slight texture",
+        "compatibility_notes": "Compatible with all face types"
+      },
+      {
+        "name": "Popped Spray Can",
+        "description": "Head stylized as a can with nozzle top, minor dents",
+        "compatibility_notes": "Limit use of headwear"
+      },
+      {
+        "name": "Cone Cap",
+        "description": "Cone-shaped head like an upside-down traffic cone",
+        "compatibility_notes": "Avoid masks and helmets"
+      },
+      {
+        "name": "Dome with Sticker",
+        "description": "Basic round head with random sticker placement",
+        "compatibility_notes": "Compatible with simple eye designs"
+      },
+      {
+        "name": "Tape-Wrapped",
+        "description": "Wrapped in street tape (e.g., caution or barcode tape)",
+        "compatibility_notes": "Works best with glowing eyes"
+      }
+    ],
+    "Rare": [],
+    "Epic": [],
+    "Legendary": [],
+    "Mythical": []
+  },
+  "EyesFace": {
+    "Common": [
+      {
+        "name": "Blank White",
+        "description": "Solid white ovals, giving off a neutral or robotic stare",
+        "compatibility_notes": "Compatible with all head types, ideal for base characters"
+      },
+      {
+        "name": "Angled Glare",
+        "description": "Slightly narrowed eyes with attitude",
+        "compatibility_notes": "Avoid on heads without visible eye area"
+      },
+      {
+        "name": "Half-Lidded Chill",
+        "description": "Relaxed eyelids, communicates boredom or calmness",
+        "compatibility_notes": "Pairs well with bandaged or vinyl heads"
+      },
+      {
+        "name": "Dot Eyes",
+        "description": "Tiny centered dots, innocent or eerie effect",
+        "compatibility_notes": "Compatible with smooth and rounded heads"
+      },
+      {
+        "name": "One Eye Closed",
+        "description": "Classic wink, adds casual playfulness",
+        "compatibility_notes": "Avoid on heads with symmetry-based designs"
+      },
+      {
+        "name": "Oval Glow (Low)",
+        "description": "Dimly glowing white ovals",
+        "compatibility_notes": "Pairs with darker head textures like Chrome or Vinyl"
+      },
+      {
+        "name": "Sticker Eye",
+        "description": "One eye appears to be a slapped-on sticker",
+        "compatibility_notes": "Great for street-punk characters"
+      },
+      {
+        "name": "Stitched Eyes",
+        "description": "Cross-stitch pattern where eyes should be",
+        "compatibility_notes": "Avoid with highly reflective head types"
+      },
+      {
+        "name": "Ghosted",
+        "description": "Eyes barely visible \u2014 faint outlines only",
+        "compatibility_notes": "For stealth-themed or Phantom heads"
+      },
+      {
+        "name": "Reflective Visor",
+        "description": "Thin horizontal visor with faint eye glint",
+        "compatibility_notes": "Ideal for helmet-style head variants"
+      }
+    ],
+    "Rare": [
+      {
+        "name": "Dual Glint",
+        "description": "Eyes with a subtle twin sparkle, adds alertness and intensity",
+        "compatibility_notes": "Works well with tech or skull head types"
+      },
+      {
+        "name": "Eye Slash",
+        "description": "One glowing eye with a digital slash trail across the face",
+        "compatibility_notes": "Avoid pairing with sticker heads"
+      },
+      {
+        "name": "Mono Lens",
+        "description": "Cyclops-style single glowing lens",
+        "compatibility_notes": "Ideal for mecha or helmet heads"
+      },
+      {
+        "name": "Tag Scribble Eyes",
+        "description": "Eyes drawn like graffiti tags",
+        "compatibility_notes": "Best used with graffiti or bandaged domes"
+      },
+      {
+        "name": "Scanline Eyes",
+        "description": "Eyes rendered as horizontal scanlines",
+        "compatibility_notes": "Avoid on masked or obscured face types"
+      },
+      {
+        "name": "Broken Gaze",
+        "description": "Glitch effect splits one eye into shards",
+        "compatibility_notes": "Pairs with cracked or glitchy heads"
+      },
+      {
+        "name": "Neon Outline",
+        "description": "Eyes outlined in a glowing color (red, green, teal)",
+        "compatibility_notes": "Good with low-contrast head types"
+      },
+      {
+        "name": "Hollow Ring Eyes",
+        "description": "White rings for eyes with dark inner cores",
+        "compatibility_notes": "Adds hollow and alien tone"
+      },
+      {
+        "name": "Streaked Under-Eyes",
+        "description": "Dark streaks painted below both eyes",
+        "compatibility_notes": "Compatible with rebellious or dark-themed heads"
+      },
+      {
+        "name": "Pixel Flicker Eyes",
+        "description": "Pixelated eyes that appear mid-glitch",
+        "compatibility_notes": "Only works with digital or glitch-based heads"
+      }
+    ],
+    "Epic": [
+      {
+        "name": "Inferno Eyes",
+        "description": "Eyes appear to be burning with inner flame",
+        "compatibility_notes": "Ideal for Flame Skull or Ember heads"
+      },
+      {
+        "name": "X-Ray Gaze",
+        "description": "Pale cyan eyes with a glowing x-ray effect around them",
+        "compatibility_notes": "Use only with transparent or mecha domes"
+      },
+      {
+        "name": "Third Eye",
+        "description": "Extra glowing eye in the forehead",
+        "compatibility_notes": "Avoid on very small heads"
+      },
+      {
+        "name": "Barcode Eyes",
+        "description": "Vertical barcode patterns in place of pupils",
+        "compatibility_notes": "Works best on tech-head or sticker-style domes"
+      },
+      {
+        "name": "Starburst Glow",
+        "description": "Bright eyes with star-shaped glow trails",
+        "compatibility_notes": "Pairs with high-contrast heads or regal masks"
+      },
+      {
+        "name": "Cracked Neon Visor",
+        "description": "Broken full-visor eye piece with animated neon cracks",
+        "compatibility_notes": "Only for helmet-type heads"
+      },
+      {
+        "name": "Asymmetric Blink",
+        "description": "One eye squinted, other glowing fully",
+        "compatibility_notes": "Best on angled or tilted characters"
+      },
+      {
+        "name": "Electric Circuit Eyes",
+        "description": "Electric nodes radiate out from glowing eyes",
+        "compatibility_notes": "Pairs with mecha or chrome head variants"
+      },
+      {
+        "name": "Flame Tear Eyes",
+        "description": "Eyes leaking tiny orange-blue flame trails",
+        "compatibility_notes": "Best with elemental heads or dark backgrounds"
+      },
+      {
+        "name": "Glowing Thread",
+        "description": "Thin, glowing strings stretch from one eye to the edge of the head",
+        "compatibility_notes": "Only for clean and flat head types"
+      }
+    ],
+    "Legendary": [
+      {
+        "name": "Glitch Rift Eyes",
+        "description": "Eyes flicker with digital distortion, like fractured data streams.",
+        "compatibility_notes": "Use with glitch, hologram, or pixel-based heads."
+      },
+      {
+        "name": "Burn Line Gaze",
+        "description": "Eyes surrounded by burnt heat lines trailing outward.",
+        "compatibility_notes": "Works best with elemental or cracked dome heads."
+      },
+      {
+        "name": "Electric Vein Eyes",
+        "description": "Vein-like energy trails extend from glowing eyes across the face.",
+        "compatibility_notes": "Compatible with exposed or maskless head types."
+      },
+      {
+        "name": "Vortex Pupils",
+        "description": "Swirling spirals draw attention into the center of each eye.",
+        "compatibility_notes": "Pairs well with mystic or mind-bending characters."
+      },
+      {
+        "name": "Flickering Sigils",
+        "description": "Runes flash inside glowing sockets with pulse-like animation.",
+        "compatibility_notes": "Use only on clean, unobstructed head shapes."
+      },
+      {
+        "name": "Vertical Glyph Eyes",
+        "description": "Eyes resemble vertical language glyphs, softly illuminated.",
+        "compatibility_notes": "Ideal for heads with Vertical sigils or lore traits."
+      },
+      {
+        "name": "Chrome Reflection",
+        "description": "Reflective lenses showing distorted cityscapes in their surface.",
+        "compatibility_notes": "Best on tech domes or futuristic masks."
+      },
+      {
+        "name": "Fracture Blink",
+        "description": "Blinking causes shattering light animation across the face.",
+        "compatibility_notes": "Avoid on already fractured heads."
+      },
+      {
+        "name": "Aura Lenses",
+        "description": "Lens-like eyes constantly shift hue based on surrounding aura.",
+        "compatibility_notes": "Great with reactive auras or chromatic backgrounds."
+      },
+      {
+        "name": "Backlit Hollow Eyes",
+        "description": "Eyes glow from deep within empty sockets, backlighting the skull.",
+        "compatibility_notes": "Only compatible with skull-type or hollow heads."
+      }
+    ],
+    "Mythical": [
+      {
+        "name": "Star Core Vision",
+        "description": "Eyes resemble miniature galaxies, spinning slowly with stardust trails.",
+        "compatibility_notes": "Works best on heads with dark or transparent shells."
+      },
+      {
+        "name": "Singularity Eyes",
+        "description": "Eyes are pitch black with subtle lensing, distorting space around them.",
+        "compatibility_notes": "Ideal for black hole or void-themed heads."
+      },
+      {
+        "name": "Golden Ratio",
+        "description": "Eyes shaped in spirals of divine geometry, glowing gold.",
+        "compatibility_notes": "Use with elevated or divine-themed characters."
+      },
+      {
+        "name": "Crowned Sparks",
+        "description": "Each eye emits an upward flicker like a spark crown.",
+        "compatibility_notes": "Compatible with regal or ascendant head types."
+      },
+      {
+        "name": "Infinity Glare",
+        "description": "Eyes shaped like sideways infinity symbols pulsing with light.",
+        "compatibility_notes": "Best with ascendant flame or glitch auras."
+      },
+      {
+        "name": "Warden Symbols",
+        "description": "Each eye holds a complex symbol representing an ancient force.",
+        "compatibility_notes": "Use only with lore-rich, clean domes."
+      },
+      {
+        "name": "Time-Lapse Eyes",
+        "description": "Eyes show frames of time passing\u2014glitch trails of previous blinks.",
+        "compatibility_notes": "Avoid pairing with fast-glitching heads."
+      },
+      {
+        "name": "Seraphic Lens",
+        "description": "Crystal-like lenses refract light into halo rings.",
+        "compatibility_notes": "Great with floating halo or radiant dome types."
+      },
+      {
+        "name": "Eclipse Eyes",
+        "description": "Eyes with bright rims and fully black centers \u2014 like solar eclipses.",
+        "compatibility_notes": "Use with Mythical backgrounds or Eclipse head types."
+      },
+      {
+        "name": "Vertical Prime Glyphs",
+        "description": "Eyes display pulsing golden runes from the Vertical Core.",
+        "compatibility_notes": "Only compatible with the \u2018Vertical Prime\u2019 head type."
+      }
+    ]
+  },
+  "ClothingTop": {
+    "Common": [
+      {
+        "name": "Basic Hoodie",
+        "description": "Plain cotton hoodie with front pocket",
+        "compatibility_notes": "Compatible with most accessories"
+      },
+      {
+        "name": "Loose T-Shirt",
+        "description": "Oversized plain tee with urban cut",
+        "compatibility_notes": "Minimal layering, ideal base look"
+      },
+      {
+        "name": "Tank Top",
+        "description": "Ribbed sleeveless shirt, often seen in summer streets",
+        "compatibility_notes": "Pairs well with tattoos or bandages"
+      },
+      {
+        "name": "Zip-Up Hoodie",
+        "description": "Thin hoodie with central zipper",
+        "compatibility_notes": "Avoid layering over armor pieces"
+      },
+      {
+        "name": "Worn Crewneck",
+        "description": "Basic street crewneck with subtle grunge",
+        "compatibility_notes": "Good for base-level streetwear"
+      },
+      {
+        "name": "Flannel Shirt",
+        "description": "Unbuttoned flannel with rolled sleeves",
+        "compatibility_notes": "Avoid heavy auras that would overlap"
+      },
+      {
+        "name": "Plain Bomber",
+        "description": "Lightweight bomber jacket with minimal patches",
+        "compatibility_notes": "Works well with headphones"
+      },
+      {
+        "name": "Graffiti Tee",
+        "description": "Spray-tagged t-shirt, faded and stylish",
+        "compatibility_notes": "Best paired with graffiti-themed heads"
+      },
+      {
+        "name": "Logo Tee",
+        "description": "Basic branded street tee with abstract box logo",
+        "compatibility_notes": "Universal compatibility"
+      },
+      {
+        "name": "Basketball Jersey",
+        "description": "Loose jersey with no number, sleeveless",
+        "compatibility_notes": "Avoid pairing with long sleeves"
+      }
+    ],
+    "Rare": [
+      {
+        "name": "Embroidered Windbreaker",
+        "description": "Stylish windbreaker with detailed back embroidery",
+        "compatibility_notes": "Avoid use with wing-based accessories"
+      },
+      {
+        "name": "Contrast Stitch Hoodie",
+        "description": "Bold hoodie with high-contrast seams and thumbhole sleeves",
+        "compatibility_notes": "Great for layered urban fits"
+      },
+      {
+        "name": "Painted Leather Jacket",
+        "description": "Graffiti-tagged leather with matte finish",
+        "compatibility_notes": "Pairs well with punk or masked heads"
+      },
+      {
+        "name": "Neo Camo Vest",
+        "description": "Cropped tactical vest in digital camo",
+        "compatibility_notes": "Avoid pairing with long-sleeve base tops"
+      },
+      {
+        "name": "Colorblock Puffer",
+        "description": "Chunky puffer with three-tone panels",
+        "compatibility_notes": "Best on slim silhouettes"
+      },
+      {
+        "name": "Retro Track Jacket",
+        "description": "90s-style zip jacket with neon piping",
+        "compatibility_notes": "Compatible with skater or nostalgic designs"
+      },
+      {
+        "name": "Street Utility Vest",
+        "description": "Multi-pocket chest rig over urban fit",
+        "compatibility_notes": "Avoid complex chest auras"
+      },
+      {
+        "name": "Drip Overcoat",
+        "description": "Long coat with paint-drip textures down sides",
+        "compatibility_notes": "Pairs with creative pants like painter pants"
+      },
+      {
+        "name": "Mesh Overlay Tee",
+        "description": "Loose mesh layer over plain shirt",
+        "compatibility_notes": "Works with techwear themes"
+      },
+      {
+        "name": "Layered Hoodie Jacket",
+        "description": "Double-layered hoodie with inner contrast color",
+        "compatibility_notes": "Best for dynamic mid-tier characters"
+      }
+    ],
+    "Epic": [
+      {
+        "name": "Hex-Grid Armor Hoodie",
+        "description": "Fitted hoodie reinforced with hexagonal plate segments",
+        "compatibility_notes": "Avoid with bulky outer accessories"
+      },
+      {
+        "name": "Eclipse Bomber",
+        "description": "Dark jacket with crescent eclipse emblem on back",
+        "compatibility_notes": "Best paired with Eclipse Eyes"
+      },
+      {
+        "name": "Neon Fragment Coat",
+        "description": "Long coat with glowing seam accents and shattered graphics",
+        "compatibility_notes": "Works well with neon-based characters"
+      },
+      {
+        "name": "Luminous Tactical Vest",
+        "description": "Street vest with light-reflective panels",
+        "compatibility_notes": "Good with reflective heads"
+      },
+      {
+        "name": "Void Zip Hoodie",
+        "description": "Matte black hoodie with starfield texture",
+        "compatibility_notes": "Great with Void or Galaxy themes"
+      },
+      {
+        "name": "Sigil Duster",
+        "description": "Long open duster coat with arcane glyphs embroidered at hem",
+        "compatibility_notes": "Avoid over-bright backgrounds"
+      },
+      {
+        "name": "Utility Cloak",
+        "description": "Asymmetric cloak with urban straps and clips",
+        "compatibility_notes": "Avoid heavy shoulder accessories"
+      },
+      {
+        "name": "Abstract Puffer",
+        "description": "Puffer with gradient fade and street art patterns",
+        "compatibility_notes": "Pairs with abstract or cosmic themes"
+      },
+      {
+        "name": "Scarfed Street Coat",
+        "description": "Collared jacket with layered scarf detail",
+        "compatibility_notes": "Avoid conflicting neck accessories"
+      },
+      {
+        "name": "Crackline Hoodie",
+        "description": "Pullover hoodie with lightning-shaped cracks across fabric",
+        "compatibility_notes": "Pairs with energy or storm aesthetics"
+      }
+    ],
+    "Legendary": [
+      {
+        "name": "Obsidian Overcoat",
+        "description": "High-collar coat with glossy obsidian-textured fabric",
+        "compatibility_notes": "Ideal for void- or shadow-themed characters"
+      },
+      {
+        "name": "Radiant Shard Jacket",
+        "description": "Fragmented jacket pieces glowing with internal light",
+        "compatibility_notes": "Avoid overlapping light effects"
+      },
+      {
+        "name": "Glyph Halo Cloak",
+        "description": "Cloak with arc patterns that mimic a soft ring glow",
+        "compatibility_notes": "Works with seraph or mystic themes"
+      },
+      {
+        "name": "Vertical Emblem Hoodie",
+        "description": "Signature hoodie with Vertical Core triangle across chest",
+        "compatibility_notes": "Only for Legendary+ characters"
+      },
+      {
+        "name": "Storm-Tech Parka",
+        "description": "Reinforced jacket with thunderhead patterns and static detailing",
+        "compatibility_notes": "Ideal for storm auras"
+      },
+      {
+        "name": "Serrated Armor Hoodie",
+        "description": "Urban hoodie with street armor paneling and spiked shoulders",
+        "compatibility_notes": "Best on angular silhouettes"
+      },
+      {
+        "name": "Ascendant Wrap",
+        "description": "Asymmetrical wrap shirt glowing with embedded sigils",
+        "compatibility_notes": "Avoid with other glowing chest items"
+      },
+      {
+        "name": "Phantom Hood Cloak",
+        "description": "Hooded cloak that fades to black at the hem",
+        "compatibility_notes": "Perfect for stealth or ghostlike looks"
+      },
+      {
+        "name": "Volcanic Leather Jacket",
+        "description": "Molten cracks glow under matte black leather",
+        "compatibility_notes": "Only for flame-aligned variants"
+      },
+      {
+        "name": "Inverted Street Robe",
+        "description": "Monk-like robe stylized in streetwear palette",
+        "compatibility_notes": "Only with high-tier elemental themes"
+      }
+    ],
+    "Mythical": [
+      {
+        "name": "Vertical Core Mantle",
+        "description": "Radiant cloak channeling energy from the Vertical Core",
+        "compatibility_notes": "Only usable by Mythical tier characters"
+      },
+      {
+        "name": "Prism Shard Duster",
+        "description": "Floating shard segments reflect soft light across coat",
+        "compatibility_notes": "Avoid traits that require cape compatibility"
+      },
+      {
+        "name": "Omniweave Robe",
+        "description": "Woven cloak with color-shifting threads and sigils",
+        "compatibility_notes": "Ideal for cosmic or time-warped looks"
+      },
+      {
+        "name": "ZeroPoint Jacket",
+        "description": "Dark parka with spiraling vortex emblem in center",
+        "compatibility_notes": "Pairs with gravity or singularity themes"
+      },
+      {
+        "name": "Ascendant Glyph Armor",
+        "description": "Street armor inscribed with glowing runes",
+        "compatibility_notes": "Avoid visual clutter with aura overlays"
+      },
+      {
+        "name": "Vertical Flame Wrap",
+        "description": "Wrap garment with subtle flame patterns and gold trim",
+        "compatibility_notes": "Best for royalty- or fire-aligned heads"
+      },
+      {
+        "name": "Starlight Windbreaker",
+        "description": "Speckled jacket with shimmer-like finish",
+        "compatibility_notes": "Only usable in low-contrast body styles"
+      },
+      {
+        "name": "ExoCrest Hoodie",
+        "description": "High-tech hoodie lined with power conduits and circuit veins",
+        "compatibility_notes": "Works with Mythical tech themes"
+      },
+      {
+        "name": "Voidpath Cloak",
+        "description": "Layered street cloak woven with darkness motif",
+        "compatibility_notes": "Avoid pairing with non-shadow heads"
+      },
+      {
+        "name": "Myth Fragment Armor",
+        "description": "Cracked crystalline segments aligned along the chest",
+        "compatibility_notes": "Only usable for mythic-tier relic wielders"
+      }
+    ]
+  },
+  "ClothingBottom": {
+    "Common": [
+      {
+        "name": "Slim Jeans",
+        "description": "Fitted denim with minor tears",
+        "compatibility_notes": "Versatile with all footwear"
+      },
+      {
+        "name": "Loose Joggers",
+        "description": "Soft tapered pants with drawstrings",
+        "compatibility_notes": "Pairs best with casual tops"
+      },
+      {
+        "name": "Cargo Shorts",
+        "description": "Baggy shorts with oversized side pockets",
+        "compatibility_notes": "Avoid clashing with long coats"
+      },
+      {
+        "name": "Track Pants",
+        "description": "Striped sides and synthetic sheen",
+        "compatibility_notes": "Ideal for athletic fits"
+      },
+      {
+        "name": "Canvas Pants",
+        "description": "Utility pants with double-stitched seams",
+        "compatibility_notes": "Good for layered looks"
+      },
+      {
+        "name": "Patchwork Denim",
+        "description": "Jeans with street-sewn patches",
+        "compatibility_notes": "Pairs well with graffiti themes"
+      },
+      {
+        "name": "Flat Black Pants",
+        "description": "Monotone black pants with minimal texture",
+        "compatibility_notes": "Universal match"
+      },
+      {
+        "name": "Skater Shorts",
+        "description": "Long shorts with raw hem",
+        "compatibility_notes": "Better with casual or skater tops"
+      },
+      {
+        "name": "Painter Pants",
+        "description": "White pants with faint paint splatter",
+        "compatibility_notes": "Use with creative character types"
+      },
+      {
+        "name": "Simple Chinos",
+        "description": "Neutral chinos with flat fit",
+        "compatibility_notes": "Best for clean aesthetic"
+      }
+    ],
+    "Rare": [
+      {
+        "name": "Urban Cargos",
+        "description": "Fitted cargo pants with oversized side flaps",
+        "compatibility_notes": "Good with utility tops"
+      },
+      {
+        "name": "Torn Knee Jeans",
+        "description": "Ripped denim with soft-fade wash",
+        "compatibility_notes": "Avoid doubling up with torn tops"
+      },
+      {
+        "name": "Paintline Joggers",
+        "description": "Diagonal paint lines run across thighs",
+        "compatibility_notes": "Great with graffiti themes"
+      },
+      {
+        "name": "Neon Stripe Pants",
+        "description": "Flat black with high-contrast side stripes",
+        "compatibility_notes": "Pairs with neon upper fits"
+      },
+      {
+        "name": "Layered Street Shorts",
+        "description": "Mesh-layer shorts with urban lining",
+        "compatibility_notes": "Best with skater or layered outfits"
+      },
+      {
+        "name": "Hex-Stitch Slacks",
+        "description": "Tailored street pants with subtle hex paneling",
+        "compatibility_notes": "Matches futuristic tops"
+      },
+      {
+        "name": "Tactical Shorts",
+        "description": "Cut short with gear pouches",
+        "compatibility_notes": "Avoid baggy top layers"
+      },
+      {
+        "name": "Spray-Paint Denim",
+        "description": "Bright tags layered across base denim",
+        "compatibility_notes": "Pair with graffiti masks or heads"
+      },
+      {
+        "name": "Corduroy Joggers",
+        "description": "Textured pants in classic earth-tone style",
+        "compatibility_notes": "Best with earth auras"
+      },
+      {
+        "name": "Flared Tech Pants",
+        "description": "Widened cuffs with mesh vent details",
+        "compatibility_notes": "Avoid clashing with oversized shoes"
+      }
+    ],
+    "Epic": [
+      {
+        "name": "Reactive Panel Pants",
+        "description": "Segmented streetwear pants with faint light-grid pattern",
+        "compatibility_notes": "Best with layered techwear tops"
+      },
+      {
+        "name": "Graffiti Fade Denim",
+        "description": "Black jeans fading into bright graffiti art toward the hem",
+        "compatibility_notes": "Pairs well with painted jackets"
+      },
+      {
+        "name": "Ash Cloak Trousers",
+        "description": "Street pants with flowing split flaps like a cloak",
+        "compatibility_notes": "Avoid cloak tops"
+      },
+      {
+        "name": "Cerulean Zip Joggers",
+        "description": "Dual zippers with subtle blue highlight seams",
+        "compatibility_notes": "Ideal for minimalist or neon fits"
+      },
+      {
+        "name": "Urban Reinforced Slacks",
+        "description": "Flat tactical pants with thick seam stitching and cargo flaps",
+        "compatibility_notes": "Great for armor or vest top layers"
+      },
+      {
+        "name": "Ember Stitch Pants",
+        "description": "Dark trousers with stitched orange glowing threads",
+        "compatibility_notes": "Best for fire or energy auras"
+      },
+      {
+        "name": "Hollow Camo Bottoms",
+        "description": "Faded digital camo with glowing contour lines",
+        "compatibility_notes": "Pairs with glitch heads"
+      },
+      {
+        "name": "Arc-Panel Streetwear",
+        "description": "Geometric paneled pants with clean folds",
+        "compatibility_notes": "Best for angular themes"
+      },
+      {
+        "name": "Paint Cracked Denim",
+        "description": "Distressed pants with hardened paint crack textures",
+        "compatibility_notes": "Matches creative or tagged tops"
+      },
+      {
+        "name": "Cyber Harness Shorts",
+        "description": "Futuristic shorts with belt loops, straps, and energy glyphs",
+        "compatibility_notes": "Avoid long coats or robes"
+      }
+    ],
+    "Legendary": [
+      {
+        "name": "Shatter-Fiber Pants",
+        "description": "Dark matte pants with glowing shattered vein textures",
+        "compatibility_notes": "Best for legendary techwear tops"
+      },
+      {
+        "name": "Obsidian Grid Slacks",
+        "description": "Reflective black with etched grid lines",
+        "compatibility_notes": "Ideal for Void-themed or Obsidian tops"
+      },
+      {
+        "name": "Sigil-Wrapped Pants",
+        "description": "Urban cloth with street-etched vertical glyph bands",
+        "compatibility_notes": "Pairs with cloak tops"
+      },
+      {
+        "name": "Flame Edge Joggers",
+        "description": "Burnt seam highlights glowing faintly red/orange",
+        "compatibility_notes": "Best with volcanic or ember outfits"
+      },
+      {
+        "name": "Gilded Seam Slacks",
+        "description": "Matte black with gold thread running vertical along seams",
+        "compatibility_notes": "Matches royalty-themed Mythical tops"
+      },
+      {
+        "name": "Tessellated Weave",
+        "description": "Tightly-woven pants with triangle-grid patterns",
+        "compatibility_notes": "Great for geometric characters"
+      },
+      {
+        "name": "Vertical Ringed Cargos",
+        "description": "Rings and utility loops line the outer leg",
+        "compatibility_notes": "Avoid with overly complex shoe styles"
+      },
+      {
+        "name": "Core Fragment Legwraps",
+        "description": "Digitally fragmented layered wraps around legs",
+        "compatibility_notes": "Best for digital, AI, or glitch builds"
+      },
+      {
+        "name": "Stained Dimension Pants",
+        "description": "Splattered cosmic pigment stains trail downward",
+        "compatibility_notes": "Great with multicolor or space backgrounds"
+      },
+      {
+        "name": "Void-Rip Skirt Wrap",
+        "description": "Skirt-style wrap showing subtle dimensional tears",
+        "compatibility_notes": "Only for Legendary or higher tier"
+      }
+    ],
+    "Mythical": [
+      {
+        "name": "Starfall Weave",
+        "description": "Pant fabric embedded with static star patterns fading toward ankles",
+        "compatibility_notes": "Pairs with space, galaxy, or eclipse themes"
+      },
+      {
+        "name": "Vertical Core Trousers",
+        "description": "Glowing vertical lines trace energy paths from core to ground",
+        "compatibility_notes": "Reserved for Mythical Core or Emblem characters"
+      },
+      {
+        "name": "Omnirune Wraps",
+        "description": "Layered wraps etched with runes from multiple factions",
+        "compatibility_notes": "Avoid pairing with mundane tops"
+      },
+      {
+        "name": "Prismatic Fold Pants",
+        "description": "Soft-angled folds reflect ambient light in faint hues",
+        "compatibility_notes": "Best in neutral or dark backgrounds"
+      },
+      {
+        "name": "Temporal Thread Joggers",
+        "description": "Thread lines curve like time arcs, glowing at joints",
+        "compatibility_notes": "Pairs with Mythical eyes or relics"
+      },
+      {
+        "name": "Crystalline Shell Bottoms",
+        "description": "Semi-reflective geometric plating down outer legs",
+        "compatibility_notes": "Works best with fractured armor tops"
+      },
+      {
+        "name": "Mythrift Skater Shorts",
+        "description": "High-contrast layered shorts with cosmic fabric peek-throughs",
+        "compatibility_notes": "Matches celestial or glitchy character themes"
+      },
+      {
+        "name": "Planet Ringed Joggers",
+        "description": "Circular ring patterns mimic planetary orbit motifs",
+        "compatibility_notes": "Pairs with head types or eyes of celestial origin"
+      },
+      {
+        "name": "Mirrorfield Pants",
+        "description": "Smooth mirrored texture reflects surrounding hues",
+        "compatibility_notes": "Best used with muted upper layers"
+      },
+      {
+        "name": "Ascendant Emblem Slacks",
+        "description": "Vertical triangle glyph sewn into glowing thigh patch",
+        "compatibility_notes": "Only for top-tier mythic lore-based characters"
+      }
+    ]
+  },
+  "Accessories": {
+    "Common": [
+      {
+        "name": "Flat Cap",
+        "description": "Simple brimmed street cap worn forward",
+        "compatibility_notes": "Avoid on horned or oversized head types"
+      },
+      {
+        "name": "Basic Chain",
+        "description": "Thin silver chain necklace",
+        "compatibility_notes": "Compatible with most tops"
+      },
+      {
+        "name": "Bandana Mask",
+        "description": "Folded bandana tied around the lower face",
+        "compatibility_notes": "Avoid with complex mouthpiece traits"
+      },
+      {
+        "name": "Wireless Headphones",
+        "description": "Basic over-ear headphones",
+        "compatibility_notes": "Avoid with full helmet styles"
+      },
+      {
+        "name": "Smartwatch",
+        "description": "Basic wrist device with blank screen",
+        "compatibility_notes": "Use with short sleeves or bare arms"
+      },
+      {
+        "name": "Mini Backpack",
+        "description": "Compact streetwear backpack",
+        "compatibility_notes": "Avoid with long coats or cloaks"
+      },
+      {
+        "name": "Utility Belt",
+        "description": "Belt with a few simple gear pouches",
+        "compatibility_notes": "Compatible with most lower wear"
+      },
+      {
+        "name": "Classic Shades",
+        "description": "Simple black-tint sunglasses",
+        "compatibility_notes": "Avoid on small or sticker eyes"
+      },
+      {
+        "name": "Cracked Phone",
+        "description": "Old cracked phone held in hand",
+        "compatibility_notes": "Pairs well with casual poses"
+      },
+      {
+        "name": "Graffiti Marker",
+        "description": "Thick marker held loosely in grip",
+        "compatibility_notes": "Pairs with graffiti head/clothing themes"
+      }
+    ],
+    "Rare": [
+      {
+        "name": "Gold Grillz Mask",
+        "description": "Half-mask with grill-style gold teeth",
+        "compatibility_notes": "Use with dark or expressive face types"
+      },
+      {
+        "name": "Patterned Beanie",
+        "description": "Beanie with urban pattern knit",
+        "compatibility_notes": "Avoid stacking with large headphones"
+      },
+      {
+        "name": "Tactical Scarf",
+        "description": "Tightly wrapped scarf with woven texture",
+        "compatibility_notes": "Best with minimalist outfits"
+      },
+      {
+        "name": "Shoulder Bag",
+        "description": "Crossbody street bag with graffiti patch",
+        "compatibility_notes": "Avoid layering with large cloaks"
+      },
+      {
+        "name": "LED Rim Glasses",
+        "description": "Eyewear outlined in faint glowing light",
+        "compatibility_notes": "Works well with neon or digital aesthetics"
+      },
+      {
+        "name": "Spray Can",
+        "description": "Urban tool held in hand, labeled in tags",
+        "compatibility_notes": "Use only on dominant hand side"
+      },
+      {
+        "name": "Augmented Lens",
+        "description": "One eye covered by a projecting lens disk",
+        "compatibility_notes": "Avoid overlapping visor-style eyes"
+      },
+      {
+        "name": "Chainlink Necklace",
+        "description": "Chunky chrome chain around neck",
+        "compatibility_notes": "Avoid with bulky collar tops"
+      },
+      {
+        "name": "Street Knife",
+        "description": "Short folding knife clipped to side",
+        "compatibility_notes": "Works with tech or rogue themes"
+      },
+      {
+        "name": "Tech Wrist Pad",
+        "description": "Flat-panel device on forearm",
+        "compatibility_notes": "Only on exposed arms"
+      }
+    ],
+    "Epic": [
+      {
+        "name": "Neon Band Mask",
+        "description": "Mask with horizontal glow band across mouth",
+        "compatibility_notes": "Avoid with conflicting eye traits"
+      },
+      {
+        "name": "Designer Chest Bag",
+        "description": "Luxury-branded tactical chest bag",
+        "compatibility_notes": "Pairs with techwear or fashion fits"
+      },
+      {
+        "name": "Relic Ring Set",
+        "description": "Multiple rings with carved symbols",
+        "compatibility_notes": "Best with clean, visible hands"
+      },
+      {
+        "name": "Wired Headjack",
+        "description": "Plugged jack behind head or neck",
+        "compatibility_notes": "Great with digital or cyborg themes"
+      },
+      {
+        "name": "Energy Vape",
+        "description": "Stylized vape device emitting faint glow",
+        "compatibility_notes": "Avoid with gas mask or full helmet"
+      },
+      {
+        "name": "High-Tier Monocle",
+        "description": "Single-lens monocle with floating UI panel",
+        "compatibility_notes": "Best on formal or mystic heads"
+      },
+      {
+        "name": "Street Saber Handle",
+        "description": "Short sword hilt sheathed at waist",
+        "compatibility_notes": "Avoid with long coats"
+      },
+      {
+        "name": "Radiant Pendant",
+        "description": "Necklace with glowing shard pendant",
+        "compatibility_notes": "Pairs well with elemental auras"
+      },
+      {
+        "name": "Hack Tablet",
+        "description": "Mini screen held in hand showing glyphs",
+        "compatibility_notes": "Only usable in one-hand poses"
+      },
+      {
+        "name": "Noisewave Headphones",
+        "description": "Angular headphones with glowing soundwave sides",
+        "compatibility_notes": "Avoid with hats or helmets"
+      }
+    ],
+    "Legendary": [
+      {
+        "name": "Glyph Collar",
+        "description": "Thick collar with rotating rune marks",
+        "compatibility_notes": "Only for Legendary+ characters"
+      },
+      {
+        "name": "Mirror Mask",
+        "description": "Full faceplate with reflective chrome surface",
+        "compatibility_notes": "Avoid combining with detailed eye traits"
+      },
+      {
+        "name": "Storm Hood Attachment",
+        "description": "Transparent rain hood overlay with static arcs",
+        "compatibility_notes": "Pairs with Storm/Tech gear"
+      },
+      {
+        "name": "Core-Linked Armwrap",
+        "description": "Forearm wrap glowing with energy veins",
+        "compatibility_notes": "Only for characters with Core auras"
+      },
+      {
+        "name": "Vertical Sigil Ring",
+        "description": "Ring with glowing triangle and vertical lines",
+        "compatibility_notes": "Reserved for lore-linked types"
+      },
+      {
+        "name": "AntiGravity Backpack",
+        "description": "Floating backpack held by glowing anchor cables",
+        "compatibility_notes": "Avoid long cloaks"
+      },
+      {
+        "name": "Cryptomancer Visor",
+        "description": "Wide lens visor with holographic code",
+        "compatibility_notes": "Great for hacker, glitch, or mystic themes"
+      },
+      {
+        "name": "Resonance Amulet",
+        "description": "Glowing jewel in an ornate neckplate",
+        "compatibility_notes": "Avoid on cluttered torso styles"
+      },
+      {
+        "name": "Shatter Baton",
+        "description": "Cracked handheld weapon pulsing with energy",
+        "compatibility_notes": "Pairs with aggressive poses"
+      },
+      {
+        "name": "Holo-Band Relic",
+        "description": "Hologram emitter on wrist projecting symbols",
+        "compatibility_notes": "Requires visible forearm"
+      }
+    ],
+    "Mythical": [
+      {
+        "name": "Crown of Echoes",
+        "description": "Floating crown composed of curved light arcs",
+        "compatibility_notes": "Only on heads without horns or helmets"
+      },
+      {
+        "name": "Fractal Chain",
+        "description": "Necklace that loops infinitely inward",
+        "compatibility_notes": "Avoid layering over glowing chest traits"
+      },
+      {
+        "name": "Null Mask",
+        "description": "Faceless mask absorbing light",
+        "compatibility_notes": "Use only with Void, Mythical, or high-energy characters"
+      },
+      {
+        "name": "Sigil Gauntlet",
+        "description": "Arm-length glove inscribed with rotating glyphs",
+        "compatibility_notes": "Only usable with clear hand view"
+      },
+      {
+        "name": "Vertical Codex Tablet",
+        "description": "Floating slab of glowing ancient runes",
+        "compatibility_notes": "Can replace handheld item slot"
+      },
+      {
+        "name": "Relic Dagger",
+        "description": "Curved dagger with gemstone hilt and aura shimmer",
+        "compatibility_notes": "Only for myth-level rogues or hunters"
+      },
+      {
+        "name": "Halo Headphones",
+        "description": "Full wraparound headset with radiant energy arc",
+        "compatibility_notes": "Use only on unobstructed head types"
+      },
+      {
+        "name": "Shard Emblem Cloakpin",
+        "description": "Vertical triangle symbol anchoring a shoulder cape",
+        "compatibility_notes": "Cloak optional"
+      },
+      {
+        "name": "Omnisight Lens",
+        "description": "Floating lens in front of third eye or forehead",
+        "compatibility_notes": "Use only with central eye types"
+      },
+      {
+        "name": "Warden\u2019s Lantern",
+        "description": "Suspended chain lantern glowing with worldlight",
+        "compatibility_notes": "Only for chosen or legendary guardians"
+      }
+    ]
+  },
+  "AuraVFX": {
+    "Common": [
+      {
+        "name": "Concrete Dust Cloud",
+        "description": "Faint smog-like dust lingering at the feet",
+        "compatibility_notes": "Compatible with all silhouettes and dark backgrounds"
+      },
+      {
+        "name": "Wall Shadow Cast",
+        "description": "Harsh back-shadow mimicking alley light",
+        "compatibility_notes": "Works best with flat backgrounds"
+      },
+      {
+        "name": "Street Reflection Glow",
+        "description": "Subtle glow at the lower edge simulating streetlight reflection",
+        "compatibility_notes": "Avoid pairing with neon backgrounds"
+      },
+      {
+        "name": "Subtle Haze",
+        "description": "Soft mist near the shoulders like warm urban air",
+        "compatibility_notes": "Pairs with neutral or faded clothing"
+      },
+      {
+        "name": "Graffiti Splatter Fade",
+        "description": "Faint color splatter behind character\u2019s back",
+        "compatibility_notes": "Best with streetwear outfits"
+      },
+      {
+        "name": "Traffic Glow Undershadow",
+        "description": "Warm glow reflecting from below, like passing traffic",
+        "compatibility_notes": "Use on standing characters only"
+      },
+      {
+        "name": "Drip Trail",
+        "description": "Small paint drip marks trailing from feet",
+        "compatibility_notes": "Compatible with graffiti accessories"
+      },
+      {
+        "name": "Sidewalk Grime",
+        "description": "Dusty texture blur near the character\u2019s feet",
+        "compatibility_notes": "Pairs with skater or casual outfits"
+      },
+      {
+        "name": "Soft Neon Mist",
+        "description": "Barely visible glow mist behind neck/shoulders",
+        "compatibility_notes": "Best used with simple top traits"
+      },
+      {
+        "name": "Building Edge Shadow",
+        "description": "Long, low-opacity directional shadow cast from the side",
+        "compatibility_notes": "Use in 1:1 upright compositions"
+      }
+    ],
+    "Rare": [
+      {
+        "name": "Graffiti Halo Fade",
+        "description": "Circular ring of soft graffiti strokes behind head",
+        "compatibility_notes": "Avoid overlapping floating accessories"
+      },
+      {
+        "name": "Subway Breeze",
+        "description": "Directional haze flowing across body from one side",
+        "compatibility_notes": "Best with long jackets or coat traits"
+      },
+      {
+        "name": "Wall Burn Mark",
+        "description": "Subtle texture like wall soot radiating behind",
+        "compatibility_notes": "Best with cracked or glitch head types"
+      },
+      {
+        "name": "Urban Stencil Glow",
+        "description": "Dim stencil-like symbol projected faintly on backdrop",
+        "compatibility_notes": "Only visible in clean backgrounds"
+      },
+      {
+        "name": "Backlight Beam",
+        "description": "Soft glow from behind simulating back alley lighting",
+        "compatibility_notes": "Pairs well with hoodie silhouettes"
+      },
+      {
+        "name": "Highway Flicker",
+        "description": "Pulsing faint lines mimicking electric interference",
+        "compatibility_notes": "Avoid on glitch-heavy characters"
+      },
+      {
+        "name": "Worn Neon Line",
+        "description": "One faded neon line vertically behind character",
+        "compatibility_notes": "Matches with verticality-themed gear"
+      },
+      {
+        "name": "Spray Burst Aura",
+        "description": "Misty radial burst from character\u2019s back in paint fog style",
+        "compatibility_notes": "Ideal for tagger or creative traits"
+      },
+      {
+        "name": "Street Vapor",
+        "description": "Vapor trail coiling low around legs",
+        "compatibility_notes": "Use in standing, grounded poses"
+      },
+      {
+        "name": "Ambient City Glow",
+        "description": "Hue glow around entire character from city light pollution",
+        "compatibility_notes": "Avoid in ultra-bright backgrounds"
+      }
+    ],
+    "Epic": [
+      {
+        "name": "Graffiti Sigil Frame",
+        "description": "Vibrant spray tag shapes frame the body in a halo of layered paint",
+        "compatibility_notes": "Avoid cluttered backgrounds or outfits with competing bright patterns"
+      },
+      {
+        "name": "Heat Ripple Silhouette",
+        "description": "Wavy heat distortion outlines the character\u2019s shape",
+        "compatibility_notes": "Works best with darker silhouettes"
+      },
+      {
+        "name": "Neon Trail Sweep",
+        "description": "Soft sweeping trails of neon light curve behind the body",
+        "compatibility_notes": "Pairs with dynamic stances"
+      },
+      {
+        "name": "Digital Ghost Echo",
+        "description": "Faint echo outlines glitch behind the character",
+        "compatibility_notes": "Avoid with pixelated traits"
+      },
+      {
+        "name": "Urban Pulse Field",
+        "description": "Pulsing ring of urban noise emanates outward from feet",
+        "compatibility_notes": "Great for grounded, static poses"
+      },
+      {
+        "name": "Spray Spiral Vortex",
+        "description": "Swirling upward mist of tag-style paint lines",
+        "compatibility_notes": "Avoid with aura-heavy accessories"
+      },
+      {
+        "name": "HoloStencil Burst",
+        "description": "Glowing city glyphs burst outward from the chest",
+        "compatibility_notes": "Use on characters with visible torsos"
+      },
+      {
+        "name": "Tagged Graffiti Panel",
+        "description": "Semi-transparent graffiti wall panel floats behind character",
+        "compatibility_notes": "Best on symmetrical poses"
+      },
+      {
+        "name": "Static Glow Veins",
+        "description": "Faint lightning-shaped light lines crawl outward from feet",
+        "compatibility_notes": "Works well with cracked or glitch traits"
+      },
+      {
+        "name": "Crosswalk Glare",
+        "description": "Harsh streetlamp light in crossbars beneath the character",
+        "compatibility_notes": "Good for minimalist dark scenes"
+      }
+    ],
+    "Legendary": [
+      {
+        "name": "Fractured Alley Field",
+        "description": "Aura of broken urban reflections like a shattered mirror",
+        "compatibility_notes": "Avoid reflective or chrome heads"
+      },
+      {
+        "name": "Vertical Graffiti Pillar",
+        "description": "Towering painted glyph beam extends vertically from back",
+        "compatibility_notes": "Only for Legendary-tier or higher"
+      },
+      {
+        "name": "Neon Wire Loop",
+        "description": "Looped wire-like glow encircles character midair",
+        "compatibility_notes": "Avoid accessory traits using circular forms"
+      },
+      {
+        "name": "Industrial Energy Leak",
+        "description": "Mist of radiant energy leaking from digital pipe seams",
+        "compatibility_notes": "Pairs with core relic or mech traits"
+      },
+      {
+        "name": "Subway Gate Frame",
+        "description": "Curved urban gate silhouette hovers behind as a frame",
+        "compatibility_notes": "Use only with standing characters"
+      },
+      {
+        "name": "Ghost City Overlay",
+        "description": "Faintly visible urban skyline overlays behind the character",
+        "compatibility_notes": "Avoid complex environmental backgrounds"
+      },
+      {
+        "name": "Signal Interference Field",
+        "description": "Static flicker distorts the outline subtly",
+        "compatibility_notes": "Avoid with heavy glitch traits"
+      },
+      {
+        "name": "Spraylight Bloom",
+        "description": "Soft radial gradient bloom from centered graffiti light",
+        "compatibility_notes": "Pairs with tagger or neon heads"
+      },
+      {
+        "name": "Tech Loop Grid",
+        "description": "Transparent grid and floating circuitry outlines around limbs",
+        "compatibility_notes": "Best with symmetrical stances"
+      },
+      {
+        "name": "Citylight Pulse",
+        "description": "Vertical scanline glows from shoes to head",
+        "compatibility_notes": "Avoid pairing with downward shadows"
+      }
+    ],
+    "Mythical": [
+      {
+        "name": "Reality Crack Stencil",
+        "description": "Cracked stencil-shaped break in space behind character",
+        "compatibility_notes": "Only usable by Mythical-tier characters"
+      },
+      {
+        "name": "Dimension Tag Rift",
+        "description": "Graffiti tag floats midair, breaking open into other dimension",
+        "compatibility_notes": "Avoid graffiti-heavy backgrounds"
+      },
+      {
+        "name": "Urban Collapse Field",
+        "description": "Floor and space around character warped as if collapsing inward",
+        "compatibility_notes": "Reserved for central hero poses"
+      },
+      {
+        "name": "Subway Portal Bloom",
+        "description": "Character framed by glowing train-tunnel-shaped bloom",
+        "compatibility_notes": "Best with urban cloak silhouettes"
+      },
+      {
+        "name": "Vertical Sigil Rift",
+        "description": "Triangle sigil glows behind with dimensional lines bursting outward",
+        "compatibility_notes": "Use only for lore-linked characters"
+      },
+      {
+        "name": "Layered Skyline Veil",
+        "description": "Stacked translucent skylines layer behind character",
+        "compatibility_notes": "Avoid pairing with wall-style backgrounds"
+      },
+      {
+        "name": "Painted Fractal Sphere",
+        "description": "3D fractal orb made of street art hovers behind",
+        "compatibility_notes": "Only usable with neutral headgear"
+      },
+      {
+        "name": "Infinite Street Trail",
+        "description": "Backdrops stretch behind character like infinite street horizon",
+        "compatibility_notes": "Reserved for fully upright poses"
+      },
+      {
+        "name": "Urban Eclipse Halo",
+        "description": "Dark glowing ring like an eclipse formed by city lights",
+        "compatibility_notes": "Only usable with silhouette-focused characters"
+      },
+      {
+        "name": "Holograffiti Grid",
+        "description": "Floating paint glyphs form rotating grid around upper torso",
+        "compatibility_notes": "Pairs with static or hovering poses"
+      }
+    ]
+  },
+  "Background": {
+    "Common": [
+      {
+        "name": "Blank Brick Wall",
+        "description": "Flat red brick wall with no graffiti or detail",
+        "compatibility_notes": "Ideal for highlighting character silhouettes"
+      },
+      {
+        "name": "Chain-Link Fence",
+        "description": "Simple chain-link fence with faded street behind",
+        "compatibility_notes": "Pairs with grungy or tagger traits"
+      },
+      {
+        "name": "Faded Concrete Wall",
+        "description": "Worn concrete wall with subtle grime and cracks",
+        "compatibility_notes": "Avoid with grayscale characters"
+      },
+      {
+        "name": "Alley Wall Corner",
+        "description": "Two intersecting concrete walls with shadows",
+        "compatibility_notes": "Works well for pose-focused characters"
+      },
+      {
+        "name": "Closed Storefront",
+        "description": "Metal shutter door with rust lines",
+        "compatibility_notes": "Use with Common or Rare-tier outfits"
+      },
+      {
+        "name": "Sidewalk Curb",
+        "description": "Cement curb view with city pavement",
+        "compatibility_notes": "Grounded feel, low saturation"
+      },
+      {
+        "name": "Dumpster Alley",
+        "description": "Rear alley scene with small green dumpster",
+        "compatibility_notes": "Pairs with skater or punk themes"
+      },
+      {
+        "name": "Parking Lot Wall",
+        "description": "White wall with numbered paint marking",
+        "compatibility_notes": "Minimalist composition"
+      },
+      {
+        "name": "Graffiti-Free Underpass",
+        "description": "Concrete underpass with no tags",
+        "compatibility_notes": "Avoid combining with loud outfits"
+      },
+      {
+        "name": "Neutral Stucco Wall",
+        "description": "Flat light stucco wall for clean backdrop",
+        "compatibility_notes": "Use with complex characters to simplify focus"
+      }
+    ],
+    "Rare": [
+      {
+        "name": "Tagged Alley",
+        "description": "Graffiti-covered alley wall with multiple layers of paint",
+        "compatibility_notes": "Avoid with heavy graffiti clothing"
+      },
+      {
+        "name": "Streetlamp Corner",
+        "description": "Dim alley lit by soft glow of single streetlamp",
+        "compatibility_notes": "Use with moody, shadowed characters"
+      },
+      {
+        "name": "Skyline Peek",
+        "description": "Distant urban skyline visible over low wall",
+        "compatibility_notes": "Adds depth without complexity"
+      },
+      {
+        "name": "Bus Stop Shelter",
+        "description": "Old glass bus stop with minimal signage",
+        "compatibility_notes": "Best with chill or lo-fi fits"
+      },
+      {
+        "name": "Graffiti Wall",
+        "description": "One large wall piece with bold tag design",
+        "compatibility_notes": "Matches colorful aura layers"
+      },
+      {
+        "name": "Overpass Pillars",
+        "description": "Concrete supports fade into background fog",
+        "compatibility_notes": "Pairs well with grounded silhouettes"
+      },
+      {
+        "name": "Abandoned Shopfront",
+        "description": "Faded sign and shuttered entrance",
+        "compatibility_notes": "Use with Rare streetwear tops"
+      },
+      {
+        "name": "Pavement Texture",
+        "description": "Textured urban ground fills most background",
+        "compatibility_notes": "Best with minimal lower clothing"
+      },
+      {
+        "name": "Fire Escape Wall",
+        "description": "Metal fire escape silhouette above wall",
+        "compatibility_notes": "Good contrast for upper VFX"
+      },
+      {
+        "name": "Backlot Gate",
+        "description": "Chain-linked gate with faded \u201cNo Entry\u201d sign",
+        "compatibility_notes": "Use with rogue or stealthy traits"
+      }
+    ],
+    "Epic": [
+      {
+        "name": "Neon Rooftop View",
+        "description": "Rain-slicked rooftop with neon skyline glow",
+        "compatibility_notes": "Best with reflective or high-contrast outfits"
+      },
+      {
+        "name": "Graffiti Train Tunnel",
+        "description": "Subway tunnel walls fully tagged, overhead light beams",
+        "compatibility_notes": "Avoid overlapping graffiti VFX"
+      },
+      {
+        "name": "Wet Crosswalk Scene",
+        "description": "Crosswalk with glowing streetlights reflecting in puddles",
+        "compatibility_notes": "Great for silhouette characters"
+      },
+      {
+        "name": "City Balcony Glow",
+        "description": "Apartment balcony with distant neon signs",
+        "compatibility_notes": "Pairs with Rare or Epic characters"
+      },
+      {
+        "name": "Alley Steam Cloud",
+        "description": "Narrow alley with drifting steam and neon lights",
+        "compatibility_notes": "Matches smoke or glow VFX"
+      },
+      {
+        "name": "Overhead Metro Tracks",
+        "description": "Graffiti-covered train passes above in background",
+        "compatibility_notes": "Avoid upper-heavy outfits"
+      },
+      {
+        "name": "Glowing Billboard Frame",
+        "description": "Bright billboard half-visible behind character",
+        "compatibility_notes": "Use with urban-themed VFX"
+      },
+      {
+        "name": "Digital Corridor",
+        "description": "Urban alley overlaid with subtle glitch lines and signage",
+        "compatibility_notes": "Pairs with glitchy eyes or auras"
+      },
+      {
+        "name": "Rainy Bus Stop",
+        "description": "Lit glass bus stop in rainfall with light streaks",
+        "compatibility_notes": "Best for calm or passive character stances"
+      },
+      {
+        "name": "Stormlit Rooftop",
+        "description": "Faint thunder glow illuminates rooftop edge",
+        "compatibility_notes": "Avoid competing light-source auras"
+      }
+    ],
+    "Legendary": [
+      {
+        "name": "Vertical Core Courtyard",
+        "description": "Urban plaza with glowing triangle glyph embedded in pavement",
+        "compatibility_notes": "Reserved for lore-tier characters"
+      },
+      {
+        "name": "Digital Billboard Citadel",
+        "description": "Massive flickering digital signs fill vertical wall",
+        "compatibility_notes": "Pairs with techwear or neon effects"
+      },
+      {
+        "name": "Urban Shrine Gate",
+        "description": "Stone gate structure surrounded by graffiti and vines",
+        "compatibility_notes": "Avoid high-clutter accessories"
+      },
+      {
+        "name": "Reflective Flood Zone",
+        "description": "Shallow flooded street reflects skyline and character",
+        "compatibility_notes": "Great with silhouette-focused characters"
+      },
+      {
+        "name": "Signal Tower Horizon",
+        "description": "Urban tower looms in background with blinking lights",
+        "compatibility_notes": "Pairs with glitch or interference auras"
+      },
+      {
+        "name": "Hacker's Rooftop",
+        "description": "Dark rooftop with antennas and green screen glow",
+        "compatibility_notes": "Works with masked or stealthy types"
+      },
+      {
+        "name": "Power Relay Alley",
+        "description": "Crackling power nodes embedded in alley walls",
+        "compatibility_notes": "Best with electric-themed outfits"
+      },
+      {
+        "name": "Industrial Ghost Zone",
+        "description": "Shuttered warehouse with broken windows and light shafts",
+        "compatibility_notes": "Avoid over-bright characters"
+      },
+      {
+        "name": "Spotlight City Floor",
+        "description": "Three angled spotlights center character in cinematic frame",
+        "compatibility_notes": "Highlight tier for Legendary"
+      },
+      {
+        "name": "Temple of Tags",
+        "description": "Abandoned church overrun with graffiti and overgrowth",
+        "compatibility_notes": "Reserved for mystic urban archetypes"
+      }
+    ],
+    "Mythical": [
+      {
+        "name": "Vertical Nexus Portal",
+        "description": "Triangular digital gateway forms behind character into other dimension",
+        "compatibility_notes": "Only for Mythical characters"
+      },
+      {
+        "name": "Floating Graffiti Islands",
+        "description": "Graffiti-covered concrete platforms hover in air",
+        "compatibility_notes": "Best with street mage or relic builds"
+      },
+      {
+        "name": "Fractured Subway Realm",
+        "description": "Subway system splits into floating layered tunnel pieces",
+        "compatibility_notes": "Avoid pairing with solid walls"
+      },
+      {
+        "name": "Eclipse Core Ruins",
+        "description": "Abandoned plaza eclipsed by sky portal glow",
+        "compatibility_notes": "Pairs with cosmic or spiritual traits"
+      },
+      {
+        "name": "Infinite Rooftop Edge",
+        "description": "Building rooftop stretches into looping horizon",
+        "compatibility_notes": "Best with clean or bright silhouettes"
+      },
+      {
+        "name": "Concrete Glyph Arena",
+        "description": "Circular urban arena with giant glyph patterns etched in floor",
+        "compatibility_notes": "Reserved for relic-class characters"
+      },
+      {
+        "name": "Dimensional City Fracture",
+        "description": "Skyscrapers bend and fragment midair behind character",
+        "compatibility_notes": "Avoid other heavy distortion VFX"
+      },
+      {
+        "name": "Urban Fabric Rift",
+        "description": "Background tears like fabric revealing cityscape beneath",
+        "compatibility_notes": "Mythical only"
+      },
+      {
+        "name": "Neon Skyline Mirage",
+        "description": "Double-exposed skyline shimmers behind character",
+        "compatibility_notes": "Avoid pairing with glitch-heavy eyes"
+      },
+      {
+        "name": "Hologlyph Monument",
+        "description": "Vertical hologram of city culture rising behind",
+        "compatibility_notes": "Best for lore-linked legacy characters"
+      }
+    ]
+  }
+}
