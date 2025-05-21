@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792541776,
+  "prompt": "Unique, collectible NFT character in MFKZ cartoon style. \nBackground: Abandoned church overrun with graffiti and overgrowth. \nHead: Head covered in faint graffiti markings, no eyes. \nEyes: Eyes with a subtle twin sparkle, adds alertness and intensity. \nClothing: Chunky puffer with three-tone panels. \nColor: Over-saturated electric red. \nSpecies: Glitch Variant. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "helmet, orb, robot, photorealism, human, realistic, plain background, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, people, motorcycles, goggles, robot eyes, robot face, 3D, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Graffiti Dome",
+      "description": "Head covered in faint graffiti markings, no eyes",
+      "compatibility_notes": "Skip high-contrast or glowing eyes"
+    },
+    "EyesFace": {
+      "name": "Dual Glint",
+      "description": "Eyes with a subtle twin sparkle, adds alertness and intensity",
+      "compatibility_notes": "Works well with tech or skull head types"
+    },
+    "ClothingTop": {
+      "name": "Colorblock Puffer",
+      "description": "Chunky puffer with three-tone panels",
+      "compatibility_notes": "Best on slim silhouettes"
+    },
+    "CharacterColor": {
+      "name": "Hyper Red",
+      "description": "Over-saturated electric red",
+      "compatibility_notes": "Pair with glitch gear"
+    },
+    "Species": {
+      "name": "Glitch Variant",
+      "rarity": "Mythical"
+    },
+    "Background": {
+      "name": "Temple of Tags",
+      "description": "Abandoned church overrun with graffiti and overgrowth",
+      "compatibility_notes": "Reserved for mystic urban archetypes"
+    }
+  },
+  "warnings": []
+}

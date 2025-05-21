@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792638494,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nBackground: Flat red brick wall with no graffiti or detail. \nHead: Head covered in faint graffiti markings, no eyes. \nEyes: Thin horizontal visor with faint eye glint. \nClothing: Street armor inscribed with glowing runes. \nColor: Weathered historic metal. \nSpecies: Hollow. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "helmet, orb, robot, photorealism, human, realistic, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, people, motorcycles, goggles, robot eyes, robot face, 3D, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Graffiti Dome",
+      "description": "Head covered in faint graffiti markings, no eyes",
+      "compatibility_notes": "Skip high-contrast or glowing eyes"
+    },
+    "EyesFace": {
+      "name": "Reflective Visor",
+      "description": "Thin horizontal visor with faint eye glint",
+      "compatibility_notes": "Ideal for helmet-style head variants"
+    },
+    "ClothingTop": {
+      "name": "Ascendant Glyph Armor",
+      "description": "Street armor inscribed with glowing runes",
+      "compatibility_notes": "Avoid visual clutter with aura overlays"
+    },
+    "CharacterColor": {
+      "name": "Ancient Bronze",
+      "description": "Weathered historic metal",
+      "compatibility_notes": "Use with armor or regalia"
+    },
+    "Species": {
+      "name": "Hollow",
+      "rarity": "Epic"
+    },
+    "Background": {
+      "name": "Blank Brick Wall",
+      "description": "Flat red brick wall with no graffiti or detail",
+      "compatibility_notes": "Ideal for highlighting character silhouettes"
+    }
+  },
+  "warnings": []
+}

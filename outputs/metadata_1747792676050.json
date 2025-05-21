@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792676050,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nBackground: Stone gate structure surrounded by graffiti and vines. \nHead: Shiny, dark vinyl surface with slight texture. \nEyes: Blinking causes shattering light animation across the face.. \nClothing: Radiant cloak channeling energy from the Vertical Core. \nColor: Urban olive drab. \nSpecies: Flamehead. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "helmet, orb, robot, photorealism, human, realistic, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, people, motorcycles, goggles, robot eyes, robot face, 3D, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Smooth Vinyl",
+      "description": "Shiny, dark vinyl surface with slight texture",
+      "compatibility_notes": "Compatible with all face types"
+    },
+    "EyesFace": {
+      "name": "Fracture Blink",
+      "description": "Blinking causes shattering light animation across the face.",
+      "compatibility_notes": "Avoid on already fractured heads."
+    },
+    "ClothingTop": {
+      "name": "Vertical Core Mantle",
+      "description": "Radiant cloak channeling energy from the Vertical Core",
+      "compatibility_notes": "Only usable by Mythical tier characters"
+    },
+    "CharacterColor": {
+      "name": "Olive",
+      "description": "Urban olive drab",
+      "compatibility_notes": "Military-style outfits recommended"
+    },
+    "Species": {
+      "name": "Flamehead",
+      "rarity": "Epic"
+    },
+    "Background": {
+      "name": "Urban Shrine Gate",
+      "description": "Stone gate structure surrounded by graffiti and vines",
+      "compatibility_notes": "Avoid high-clutter accessories"
+    }
+  },
+  "warnings": []
+}

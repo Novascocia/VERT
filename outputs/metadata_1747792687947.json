@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792687947,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nBackground: Faint thunder glow illuminates rooftop edge. \nHead: Cone-shaped head like an upside-down traffic cone. \nEyes: Eyes shaped in spirals of divine geometry, glowing gold.. \nClothing: Fragmented jacket pieces glowing with internal light. \nColor: Urban blue tone. \nSpecies: Mascot. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "helmet, orb, robot, photorealism, human, realistic, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, people, motorcycles, goggles, robot eyes, robot face, 3D, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Cone Cap",
+      "description": "Cone-shaped head like an upside-down traffic cone",
+      "compatibility_notes": "Avoid masks and helmets"
+    },
+    "EyesFace": {
+      "name": "Golden Ratio",
+      "description": "Eyes shaped in spirals of divine geometry, glowing gold.",
+      "compatibility_notes": "Use with elevated or divine-themed characters."
+    },
+    "ClothingTop": {
+      "name": "Radiant Shard Jacket",
+      "description": "Fragmented jacket pieces glowing with internal light",
+      "compatibility_notes": "Avoid overlapping light effects"
+    },
+    "CharacterColor": {
+      "name": "Blue",
+      "description": "Urban blue tone",
+      "compatibility_notes": "Neutral with most styles"
+    },
+    "Species": {
+      "name": "Mascot",
+      "rarity": "Common"
+    },
+    "Background": {
+      "name": "Stormlit Rooftop",
+      "description": "Faint thunder glow illuminates rooftop edge",
+      "compatibility_notes": "Avoid competing light-source auras"
+    }
+  },
+  "warnings": []
+}

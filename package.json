@@ -1,0 +1,16 @@
+{
+  "name": "vertical-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "NFT character generator using Stability AI",
+  "main": "scripts/generate_nft.js",
+  "scripts": {
+    "generate": "node scripts/generate_nft.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "dotenv": "^16.5.0",
+    "form-data": "^4.0.0",
+    "replicate": "^1.0.1"
+  }
+}

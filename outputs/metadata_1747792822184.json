@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792822184,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nCharacter is NOT human, NOT a child, NOT realistic, NOT a person. Character is a unique, original, non-human collectible. \nNo human face, no human skin, no human anatomy, no human proportions. \nCharacter must have a unique, non-human silhouette and features. \nBackground: Metal fire escape silhouette above wall. \nHead: Head covered in faint graffiti markings, no eyes. \nEyes: Eyes appear to be burning with inner flame. \nClothing: Graffiti-tagged leather with matte finish. \nColor: Highlighter green. \nSpecies: Glitch Variant. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "human, person, child, realistic face, realistic skin, human anatomy, human proportions, human body, human smile, human nose, human mouth, human ears, human hair, human hands, human feet, human fingers, human toes, human eyes, human eyebrows, human teeth, human expression, human pose, human clothing, human style, human cartoon, humanoid, people, children, baby, kid, girl, boy, woman, man, adult, teenager, realistic, photorealistic, portrait, selfie, photo, 3D, Pixar, Disney, helmet, orb, robot, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, motorcycles, goggles, robot eyes, robot face, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Graffiti Dome",
+      "description": "Head covered in faint graffiti markings, no eyes",
+      "compatibility_notes": "Skip high-contrast or glowing eyes"
+    },
+    "EyesFace": {
+      "name": "Inferno Eyes",
+      "description": "Eyes appear to be burning with inner flame",
+      "compatibility_notes": "Ideal for Flame Skull or Ember heads"
+    },
+    "ClothingTop": {
+      "name": "Painted Leather Jacket",
+      "description": "Graffiti-tagged leather with matte finish",
+      "compatibility_notes": "Pairs well with punk or masked heads"
+    },
+    "CharacterColor": {
+      "name": "Lime",
+      "description": "Highlighter green",
+      "compatibility_notes": "Avoid with yellow-heavy themes"
+    },
+    "Species": {
+      "name": "Glitch Variant",
+      "rarity": "Mythical"
+    },
+    "Background": {
+      "name": "Fire Escape Wall",
+      "description": "Metal fire escape silhouette above wall",
+      "compatibility_notes": "Good contrast for upper VFX"
+    }
+  },
+  "warnings": []
+}

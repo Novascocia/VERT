@@ -21,8 +21,20 @@ def patch_and_upload_metadata(characters: list, image_urls: dict) -> dict:
             "name": f"Vertical #{char_id}",
             "description": "A unique character from the Vertical Project NFT collection.",
             "image": image_url,
-            "traits": traits
+            "traits": {
+                "HeadType": character["HeadType"]["name"],
+                "EyesFace": character["EyesFace"]["name"],
+                "ClothingTop": character["ClothingTop"]["name"],
+                "CharacterColor": character["CharacterColor"]["name"]
+            }
         }
+
+        # Add Species and GraphicText if they exist
+        if "Species" in character:
+            metadata["traits"]["Species"] = character["Species"]
+
+        if "GraphicText" in character:
+            metadata["traits"]["GraphicText"] = character["GraphicText"]
 
         json_data = json.dumps(metadata)
         filename = f"character_{char_id}_metadata.json"

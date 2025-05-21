@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792665535,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nBackground: Vertical hologram of city culture rising behind. \nHead: Head stylized as a can with nozzle top, minor dents. \nEyes: Slightly narrowed eyes with attitude. \nClothing: Reinforced jacket with thunderhead patterns and static detailing. \nColor: Gloss black with deep reflectivity. \nSpecies: Gold Hybrid. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "helmet, orb, robot, photorealism, human, realistic, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, people, motorcycles, goggles, robot eyes, robot face, 3D, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Popped Spray Can",
+      "description": "Head stylized as a can with nozzle top, minor dents",
+      "compatibility_notes": "Limit use of headwear"
+    },
+    "EyesFace": {
+      "name": "Angled Glare",
+      "description": "Slightly narrowed eyes with attitude",
+      "compatibility_notes": "Avoid on heads without visible eye area"
+    },
+    "ClothingTop": {
+      "name": "Storm-Tech Parka",
+      "description": "Reinforced jacket with thunderhead patterns and static detailing",
+      "compatibility_notes": "Ideal for storm auras"
+    },
+    "CharacterColor": {
+      "name": "Obsidian",
+      "description": "Gloss black with deep reflectivity",
+      "compatibility_notes": "Use with bold outlines"
+    },
+    "Species": {
+      "name": "Gold Hybrid",
+      "rarity": "Legendary"
+    },
+    "Background": {
+      "name": "Hologlyph Monument",
+      "description": "Vertical hologram of city culture rising behind",
+      "compatibility_notes": "Best for lore-linked legacy characters"
+    }
+  },
+  "warnings": []
+}

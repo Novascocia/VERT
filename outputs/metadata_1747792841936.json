@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792841936,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nCharacter is NOT human, NOT a child, NOT realistic, NOT a person. Character is a unique, original, non-human collectible. \nNo human face, no human skin, no human anatomy, no human proportions. \nCharacter must have a unique, non-human silhouette and features. \nBackground: Apartment balcony with distant neon signs. \nHead: Head stylized as a can with nozzle top, minor dents. \nEyes: Dimly glowing white ovals. \nClothing: Graffiti-tagged leather with matte finish. \nColor: Acid-glow green. \nSpecies: Flamehead. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "human, person, child, realistic face, realistic skin, human anatomy, human proportions, human body, human smile, human nose, human mouth, human ears, human hair, human hands, human feet, human fingers, human toes, human eyes, human eyebrows, human teeth, human expression, human pose, human clothing, human style, human cartoon, humanoid, people, children, baby, kid, girl, boy, woman, man, adult, teenager, realistic, photorealistic, portrait, selfie, photo, 3D, Pixar, Disney, helmet, orb, robot, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, motorcycles, goggles, robot eyes, robot face, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Popped Spray Can",
+      "description": "Head stylized as a can with nozzle top, minor dents",
+      "compatibility_notes": "Limit use of headwear"
+    },
+    "EyesFace": {
+      "name": "Oval Glow (Low)",
+      "description": "Dimly glowing white ovals",
+      "compatibility_notes": "Pairs with darker head textures like Chrome or Vinyl"
+    },
+    "ClothingTop": {
+      "name": "Painted Leather Jacket",
+      "description": "Graffiti-tagged leather with matte finish",
+      "compatibility_notes": "Pairs well with punk or masked heads"
+    },
+    "CharacterColor": {
+      "name": "Toxic Green",
+      "description": "Acid-glow green",
+      "compatibility_notes": "Pairs with glitch or corrupted traits"
+    },
+    "Species": {
+      "name": "Flamehead",
+      "rarity": "Epic"
+    },
+    "Background": {
+      "name": "City Balcony Glow",
+      "description": "Apartment balcony with distant neon signs",
+      "compatibility_notes": "Pairs with Rare or Epic characters"
+    }
+  },
+  "warnings": []
+}

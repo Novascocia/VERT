@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792946388,
+  "prompt": "Unique, collectible NFT creature in bold cartoon style. \nCharacter is NOT human, NOT a person, NOT a child, NOT realistic, NOT humanoid. \nCharacter is a unique, original, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person. \nNo human face, no human skin, no human anatomy, no human proportions, no human body, no human features. \nCharacter must have a unique, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person silhouette and features. \nCreature, mascot, monster, alien, robot, animal, fantasy being, or abstract. \nBackground: One large wall piece with bold tag design. \nHead: Rounded head with texture resembling ribbed fabric. \nEyes: Pale cyan eyes with a glowing x-ray effect around them. \nClothing: Multi-pocket chest rig over urban fit. \nColor: Standard crimson red. \nSpecies: Hollow. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "human, person, child, realistic face, realistic skin, human anatomy, human proportions, human body, human smile, human nose, human mouth, human ears, human hair, human hands, human feet, human fingers, human toes, human eyes, human eyebrows, human teeth, human expression, human pose, human clothing, human style, human cartoon, humanoid, people, children, baby, kid, girl, boy, woman, man, adult, teenager, realistic, photorealistic, portrait, selfie, photo, 3D, Pixar, Disney, cartoon human, cartoon person, cartoon child, cartoon adult, cartoon boy, cartoon girl, cartoon man, cartoon woman, cartoon baby, cartoon kid, helmet, orb, robot, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, motorcycles, goggles, robot eyes, robot face, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Knit Cap Dome",
+      "description": "Rounded head with texture resembling ribbed fabric",
+      "compatibility_notes": "Avoid bulky accessories that would obscure the cap"
+    },
+    "EyesFace": {
+      "name": "X-Ray Gaze",
+      "description": "Pale cyan eyes with a glowing x-ray effect around them",
+      "compatibility_notes": "Use only with transparent or mecha domes"
+    },
+    "ClothingTop": {
+      "name": "Street Utility Vest",
+      "description": "Multi-pocket chest rig over urban fit",
+      "compatibility_notes": "Avoid complex chest auras"
+    },
+    "CharacterColor": {
+      "name": "Red",
+      "description": "Standard crimson red",
+      "compatibility_notes": "Pairs well with aggressive aura effects"
+    },
+    "Species": {
+      "name": "Hollow",
+      "rarity": "Epic"
+    },
+    "Background": {
+      "name": "Graffiti Wall",
+      "description": "One large wall piece with bold tag design",
+      "compatibility_notes": "Matches colorful aura layers"
+    }
+  },
+  "warnings": []
+}

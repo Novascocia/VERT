@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792810966,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nCharacter is NOT human, NOT a child, NOT realistic, NOT a person. Character is a unique, original, non-human collectible. \nNo human face, no human skin, no human anatomy, no human proportions. \nCharacter must have a unique, non-human silhouette and features. \nBackground: Apartment balcony with distant neon signs. \nHead: Gloss black with a single light reflection edge. \nEyes: Each eye holds a complex symbol representing an ancient force.. \nClothing: Dark jacket with crescent eclipse emblem on back. \nColor: Distorted noise patterns across body. \nSpecies: Alien. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "human, person, child, realistic face, realistic skin, human anatomy, human proportions, human body, human smile, human nose, human mouth, human ears, human hair, human hands, human feet, human fingers, human toes, human eyes, human eyebrows, human teeth, human expression, human pose, human clothing, human style, human cartoon, humanoid, people, children, baby, kid, girl, boy, woman, man, adult, teenager, realistic, photorealistic, portrait, selfie, photo, 3D, Pixar, Disney, helmet, orb, robot, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, motorcycles, goggles, robot eyes, robot face, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Slick Chrome",
+      "description": "Gloss black with a single light reflection edge",
+      "compatibility_notes": "Avoid complex auras or reflectivity clashes"
+    },
+    "EyesFace": {
+      "name": "Warden Symbols",
+      "description": "Each eye holds a complex symbol representing an ancient force.",
+      "compatibility_notes": "Use only with lore-rich, clean domes."
+    },
+    "ClothingTop": {
+      "name": "Eclipse Bomber",
+      "description": "Dark jacket with crescent eclipse emblem on back",
+      "compatibility_notes": "Best paired with Eclipse Eyes"
+    },
+    "CharacterColor": {
+      "name": "Quantum Glitch",
+      "description": "Distorted noise patterns across body",
+      "compatibility_notes": "Exclusive to glitch-theme legends"
+    },
+    "Species": {
+      "name": "Alien",
+      "rarity": "Legendary"
+    },
+    "Background": {
+      "name": "City Balcony Glow",
+      "description": "Apartment balcony with distant neon signs",
+      "compatibility_notes": "Pairs with Rare or Epic characters"
+    }
+  },
+  "warnings": []
+}

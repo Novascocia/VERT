@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792654306,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nBackground: Crosswalk with glowing streetlights reflecting in puddles. \nHead: Rounded head with texture resembling ribbed fabric. \nEyes: Bright eyes with star-shaped glow trails. \nClothing: Multi-pocket chest rig over urban fit. \nColor: Faint silhouettes trail behind movements. \nSpecies: Alien. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "helmet, orb, robot, photorealism, human, realistic, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, people, motorcycles, goggles, robot eyes, robot face, 3D, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Knit Cap Dome",
+      "description": "Rounded head with texture resembling ribbed fabric",
+      "compatibility_notes": "Avoid bulky accessories that would obscure the cap"
+    },
+    "EyesFace": {
+      "name": "Starburst Glow",
+      "description": "Bright eyes with star-shaped glow trails",
+      "compatibility_notes": "Pairs with high-contrast heads or regal masks"
+    },
+    "ClothingTop": {
+      "name": "Street Utility Vest",
+      "description": "Multi-pocket chest rig over urban fit",
+      "compatibility_notes": "Avoid complex chest auras"
+    },
+    "CharacterColor": {
+      "name": "Echo Shader",
+      "description": "Faint silhouettes trail behind movements",
+      "compatibility_notes": "Mythical only"
+    },
+    "Species": {
+      "name": "Alien",
+      "rarity": "Legendary"
+    },
+    "Background": {
+      "name": "Wet Crosswalk Scene",
+      "description": "Crosswalk with glowing streetlights reflecting in puddles",
+      "compatibility_notes": "Great for silhouette characters"
+    }
+  },
+  "warnings": []
+}

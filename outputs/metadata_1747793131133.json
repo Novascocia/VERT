@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747793131133,
+  "prompt": "Background: Urban alley overlaid with subtle glitch lines and signage. \nBackground must be visible and match this description. \nUnique, collectible NFT creature in bold cartoon style. \nCharacter is NOT human, NOT a person, NOT a child, NOT realistic, NOT humanoid. \nCharacter is a unique, original, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person. \nNo human face, no human skin, no human anatomy, no human proportions, no human body, no human features. \nCharacter must have a unique, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person silhouette and features. \nCreature, mascot, monster, alien, robot, animal, fantasy being, or abstract. \nHead: Cone-shaped head like an upside-down traffic cone. \nEyes: Eyes are pitch black with subtle lensing, distorting space around them.. \nClothing: Oversized plain tee with urban cut. \nColor: Pixelated fade effect over solid tone. \nSpecies: Mascot. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "human, person, child, realistic face, realistic skin, human anatomy, human proportions, human body, human smile, human nose, human mouth, human ears, human hair, human hands, human feet, human fingers, human toes, human eyes, human eyebrows, human teeth, human expression, human pose, human clothing, human style, human cartoon, humanoid, people, children, baby, kid, girl, boy, woman, man, adult, teenager, realistic, photorealistic, portrait, selfie, photo, 3D, Pixar, Disney, cartoon human, cartoon person, cartoon child, cartoon adult, cartoon boy, cartoon girl, cartoon man, cartoon woman, cartoon baby, cartoon kid, helmet, orb, robot, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, motorcycles, goggles, robot eyes, robot face, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Cone Cap",
+      "description": "Cone-shaped head like an upside-down traffic cone",
+      "compatibility_notes": "Avoid masks and helmets"
+    },
+    "EyesFace": {
+      "name": "Singularity Eyes",
+      "description": "Eyes are pitch black with subtle lensing, distorting space around them.",
+      "compatibility_notes": "Ideal for black hole or void-themed heads."
+    },
+    "ClothingTop": {
+      "name": "Loose T-Shirt",
+      "description": "Oversized plain tee with urban cut",
+      "compatibility_notes": "Minimal layering, ideal base look"
+    },
+    "CharacterColor": {
+      "name": "Digital Fade",
+      "description": "Pixelated fade effect over solid tone",
+      "compatibility_notes": "High-tech characters only"
+    },
+    "Species": {
+      "name": "Mascot",
+      "rarity": "Common"
+    },
+    "Background": {
+      "name": "Digital Corridor",
+      "description": "Urban alley overlaid with subtle glitch lines and signage",
+      "compatibility_notes": "Pairs with glitchy eyes or auras"
+    }
+  },
+  "warnings": []
+}

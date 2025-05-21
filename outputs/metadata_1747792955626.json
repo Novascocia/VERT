@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792955626,
+  "prompt": "Unique, collectible NFT creature in bold cartoon style. \nCharacter is NOT human, NOT a person, NOT a child, NOT realistic, NOT humanoid. \nCharacter is a unique, original, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person. \nNo human face, no human skin, no human anatomy, no human proportions, no human body, no human features. \nCharacter must have a unique, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person silhouette and features. \nCreature, mascot, monster, alien, robot, animal, fantasy being, or abstract. \nBackground: Triangular digital gateway forms behind character into other dimension. \nHead: Head covered in faint graffiti markings, no eyes. \nEyes: Solid white ovals, giving off a neutral or robotic stare. \nClothing: Spray-tagged t-shirt, faded and stylish. \nColor: Overexposed white light skin tone. \nSpecies: Flamehead. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "human, person, child, realistic face, realistic skin, human anatomy, human proportions, human body, human smile, human nose, human mouth, human ears, human hair, human hands, human feet, human fingers, human toes, human eyes, human eyebrows, human teeth, human expression, human pose, human clothing, human style, human cartoon, humanoid, people, children, baby, kid, girl, boy, woman, man, adult, teenager, realistic, photorealistic, portrait, selfie, photo, 3D, Pixar, Disney, cartoon human, cartoon person, cartoon child, cartoon adult, cartoon boy, cartoon girl, cartoon man, cartoon woman, cartoon baby, cartoon kid, helmet, orb, robot, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, motorcycles, goggles, robot eyes, robot face, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Graffiti Dome",
+      "description": "Head covered in faint graffiti markings, no eyes",
+      "compatibility_notes": "Skip high-contrast or glowing eyes"
+    },
+    "EyesFace": {
+      "name": "Blank White",
+      "description": "Solid white ovals, giving off a neutral or robotic stare",
+      "compatibility_notes": "Compatible with all head types, ideal for base characters"
+    },
+    "ClothingTop": {
+      "name": "Graffiti Tee",
+      "description": "Spray-tagged t-shirt, faded and stylish",
+      "compatibility_notes": "Best paired with graffiti-themed heads"
+    },
+    "CharacterColor": {
+      "name": "Plasma White",
+      "description": "Overexposed white light skin tone",
+      "compatibility_notes": "Use with subtle outfits"
+    },
+    "Species": {
+      "name": "Flamehead",
+      "rarity": "Epic"
+    },
+    "Background": {
+      "name": "Vertical Nexus Portal",
+      "description": "Triangular digital gateway forms behind character into other dimension",
+      "compatibility_notes": "Only for Mythical characters"
+    }
+  },
+  "warnings": []
+}

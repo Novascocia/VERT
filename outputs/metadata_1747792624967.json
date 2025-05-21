@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747792624967,
+  "prompt": "Unique, collectible NFT character in bold cartoon style. \nBackground: Shuttered warehouse with broken windows and light shafts. \nHead: Basic round head with random sticker placement. \nEyes: Cross-stitch pattern where eyes should be. \nClothing: Double-layered hoodie with inner contrast color. \nColor: Matte black tone with light diffusion. \nSpecies: Flamehead. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "helmet, orb, robot, photorealism, human, realistic, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, people, motorcycles, goggles, robot eyes, robot face, 3D, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Dome with Sticker",
+      "description": "Basic round head with random sticker placement",
+      "compatibility_notes": "Compatible with simple eye designs"
+    },
+    "EyesFace": {
+      "name": "Stitched Eyes",
+      "description": "Cross-stitch pattern where eyes should be",
+      "compatibility_notes": "Avoid with highly reflective head types"
+    },
+    "ClothingTop": {
+      "name": "Layered Hoodie Jacket",
+      "description": "Double-layered hoodie with inner contrast color",
+      "compatibility_notes": "Best for dynamic mid-tier characters"
+    },
+    "CharacterColor": {
+      "name": "Black",
+      "description": "Matte black tone with light diffusion",
+      "compatibility_notes": "Compatible with all head and clothing styles"
+    },
+    "Species": {
+      "name": "Flamehead",
+      "rarity": "Epic"
+    },
+    "Background": {
+      "name": "Industrial Ghost Zone",
+      "description": "Shuttered warehouse with broken windows and light shafts",
+      "compatibility_notes": "Avoid over-bright characters"
+    }
+  },
+  "warnings": []
+}

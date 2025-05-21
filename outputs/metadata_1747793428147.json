@@ -1,0 +1,37 @@
+{
+  "timestamp": 1747793428147,
+  "prompt": "Background: Metal fire escape silhouette above wall. \nBackground must be visible and match this description. \nUnique, collectible NFT creature in bold cartoon style. \nCharacter is NOT human, NOT a person, NOT a child, NOT realistic, NOT humanoid. \nCharacter is a unique, original, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person. \nNo human face, no human skin, no human anatomy, no human proportions, no human body, no human features. \nCharacter must have a unique, non-human, non-humanoid, non-person, non-child, non-adult, non-boy, non-girl, non-man, non-woman, non-teenager, non-baby, non-kid, non-cartoon human, non-cartoon person silhouette and features. \nCreature, mascot, monster, alien, robot, animal, fantasy being, or abstract. \nHead: Rounded head with texture resembling ribbed fabric. \nEyes: Eyes shaped like sideways infinity symbols pulsing with light.. \nClothing: Matte black hoodie with starfield texture. \nColor: Pulsing purple glow. \nSpecies: Gold Hybrid. \nOnly visible text: 'VERT'. \nBold outlines, cel-shading, flat colors, no gradients, no photorealism.",
+  "negative_prompt": "human, person, child, realistic face, realistic skin, human anatomy, human proportions, human body, human smile, human nose, human mouth, human ears, human hair, human hands, human feet, human fingers, human toes, human eyes, human eyebrows, human teeth, human expression, human pose, human clothing, human style, human cartoon, humanoid, people, children, baby, kid, girl, boy, woman, man, adult, teenager, realistic, photorealistic, portrait, selfie, photo, 3D, Pixar, Disney, cartoon human, cartoon person, cartoon child, cartoon adult, cartoon boy, cartoon girl, cartoon man, cartoon woman, cartoon baby, cartoon kid, helmet, orb, robot, plain background, text: MFKZ, text: NFT, text: cartoon, text: character, text except 'VERT', logos, brand names, cityscape, cars, crowds, generic urban, street scene, motorcycles, goggles, robot eyes, robot face, gradients, smooth shading, realistic textures, hats, hoods, gloves, shoes, boots, sandals, socks, dull eyes, blank head, blank eyes, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait",
+  "traits": {
+    "HeadType": {
+      "name": "Knit Cap Dome",
+      "description": "Rounded head with texture resembling ribbed fabric",
+      "compatibility_notes": "Avoid bulky accessories that would obscure the cap"
+    },
+    "EyesFace": {
+      "name": "Infinity Glare",
+      "description": "Eyes shaped like sideways infinity symbols pulsing with light.",
+      "compatibility_notes": "Best with ascendant flame or glitch auras."
+    },
+    "ClothingTop": {
+      "name": "Void Zip Hoodie",
+      "description": "Matte black hoodie with starfield texture",
+      "compatibility_notes": "Great with Void or Galaxy themes"
+    },
+    "CharacterColor": {
+      "name": "Violet Flame",
+      "description": "Pulsing purple glow",
+      "compatibility_notes": "Pairs with rare aura types"
+    },
+    "Species": {
+      "name": "Gold Hybrid",
+      "rarity": "Legendary"
+    },
+    "Background": {
+      "name": "Fire Escape Wall",
+      "description": "Metal fire escape silhouette above wall",
+      "compatibility_notes": "Good contrast for upper VFX"
+    }
+  },
+  "warnings": []
+}
