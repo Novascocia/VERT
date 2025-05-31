@@ -1,0 +1,257 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add your custom styles below */
+body {
+  @apply text-white;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  background-color: #0A0A0A;
+  background-image: url('/Cityscape.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  position: relative;
+}
+
+/* Dark overlay to ensure text readability */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 10, 0.7);
+  z-index: -1;
+  pointer-events: none;
+}
+
+@layer base {
+  :root {
+    --font-urban: 'Urbanist', sans-serif;
+    --font-comic: 'Bangers', cursive;
+  }
+}
+
+@layer components {
+  .btn-cel {
+    @apply px-6 py-3 bg-vert-accent text-white font-comic text-xl
+           border-2 border-black shadow-cel
+           hover:shadow-cel-hover hover:-translate-y-1
+           active:translate-y-0 active:shadow-cel
+           transition-all duration-200;
+  }
+
+  /* New VERT color button variants using direct colors */
+  .btn-vert-green {
+    @apply px-6 py-3 font-comic text-xl font-bold
+           border-2 border-black shadow-cel
+           hover:shadow-cel-hover hover:-translate-y-1
+           active:translate-y-0 active:shadow-cel
+           transition-all duration-200 rounded-lg;
+    background-color: #50D64D;
+    color: #111111;
+  }
+
+  .btn-vert-green:hover {
+    background-color: rgba(80, 214, 77, 0.8);
+  }
+
+  .btn-vert-gold {
+    @apply px-6 py-3 font-comic text-xl font-bold
+           border-2 border-black shadow-cel
+           hover:shadow-cel-hover hover:-translate-y-1
+           active:translate-y-0 active:shadow-cel
+           transition-all duration-200 rounded-lg;
+    background-color: #F4B942;
+    color: #111111;
+  }
+
+  .btn-vert-gold:hover {
+    background-color: rgba(244, 185, 66, 0.8);
+  }
+
+  .btn-header-green {
+    @apply px-6 py-3 font-comic text-xl font-bold
+           border-2 border-black shadow-cel
+           hover:shadow-cel-hover hover:-translate-y-1
+           active:translate-y-0 active:shadow-cel
+           transition-all duration-200 rounded-lg;
+    background-color: #ffffff;
+    color: #111111;
+  }
+
+  .btn-header-green:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .card-cel {
+    @apply bg-vert-gray border-2 border-black shadow-cel
+           p-4 rounded-lg;
+  }
+
+  .heading-comic {
+    @apply font-comic text-4xl md:text-5xl lg:text-6xl
+           text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,1)];
+  }
+
+  /* Card flip styles */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1A1A1A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #50D64D;
+  border: 2px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(80, 214, 77, 0.8);
+}
+
+/* Blinking cursor animation for prize pool terminal */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-start infinite;
+}
+
+/* RainbowKit Connect Button Customization */
+[data-rk] button[data-testid="rk-connect-button"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000 !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+  font-family: 'Bangers', cursive !important;
+  font-size: 1.25rem !important;
+  font-weight: bold !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.2s !important;
+}
+
+[data-rk] button[data-testid="rk-connect-button"]:hover {
+  background-color: #f0f0f0 !important;
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1) !important;
+  transform: translateY(-4px) !important;
+}
+
+[data-rk] button[data-testid="rk-connect-button"]:active {
+  transform: translateY(0) !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+}
+
+/* RainbowKit Account Button (when connected) */
+[data-rk] button[data-testid="rk-account-button"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000 !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+  font-family: 'Bangers', cursive !important;
+  font-size: 1.25rem !important;
+  font-weight: bold !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.2s !important;
+}
+
+[data-rk] button[data-testid="rk-account-button"]:hover {
+  background-color: #f0f0f0 !important;
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1) !important;
+  transform: translateY(-4px) !important;
+}
+
+[data-rk] button[data-testid="rk-account-button"]:active {
+  transform: translateY(0) !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+}
+
+/* Stat Bubble Enhancements */
+.stat-bubble-container {
+  pointer-events: none; /* Allow clicks to pass through the container */
+}
+
+.stat-bubble-container > * {
+  pointer-events: auto; /* Re-enable clicks on the bubbles themselves */
+}
+
+/* Comic-style text effects for bubbles */
+.bubble-text-shadow {
+  text-shadow: 
+    1px 1px 0px rgba(0,0,0,0.8),
+    -1px -1px 0px rgba(255,255,255,0.3),
+    2px 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Graffiti-style glow effects */
+.bubble-glow-green {
+  box-shadow: 
+    0 0 20px rgba(34, 197, 94, 0.6),
+    0 0 40px rgba(34, 197, 94, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.bubble-glow-gold {
+  box-shadow: 
+    0 0 20px rgba(245, 158, 11, 0.6),
+    0 0 40px rgba(245, 158, 11, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.bubble-glow-purple {
+  box-shadow: 
+    0 0 20px rgba(147, 51, 234, 0.6),
+    0 0 40px rgba(147, 51, 234, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.bubble-glow-blue {
+  box-shadow: 
+    0 0 20px rgba(37, 99, 235, 0.6),
+    0 0 40px rgba(37, 99, 235, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Connect Wallet Button */
+.connect-wallet-btn {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #000 !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+  font-family: 'Bangers', cursive !important;
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  border-radius: 9999px !important;
+  transition: all 0.2s !important;
+  padding: 0.75rem 1.5rem !important;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.connect-wallet-btn:hover {
+  background-color: #f0f0f0 !important;
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1) !important;
+  transform: translateY(-4px) !important;
+}
+
+.connect-wallet-btn:active {
+  transform: translateY(0) !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+}

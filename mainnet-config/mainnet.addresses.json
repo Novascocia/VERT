@@ -1,0 +1,44 @@
+{
+  "_comment": "Mainnet contract addresses - Fill in as contracts are deployed",
+  "_deployment_phases": {
+    "phase1": "Deploy NFT contract with VIRTUAL only",
+    "phase2": "Add VERT token address when launched by Virtuals Protocol",
+    "phase3": "Prize pool funding (no new addresses)",
+    "phase4": "Add staking contract address"
+  },
+  
+  "NFT_CONTRACT_ADDRESS": "[FILL_IN_AFTER_DEPLOYMENT]",
+  "VERT_TOKEN_ADDRESS": "[FILL_IN_WHEN_VIRTUALS_LAUNCHES_VERT]",
+  "VIRTUAL_TOKEN_ADDRESS": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
+  "TREASURY_ADDRESS": "[FILL_IN_YOUR_MAINNET_TREASURY]",
+  "OPERATIONAL_ADDRESS": "[FILL_IN_YOUR_OPERATIONAL_WALLET]",
+  
+  "_staking_contracts": {
+    "STAKING_CONTRACT_ADDRESS": "[FILL_IN_WHEN_STAKING_LAUNCHES]",
+    "STAKING_REWARDS_ADDRESS": "[FILL_IN_IF_SEPARATE_CONTRACT]"
+  },
+  
+  "_network_info": {
+    "chain_id": 8453,
+    "network_name": "base",
+    "rpc_url": "https://mainnet.base.org",
+    "explorer_url": "https://basescan.org"
+  },
+  
+  "_deployment_tracker": {
+    "nft_deployed": false,
+    "vert_token_set": false,
+    "prize_pool_funded": false,
+    "staking_integrated": false,
+    "deployment_date": "[FILL_IN_DATE]",
+    "deployer_address": "[FILL_IN_DEPLOYER_ADDRESS]"
+  },
+  
+  "_testnet_reference": {
+    "_comment": "Keep for reference/comparison",
+    "testnet_nft": "0x9ede64fe689aa03B049497E2A70676d02f3437E9",
+    "testnet_vert": "0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd",
+    "testnet_virtual": "0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a",
+    "testnet_treasury": "0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23"
+  }
+} 

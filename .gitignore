@@ -1,0 +1,8 @@
+.env
+Keys/
+__pycache__/
+firebase_key_BACKUP.json
+*.pyc
+.env.local
+.env.production
+.env.development
