@@ -6,3 +6,52 @@ firebase_key_BACKUP.json
 .env.local
 .env.production
 .env.development
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next/
+out/
+dist/
+build/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Cache directories
+.cache/
+cache/
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# Environment files (additional)
+".env (do not use)"
+".env (do not use 1)"
+
+# Firebase
+.firebaserc
+firebase.json
+firestore.indexes.json
+firestore.rules
+
+# Project specific
+assets/
+outputs/
+comfy_prompts/
+data/
+docs/
+VERT/
+*.py
+background-options.css
+verticals_traits_backup_DO_NOT_USE.json
+debug_*.js
