@@ -126,6 +126,21 @@ export default function MintFeedPanel({
               </motion.div>
             )}
 
+            {!isWaitingForTx && !isProcessing && !mintedNFTImageUrl && (
+              <motion.div
+                key="initial"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="h-full flex flex-col justify-center items-center"
+              >
+                <div className="text-gray-400 text-center">
+                  <div className="mb-2">&gt; mint feed initialized</div>
+                  <div className="text-sm">&gt; your minted NFT appears here</div>
+                </div>
+              </motion.div>
+            )}
+
             {!isWaitingForTx && !isProcessing && mintedNFTImageUrl && (
               <motion.div
                 key="completed"
@@ -210,7 +225,7 @@ export default function MintFeedPanel({
         </div>
 
         {/* Note positioned absolutely at bottom - doesn't affect container height */}
-        {(isProcessing || (!isWaitingForTx && (mintedNFTImageUrl || lastMintedRarity))) && (
+        {(isProcessing || isWaitingForTx || (!isWaitingForTx && !isProcessing)) && (
           <div className="absolute bottom-4 left-6 right-6 border-t border-green-500/30 pt-2">
             <div className="text-white text-xs text-center">
               &gt; NFT may take up to 60s to generate — minting gets faster after your first

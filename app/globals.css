@@ -255,3 +255,45 @@ body::before {
   transform: translateY(0) !important;
   box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
 }
+
+/* Subtle ASCII Art Effects */
+.ascii-container {
+  position: relative;
+}
+
+.ascii-line {
+  display: block;
+  transition: text-shadow 0.3s ease;
+}
+
+.ascii-line-1 { animation: lineBlink 3s ease-in-out infinite 0.0s; }
+.ascii-line-2 { animation: lineBlink 3s ease-in-out infinite 0.4s; }
+.ascii-line-3 { animation: lineBlink 3s ease-in-out infinite 0.8s; }
+.ascii-line-4 { animation: lineBlink 3s ease-in-out infinite 1.2s; }
+.ascii-line-5 { animation: lineBlink 3s ease-in-out infinite 1.6s; }
+.ascii-line-6 { animation: lineBlink 3s ease-in-out infinite 2.0s; }
+
+.pulse-text {
+  animation: textPulse 2s ease-in-out infinite;
+}
+
+@keyframes lineBlink {
+  0%, 10% {
+    text-shadow: 
+      0 0 10px rgba(80, 214, 77, 0.8),
+      0 0 20px rgba(80, 214, 77, 0.6),
+      0 0 30px rgba(80, 214, 77, 0.4);
+  }
+  15%, 100% {
+    text-shadow: none;
+  }
+}
+
+@keyframes textPulse {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+}

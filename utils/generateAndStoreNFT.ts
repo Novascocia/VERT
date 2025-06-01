@@ -147,9 +147,9 @@ async function uploadToPinata(imageUrl: string): Promise<string> {
   }
 }
 
-// 3. Create metadata and upload to Pinata as a folder
-async function uploadMetadataFolderToPinata(tokenId: number, imageIpfsUri: string, rarity: string): Promise<string> {
-  console.log("📝 Creating metadata for token (folder mode):", tokenId);
+// 3. Create metadata and upload to Pinata as a single file (not folder)
+async function uploadMetadataToPinata(tokenId: number, imageIpfsUri: string, traits: SelectedTraits): Promise<string> {
+  console.log("📝 Creating metadata for token (direct file mode):", tokenId);
   try {
     const metadata = {
       name: `Vertical Project #${tokenId}`,
@@ -157,51 +157,41 @@ async function uploadMetadataFolderToPinata(tokenId: number, imageIpfsUri: strin
       image: imageIpfsUri,
       attributes: [
         {
-          trait_type: "rarity",
-          value: rarity
+          trait_type: "Rarity",
+          value: traits.rarity
+        },
+        {
+          trait_type: "Species", 
+          value: traits.Species.name
         }
       ]
     };
 
-    // Write metadata to a temp file
-    const tempDir = path.join(__dirname, `../.tmp_metadata_${tokenId}`);
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir);
-    }
-    const filePath = path.join(tempDir, `${tokenId}.json`);
-    fs.writeFileSync(filePath, JSON.stringify(metadata, null, 2));
+    // Convert metadata to buffer
+    const metadataBuffer = Buffer.from(JSON.stringify(metadata, null, 2));
+    const metadataStream = Readable.from(metadataBuffer);
+    const fileName = `vertical-metadata-${tokenId}-${Date.now()}.json`;
 
-    // Prepare FormData for folder upload
-    const form = new FormData();
-    form.append('file', fs.createReadStream(filePath), {
-      filepath: `${tokenId}.json` // This ensures the file is inside the folder root
-    });
-
-    // Pinata folder upload endpoint
-    const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
-    const response = await axios.post(url, form, {
-      maxBodyLength: Infinity,
-      headers: {
-        ...form.getHeaders(),
-        pinata_api_key: process.env.PINATA_API_KEY!,
-        pinata_secret_api_key: process.env.PINATA_SECRET!,
+    // Pin metadata file directly to Pinata
+    console.log("📤 Uploading metadata to Pinata...");
+    const result = await pinata.pinFileToIPFS(metadataStream, {
+      pinataMetadata: { 
+        name: fileName
+      },
+      pinataOptions: { 
+        cidVersion: 1 
       },
     });
 
-    if (!response.data.IpfsHash) {
-      throw new Error("No IPFS hash returned from Pinata for folder upload");
+    if (!result.IpfsHash) {
+      throw new Error("No IPFS hash returned from Pinata for metadata upload");
     }
 
-    // Clean up temp files
-    fs.unlinkSync(filePath);
-    fs.rmdirSync(tempDir);
-
-    const folderCID = response.data.IpfsHash;
-    const ipfsUri = `ipfs://${folderCID}/${tokenId}.json`;
-    console.log("✅ Metadata folder uploaded to IPFS:", ipfsUri);
+    const ipfsUri = `ipfs://${result.IpfsHash}`;
+    console.log("✅ Metadata uploaded to IPFS:", ipfsUri);
     return ipfsUri;
   } catch (error) {
-    console.error("❌ Error uploading metadata folder to Pinata:", error);
+    console.error("❌ Error uploading metadata to Pinata:", error);
     throw error;
   }
 }
@@ -234,12 +224,12 @@ export async function generateAndStoreNFT(
 
     // Upload to IPFS
     const ipfsImageUri = await uploadToPinata(rawImageUrl);
-    const metadataUri = await uploadMetadataFolderToPinata(numericTokenId, ipfsImageUri, traits.rarity);
+    const metadataUri = await uploadMetadataToPinata(numericTokenId, ipfsImageUri, traits);
 
     // Set tokenURI on-chain using backend wallet
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL!);
     const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-    const contractAddress = process.env.CONTRACT_ADDRESS || "0x9ede64fe689aa03B049497E2A70676d02f3437E9";
+    const contractAddress = process.env.CONTRACT_ADDRESS || "0xc03605b09aF6010bb2097d285b9aF4024ecAf098";
     const contract = new ethers.Contract(contractAddress, contractABI.abi, signer);
     
     try {

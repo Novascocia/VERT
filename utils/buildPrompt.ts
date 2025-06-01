@@ -39,7 +39,7 @@ export function getRandomTraits(): SelectedTraits {
 
   // Assign rarity (weighted random)
   const rarityTiers = ['Common', 'Rare', 'Epic', 'Legendary', 'Mythical'];
-  const rarityWeights = [70, 20, 6, 3, 1];
+  const rarityWeights = [70, 18.75, 9, 1.875, 0.375];
   const sum = rarityWeights.reduce((a, b) => a + b, 0);
   let rand = Math.random() * sum;
   let chosenRarity = rarityTiers[0];

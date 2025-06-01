@@ -1,22 +1,44 @@
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { baseSepolia, base } from 'wagmi/chains';
-import { http } from 'wagmi';
+import { createConfig, http } from 'wagmi'
+import { base } from 'wagmi/chains'
+import { connectorsForWallets } from '@rainbow-me/rainbowkit'
+import {
+  metaMaskWallet,
+  coinbaseWallet,
+  injectedWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 
-export { baseSepolia, base };
+export { base };
 
 // Get Alchemy API key from environment
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY || '';
 
-export const wagmiConfig = getDefaultConfig({
-  appName: 'Verticals',
-  projectId: '1209303285d90dccca865a8af6f9c959',
-  chains: [baseSepolia], // For mainnet launch, change to: [base]
+// Minimal connector configuration WITHOUT WalletConnect to prevent auto-popup
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: 'Recommended',
+      wallets: [
+        injectedWallet,
+        metaMaskWallet,
+        coinbaseWallet,
+      ],
+    },
+  ],
+  {
+    appName: 'Verticals',
+    projectId: '1209303285d90dccca865a8af6f9c959',
+  }
+);
+
+export const wagmiConfig = createConfig({
+  connectors,
+  chains: [base],
   transports: {
-    [baseSepolia.id]: http(
+    [base.id]: http(
       ALCHEMY_API_KEY 
-        ? `https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
-        : 'https://sepolia.base.org'
+        ? `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+        : 'https://mainnet.base.org'
     ),
   },
-  ssr: false, // Disable SSR to prevent hydration issues and auto-popup
+  ssr: false,
 }); 

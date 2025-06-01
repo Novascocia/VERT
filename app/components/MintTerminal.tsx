@@ -48,7 +48,13 @@ export default function MintTerminal({
   mintError,
   mintedNFTImageUrl
 }: MintTerminalProps) {
-  const [lines, setLines] = useState<TerminalLine[]>([]);
+  const [lines, setLines] = useState<TerminalLine[]>([
+    { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
+    { id: 'select', text: '> select mint type:', type: 'system' },
+    { id: 'opt1', text: `  [1] mint with virtual (${priceVirtual} virtual)`, type: 'option', clickable: true },
+    { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: false },
+    { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
+  ]);
   const [showCursor, setShowCursor] = useState(true);
   const [hasInitialized, setHasInitialized] = useState(false);
   const { isConnected } = useAccount();
@@ -86,7 +92,8 @@ export default function MintTerminal({
         { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
         { id: 'select', text: '> select mint type:', type: 'system' },
         { id: 'opt1', text: `  [1] mint with virtual (${priceVirtual} virtual)`, type: 'option', clickable: true },
-        { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: true }
+        { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: false },
+        { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
       ]);
     }
   }, [hasInitialized]); // Only depend on hasInitialized
@@ -124,7 +131,8 @@ export default function MintTerminal({
         { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
         { id: 'select', text: '> select mint type:', type: 'system' },
         { id: 'opt1', text: `  [1] mint with virtual (${priceVirtual} virtual)`, type: 'option', clickable: true },
-        { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: true }
+        { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: false },
+        { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
       ]);
     }
   }, [hasInitialized, isConnected, canMint, priceVirtual, priceVert, isWaitingForTx]);
@@ -185,7 +193,8 @@ export default function MintTerminal({
           { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
           { id: 'select', text: '> select mint type:', type: 'system' },
           { id: 'opt1', text: `  [1] mint with virtual (${priceVirtual} virtual)`, type: 'option', clickable: true },
-          { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: true }
+          { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: false },
+          { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
         ]);
       }, 2000);
       
@@ -225,13 +234,14 @@ export default function MintTerminal({
           { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
           { id: 'select', text: '> select mint type:', type: 'system' },
           { id: 'opt1', text: `  [1] mint with virtual (${priceVirtual} virtual)`, type: 'option', clickable: true },
-          { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: true }
+          { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: false },
+          { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
         ]);
       }, 3000);
     }
   }, [canMint, isProcessing, isWaitingForTx, onMintWithVirtual, onMintWithVert, priceVirtual, priceVert]);
 
-  // Handle keyboard input
+  // Handle keyboard input - disable VERT option (key 2)
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (!canMint || isProcessing || isWaitingForTx) return;
@@ -239,7 +249,8 @@ export default function MintTerminal({
       if (event.key === '1') {
         handleOptionSelect('virtual');
       } else if (event.key === '2') {
-        handleOptionSelect('vert');
+        // VERT minting disabled - do nothing
+        console.log('⚠️ VERT minting coming soon!');
       }
     };
 
@@ -259,11 +270,14 @@ export default function MintTerminal({
     return () => clearInterval(interval);
   }, [isProcessing]);
 
-  const getLineColor = (type: string) => {
+  const getLineColor = (type: string, clickable?: boolean) => {
     switch (type) {
       case 'success': return 'text-green-400';
       case 'error': return 'text-red-400';
-      case 'option': return 'text-white hover:text-gray-300';
+      case 'option': 
+        return clickable 
+          ? 'text-white hover:text-gray-300' 
+          : 'text-gray-500'; // Disabled options are grayed out
       case 'command': return 'text-yellow-400';
       case 'processing': return 'text-orange-400';
       case 'waiting': return 'text-gray-400';
@@ -278,7 +292,8 @@ export default function MintTerminal({
     if (line.id === 'opt1') {
       handleOptionSelect('virtual');
     } else if (line.id === 'opt2') {
-      handleOptionSelect('vert');
+      // VERT option is disabled - do nothing
+      console.log('⚠️ VERT minting coming soon!');
     }
   };
 
@@ -287,10 +302,13 @@ export default function MintTerminal({
       <div className="bg-black border-2 border-green-500 rounded-lg p-6 font-mono text-sm min-h-[400px]">
         {/* Terminal Header */}
         <div className="flex items-center mb-4 pb-2 border-b border-green-500/30 relative">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          <div className="flex items-center gap-2 text-center">
+            <div className="text-white font-mono text-xs font-black animate-pulse" style={{textShadow: '0 0 15px rgba(34, 197, 94, 1), 0 0 30px rgba(34, 197, 94, 0.5)'}}>
+              START HERE
+            </div>
+            <div className="text-white font-mono text-sm animate-bounce" style={{textShadow: '0 0 15px rgba(34, 197, 94, 1), 0 0 30px rgba(34, 197, 94, 0.5)'}}>
+              ↓
+            </div>
           </div>
           <span className="text-green-400 text-xs absolute left-1/2 transform -translate-x-1/2">VERTICAL_MINT_v1.0.0</span>
         </div>
@@ -325,7 +343,7 @@ export default function MintTerminal({
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
-                  className={`${getLineColor(line.type)} ${
+                  className={`${getLineColor(line.type, line.clickable)} ${
                     line.clickable && canMint && !isProcessing && !isWaitingForTx
                       ? 'cursor-pointer hover:bg-green-900/20 px-2 py-1 rounded transition-colors'
                       : ''
@@ -350,10 +368,16 @@ export default function MintTerminal({
         {canMint && !isProcessing && !isWaitingForTx && (
           <div className="mt-4 pt-2 border-t border-green-500/30">
             <div className="text-green-500/70 text-xs">
-              💡 Use keyboard: [1] for VIRTUAL, [2] for VERT, or click options above
+              💡 Use keyboard: [1] for VIRTUAL minting, or click option above
             </div>
             <div className="text-green-500/70 text-xs mt-1">
               First time minting? Approve token spending. Select Max for best experience.
+            </div>
+            <div className="text-yellow-500/70 text-xs mt-1">
+              📍 Phase 1: Virtual only minting
+            </div>
+            <div className="text-yellow-500/70 text-xs mt-1">
+              🚀 Phase 2: Dual token minting + live prize pool!
             </div>
           </div>
         )}

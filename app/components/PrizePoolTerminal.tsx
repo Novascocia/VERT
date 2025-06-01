@@ -63,7 +63,7 @@ export default function PrizePoolTerminal({ prizePoolAmount }: PrizePoolTerminal
 
   return (
     <div className="w-full mx-auto max-w-4xl">
-      <div className="bg-black border-2 border-green-500 rounded-lg p-8 font-mono text-sm relative shadow-2xl shadow-green-500/20">
+      <div className="bg-black border-2 border-green-500 rounded-lg p-8 font-mono text-sm relative shadow-2xl shadow-green-500/20 h-[320px] flex flex-col justify-between">
         {/* Glow effect overlay */}
         <div className="absolute inset-0 rounded-lg bg-green-500/5 border border-green-500/30 pointer-events-none"></div>
         
@@ -96,6 +96,11 @@ export default function PrizePoolTerminal({ prizePoolAmount }: PrizePoolTerminal
                 {/* Subtle glow effect only */}
                 <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 via-green-400/10 to-green-500/10 
                               rounded-lg blur-xl animate-pulse pointer-events-none"></div>
+              </div>
+              
+              {/* Prize Pool launching soon note */}
+              <div className="text-yellow-500/90 text-sm font-medium tracking-wide">
+                🚀 Prize Pool launching soon!
               </div>
             </div>
           </div>

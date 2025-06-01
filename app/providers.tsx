@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, lightTheme } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import { wagmiConfig } from './config/wagmiConfig'
+import { base } from 'wagmi/chains'
 
 const queryClient = new QueryClient()
 
@@ -19,8 +20,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
             borderRadius: 'small',
             fontStack: 'system',
           })}
+          initialChain={base}
+          modalSize="compact"
+          showRecentTransactions={false}
         >
-          {children}
+          <div>
+            {children}
+          </div>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

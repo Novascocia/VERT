@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { formatEther, decodeEventLog } from 'viem';
 import { usePublicClient } from 'wagmi';
-import { baseSepolia } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { VERTICAL_ABI } from '@/abis/Vertical';
 
 interface MintLeaderboardProps {
@@ -21,14 +21,14 @@ interface MintEntry {
 export default function MintLeaderboard({ 
   maxEntries = 10, 
   title = "🏆 Mint Leaderboard",
-  contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x9ede64fe689aa03B049497E2A70676d02f3437E9'
+  contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098'
 }: MintLeaderboardProps) {
   const [leaderboard, setLeaderboard] = useState<MintEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalMinted, setTotalMinted] = useState('0');
   const [consecutiveFailures, setConsecutiveFailures] = useState(0);
-  const publicClient = usePublicClient({ chainId: baseSepolia.id });
+  const publicClient = usePublicClient({ chainId: base.id });
 
   const fetchLeaderboardData = async () => {
     // Stop trying if we've had too many consecutive failures (RPC is down)
