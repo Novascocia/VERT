@@ -1,3 +1,5 @@
+import { id } from 'ethers';
+
 export const ERC20_ABI = [
   {
     type: 'function',
@@ -55,4 +57,7 @@ export const VERTICAL_ABI = [
   'function getPrizePoolBalance() view returns (uint256)',
   'event NFTMinted(address indexed to, uint256 indexed tokenId, uint256 rarity)',
   'event PrizeClaimed(address indexed user, uint256 amount)'
-]; 
+];
+
+// Keccak256(topic0) for Transfer(address,address,uint256)
+export const TRANSFER_EVENT_TOPIC = id("Transfer(address,address,uint256)"); 

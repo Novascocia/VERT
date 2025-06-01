@@ -3,10 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
-import { VERTICAL_ABI, TRANSFER_EVENT_TOPIC } from '@/abis/Vertical';
+import { VERTICAL_ABI, TRANSFER_EVENT_TOPIC } from '@/app/config/abis';
 import { Interface } from 'ethers';
 import RarityReveal from '@/app/components/RarityReveal';
-import { ERC20_ABI } from '@/abis/ERC20';
+import { ERC20_ABI } from '@/app/config/abis';
 import { shortAddress } from '@/utils/helpers';
 import HowItWorks from '@/app/components/HowItWorks';
 import RarityOddsTable from '@/app/components/RarityOddsTable';
@@ -22,11 +22,12 @@ import MintFeedPanel from '@/app/components/MintFeedPanel';
 import { useAccount, useWalletClient, usePublicClient, useChainId, useDisconnect } from 'wagmi';
 import { readContract, writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { wagmiConfig } from '@/app/config/wagmiConfig';
-import { baseSepolia } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { formatEther, maxUint256, decodeEventLog, encodeFunctionData } from 'viem';
 import MintLeaderboard from '@/app/components/MintLeaderboard';
 import PrizePoolTerminal from '@/app/components/PrizePoolTerminal';
 import StatsTerminal from '@/app/components/StatsTerminal';
+import { preventWalletAutoPopup } from '@/app/utils/walletUtils';
 
 // Constants
 const BASE_SEPOLIA_CHAIN_ID = '0x14A34';
@@ -41,9 +42,9 @@ const PUBLIC_RPC = ALCHEMY_API_KEY
   : 'https://sepolia.base.org';
 
 // Contract addresses
-const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x9ede64fe689aa03B049497E2A70676d02f3437E9';
-const vertTokenAddress = process.env.NEXT_PUBLIC_VERT_TOKEN_ADDRESS || '0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd';
-const virtualTokenAddress = process.env.NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS || '0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a';
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098';
+const vertTokenAddress = process.env.NEXT_PUBLIC_VERT_TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000';
+const virtualTokenAddress = process.env.NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS || '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b';
 
 // Remove the mock implementation and replace with real API call
 async function generateAndStoreNFT(tokenId: string) {
@@ -269,9 +270,9 @@ export default function Home() {
   const [lastMintTime, setLastMintTime] = useState<number>(0);
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  const isOnBaseSepolia = chainId === 84532;
-  const { data: walletClient } = useWalletClient({ chainId: baseSepolia.id });
-  const publicClient = usePublicClient({ chainId: baseSepolia.id });
+  const isOnBaseMainnet = chainId === 8453;
+  const { data: walletClient } = useWalletClient({ chainId: base.id });
+  const publicClient = usePublicClient({ chainId: base.id });
   const [mounted, setMounted] = useState(false);
   const { disconnect } = useDisconnect();
 
@@ -288,17 +289,17 @@ export default function Home() {
     if (mounted && isConnected) {
       console.log('🔍 Network Debug Info:');
       console.log('Current Chain ID:', chainId);
-      console.log('Expected Chain ID (Base Sepolia):', 84532);
-      console.log('Is on Base Sepolia:', isOnBaseSepolia);
+      console.log('Expected Chain ID (Base Mainnet):', 8453);
+      console.log('Is on Base Mainnet:', chainId === 8453);
       console.log('Contract Address:', contractAddress);
       
-      if (!isOnBaseSepolia) {
-        console.warn('⚠️ WARNING: You are not connected to Base Sepolia testnet!');
+      if (chainId !== 8453) {
+        console.warn('⚠️ WARNING: You are not connected to Base Mainnet!');
         console.warn('Current network chain ID:', chainId);
-        console.warn('Please switch to Base Sepolia (chain ID: 84532) to avoid high gas fees');
+        console.warn('Please switch to Base Mainnet (chain ID: 8453) for Phase 1 launch');
       }
     }
-  }, [mounted, isConnected, chainId, isOnBaseSepolia]);
+  }, [mounted, isConnected, chainId]);
 
   // Verify contract and its interface
   useEffect(() => {
@@ -365,6 +366,9 @@ export default function Home() {
   useEffect(() => {
     console.log('🚀 Component mounting...');
     
+    // Prevent WalletConnect auto-popup immediately
+    preventWalletAutoPopup();
+    
     // Delay mounting to prevent hydration setState issues
     const mountTimeout = setTimeout(() => {
       setMounted(true);
@@ -377,32 +381,6 @@ export default function Home() {
         setMounted(true);
       }
     }, 2000); // 2 second fallback
-    
-    // Clear stale WalletConnect sessions more carefully
-    try {
-      if (typeof window !== 'undefined') {
-        console.log('🧹 Clearing stale wallet sessions...');
-        
-        // Only clear obviously stale keys, not all WalletConnect data
-        const keysToRemove = Object.keys(localStorage).filter(key => 
-          key.includes('wc@2:client') && 
-          localStorage.getItem(key)?.includes('expired')
-        );
-        
-        if (keysToRemove.length > 0) {
-          console.log(`🗑️ Removing ${keysToRemove.length} stale wallet sessions`);
-          keysToRemove.forEach(key => {
-            try {
-              localStorage.removeItem(key);
-            } catch (e) {
-              // Ignore errors
-            }
-          });
-        }
-      }
-    } catch (error) {
-      // Ignore localStorage errors
-    }
     
     return () => {
       clearTimeout(mountTimeout);
@@ -744,22 +722,21 @@ export default function Home() {
           console.log('🔍 VERT allowance insufficient, requesting approval...');
           console.log('🔍 VERT Approval Debug:', {
             spender: contractAddress,
-            amount: (currentPrice * BigInt(10)).toString(), // Approve 10x the required amount for convenience
-            requiredPrice: currentPrice.toString(),
+            amount: 'MAX_UINT256', // Approve maximum so user only needs to approve once
             currentAllowance: formatEther(currentAllowance)
           });
           
           // Request approval from user
-          toast('Approve VERT token spending');
+          toast('Approve VERT token spending (one-time approval)');
           try {
             await writeContract(wagmiConfig, {
               account: walletClient.account.address,
               address: vertTokenAddress as `0x${string}`,
               abi: ERC20_ABI,
               functionName: 'approve',
-              args: [contractAddress as `0x${string}`, currentPrice * BigInt(10)], // 10x required for convenience
+              args: [contractAddress as `0x${string}`, MAX_UINT256], // Approve maximum for convenience
             });
-            toast.success('VERT approved ✅');
+            toast.success('VERT approved ✅ - No more approvals needed!');
             
             // Refresh allowances after approval
             await checkAllowances();
@@ -1142,19 +1119,19 @@ export default function Home() {
       if (allowance < price) {
         console.log('🔍 VIRTUAL Approval Debug:', {
           spender: contractAddress,
-          amount: (price * BigInt(10)).toString(), // Approve 10x the required amount instead of MAX
-          requiredPrice: price.toString()
+          amount: 'MAX_UINT256', // Approve maximum so user only needs to approve once
+          requiredPrice: price.toString(),
+          allowance: allowance.toString()
         });
-        toast('Approve VIRTUAL token spending');
+        toast('Approve VIRTUAL token spending (one-time approval)');
         await writeContract(wagmiConfig, {
           account: walletClient.account.address,
           address: virtualTokenAddress as `0x${string}`,
           abi: ERC20_ABI,
           functionName: 'approve',
-          args: [contractAddress as `0x${string}`, price * BigInt(10)], // 10x required instead of MAX_UINT256
-          // Removed explicit gas limit - let wallet estimate
+          args: [contractAddress as `0x${string}`, MAX_UINT256], // Approve maximum for convenience
         });
-        toast.success('VIRTUAL approved ✅');
+        toast.success('VIRTUAL approved ✅ - No more approvals needed!');
         // Refresh allowances
         await checkAllowances();
       }
@@ -1376,7 +1353,7 @@ export default function Home() {
     }
   };
 
-  const canMint = Boolean(mounted && isConnected && address && isOnBaseSepolia && !isLoading);
+  const canMint = Boolean(mounted && isConnected && address && isOnBaseMainnet && !isLoading);
 
   // Don't render anything until mounted to prevent hydration issues
   if (!mounted) {
@@ -1424,17 +1401,16 @@ export default function Home() {
         {/* Header */}
         <div className="z-50 relative">
           <header className="relative flex justify-between items-center mb-8">
-            <img 
-              src="/title.png" 
-              alt="VERT" 
-              className="h-20 md:h-32 w-auto"
-            />
-            {/* Absolutely Centered Navigation Buttons */}
-            <nav className="absolute left-1/2 transform -translate-x-1/2 flex gap-4 items-center">
-              <a href="https://x.com/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm">Twitter/X</a>
-              <a href="#" className="btn-header-green text-sm">OpenSea</a>
+            {/* Navigation Buttons on Left */}
+            <nav className="flex gap-4 items-center">
+              <a href="https://novascodia.gitbook.io/litepaper/" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm">VERT Litepaper</a>
               <a href="#" className="btn-header-green text-sm">VERT Token</a>
-              <a href="https://novascocia.gitbook.io/litepaper/" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm">VERT Litepaper</a>
+              <a href="https://opensea.io/collection/vertical-project" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+                <img src="/opensea_logo.webp" alt="OpenSea" className="w-full h-full object-contain filter invert" />
+              </a>
+              <a href="https://x.com/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+                <img src="/x_logo.webp" alt="X" className="w-full h-full object-contain filter invert" />
+              </a>
             </nav>
             {/* Connect Button on Right */}
             <div className="flex gap-2 items-center">
@@ -1455,11 +1431,21 @@ export default function Home() {
             </div>
           </header>
         </div>
-        {/* Hero */}
+        {/* Hero - ASCII Art Header */}
         <section className="text-center mb-6">
-          <h2 className="heading-comic mb-4">
-            Mint a Vertical. Win VERT.
-          </h2>
+          <div className="font-mono text-green-400 text-xs md:text-sm lg:text-base mb-4 leading-tight overflow-x-auto">
+            <pre className="inline-block text-left whitespace-pre ascii-container">
+<span className="ascii-line ascii-line-6">██╗   ██╗███████╗██████╗ ████████╗██╗ ██████╗ █████╗ ██╗     </span>
+<span className="ascii-line ascii-line-5">██║   ██║██╔════╝██╔══██╗╚══██╔══╝██║██╔════╝██╔══██╗██║     </span>
+<span className="ascii-line ascii-line-4">██║   ██║█████╗  ██████╔╝   ██║   ██║██║     ███████║██║     </span>
+<span className="ascii-line ascii-line-3">╚██╗ ██╔╝██╔══╝  ██╔══██╗   ██║   ██║██║     ██╔══██║██║     </span>
+<span className="ascii-line ascii-line-2"> ╚████╔╝ ███████╗██║  ██║   ██║   ██║╚██████╗██║  ██║███████╗</span>
+<span className="ascii-line ascii-line-1">  ╚═══╝  ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝</span>
+            </pre>
+          </div>
+          <div className="text-green-300 font-mono text-lg md:text-xl font-bold tracking-wider pulse-text">
+            MINT → WIN → PROFIT
+          </div>
         </section>
 
         {/* Terminal Stats Section - Side by Side */}
