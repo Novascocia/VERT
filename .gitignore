@@ -48,10 +48,10 @@ firestore.rules
 assets/
 outputs/
 comfy_prompts/
-data/
 docs/
 VERT/
 *.py
 background-options.css
 verticals_traits_backup_DO_NOT_USE.json
 debug_*.js
+.vercel
