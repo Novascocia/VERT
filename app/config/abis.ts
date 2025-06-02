@@ -126,6 +126,27 @@ export const VERTICAL_ABI = [
       { name: '', type: 'uint256' }
     ]
   },
+  
+  // ERC-721 standard functions (MISSING - ADDING NOW)
+  {
+    type: 'function',
+    name: 'name',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'string' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'symbol',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'string' }
+    ]
+  },
+  
   {
     type: 'function',
     name: 'supportsInterface',
