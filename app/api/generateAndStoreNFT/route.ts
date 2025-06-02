@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateAndStoreNFT } from "@/utils/generateAndStoreNFT";
-import { getRandomTraits } from "@/utils/buildPrompt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,15 +17,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("🎲 Generating random traits for token:", tokenId);
-    const traits = getRandomTraits();
-    console.log("✅ Generated traits:", traits);
+    // Test import before using
+    console.log("🔍 Testing buildPrompt import...");
+    try {
+      const { getRandomTraits } = await import("@/utils/buildPrompt");
+      console.log("✅ buildPrompt import successful");
+      
+      console.log("🎲 Generating random traits for token:", tokenId);
+      const traits = getRandomTraits();
+      console.log("✅ Generated traits:", traits);
 
-    console.log("🚀 Starting NFT generation for token:", tokenId);
-    const result = await generateAndStoreNFT(tokenId, traits);
+      console.log("🚀 Starting NFT generation for token:", tokenId);
+      const result = await generateAndStoreNFT(tokenId, traits);
 
-    console.log("✨ NFT generation completed successfully!");
-    return NextResponse.json(result);
+      console.log("✨ NFT generation completed successfully!");
+      return NextResponse.json(result);
+    } catch (importError: any) {
+      console.error("❌ Import or trait generation error:", importError);
+      throw new Error(`Import/trait error: ${importError.message}`);
+    }
+
   } catch (error: any) {
     console.error("❌ Error in generateAndStoreNFT API:", error);
     
@@ -52,9 +62,12 @@ export async function POST(request: NextRequest) {
     } else if (error.message?.includes('Pinata')) {
       errorDetails.type = 'IPFS Upload Error';
       errorDetails.solution = 'Pinata/IPFS service issue';
-    } else if (error.message?.includes('traits')) {
+    } else if (error.message?.includes('traits') || error.message?.includes('Import/trait')) {
       errorDetails.type = 'Trait Generation Error';
       errorDetails.solution = 'Issue with trait data or generation logic';
+    } else if (error.message?.includes('Cannot find module') || error.message?.includes('import')) {
+      errorDetails.type = 'Module Import Error';
+      errorDetails.solution = 'Missing dependency or incorrect import path';
     }
     
     console.error("📋 Detailed error info:", errorDetails);
