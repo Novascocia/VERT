@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateAndStoreNFT } from "@/utils/generateAndStoreNFT";
+// Temporarily removed this import to test: import { generateAndStoreNFT } from "@/utils/generateAndStoreNFT";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("🚀 NFT Generation API called");
+    console.log("🚀 NFT Generation API called - debugging version");
     
     const body = await request.json();
     const { tokenId } = body;
@@ -27,14 +27,19 @@ export async function POST(request: NextRequest) {
       const traits = getRandomTraits();
       console.log("✅ Generated traits:", traits);
 
+      // Now test generateAndStoreNFT import
+      console.log("🔍 Testing generateAndStoreNFT import...");
+      const { generateAndStoreNFT } = await import("@/utils/generateAndStoreNFT");
+      console.log("✅ generateAndStoreNFT import successful");
+
       console.log("🚀 Starting NFT generation for token:", tokenId);
       const result = await generateAndStoreNFT(tokenId, traits);
 
       console.log("✨ NFT generation completed successfully!");
       return NextResponse.json(result);
     } catch (importError: any) {
-      console.error("❌ Import or trait generation error:", importError);
-      throw new Error(`Import/trait error: ${importError.message}`);
+      console.error("❌ Import or generation error:", importError);
+      throw new Error(`Import/generation error: ${importError.message}`);
     }
 
   } catch (error: any) {
