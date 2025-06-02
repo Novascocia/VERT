@@ -24,6 +24,14 @@ export default function AdminTerminal() {
     unaccounted: string;
     lastCheck: string;
   } | null>(null);
+  
+  // Admin Control States
+  const [virtualPrice, setVirtualPrice] = useState("");
+  const [vertPrice, setVertPrice] = useState("");
+  const [addPoolAmount, setAddPoolAmount] = useState("");
+  const [isPaused, setIsPaused] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
   const terminalRef = useRef<HTMLDivElement>(null);
 
   // Contract addresses
@@ -35,6 +43,7 @@ export default function AdminTerminal() {
     if (isConnected && address) {
       // For development, you can also check contract owner
       checkIfAdmin();
+      loadCurrentPrices();
     } else {
       setIsAdmin(false);
       setIsVisible(false);
@@ -64,6 +73,152 @@ export default function AdminTerminal() {
     } catch (error) {
       setIsAdmin(false);
       console.error("Failed to check admin status:", error);
+    }
+  };
+
+  const loadCurrentPrices = async () => {
+    try {
+      if (!publicClient) return;
+      
+      const vPrice = await publicClient.readContract({
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'priceVirtual',
+      }) as bigint;
+      
+      const vertP = await publicClient.readContract({
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'priceVert',
+      }) as bigint;
+      
+      const paused = await publicClient.readContract({
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'paused',
+      }) as boolean;
+      
+      setVirtualPrice(formatEther(vPrice));
+      setVertPrice(formatEther(vertP));
+      setIsPaused(paused);
+    } catch (error) {
+      console.error("Failed to load current prices:", error);
+    }
+  };
+
+  const updateVirtualPrice = async () => {
+    if (!virtualPrice || !walletClient) return;
+    
+    try {
+      setIsLoading(true);
+      addTerminalLine(`🔄 Setting VIRTUAL price to ${virtualPrice}...`);
+      
+      const result = await writeContract(wagmiConfig, {
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'setPrices',
+        args: [parseEther(virtualPrice), parseEther(vertPrice)],
+      });
+      
+      addTerminalLine(`✅ VIRTUAL price updated! Tx: ${result}`);
+      await loadCurrentPrices();
+    } catch (error: any) {
+      addTerminalLine(`❌ Failed to update VIRTUAL price: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateVertPrice = async () => {
+    if (!vertPrice || !walletClient) return;
+    
+    try {
+      setIsLoading(true);
+      addTerminalLine(`🔄 Setting VERT price to ${vertPrice}...`);
+      
+      const result = await writeContract(wagmiConfig, {
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'setPrices',
+        args: [parseEther(virtualPrice), parseEther(vertPrice)],
+      });
+      
+      addTerminalLine(`✅ VERT price updated! Tx: ${result}`);
+      await loadCurrentPrices();
+    } catch (error: any) {
+      addTerminalLine(`❌ Failed to update VERT price: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updateBothPrices = async () => {
+    if (!virtualPrice || !vertPrice || !walletClient) return;
+    
+    try {
+      setIsLoading(true);
+      addTerminalLine(`🔄 Setting prices: VIRTUAL=${virtualPrice}, VERT=${vertPrice}...`);
+      
+      const result = await writeContract(wagmiConfig, {
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'setPrices',
+        args: [parseEther(virtualPrice), parseEther(vertPrice)],
+      });
+      
+      addTerminalLine(`✅ Both prices updated! Tx: ${result}`);
+      await loadCurrentPrices();
+    } catch (error: any) {
+      addTerminalLine(`❌ Failed to update prices: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const togglePause = async () => {
+    if (!walletClient) return;
+    
+    try {
+      setIsLoading(true);
+      const action = isPaused ? 'unpause' : 'pause';
+      addTerminalLine(`🔄 ${isPaused ? 'Unpausing' : 'Pausing'} contract...`);
+      
+      const result = await writeContract(wagmiConfig, {
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: action,
+      });
+      
+      addTerminalLine(`✅ Contract ${action}d! Tx: ${result}`);
+      await loadCurrentPrices();
+    } catch (error: any) {
+      addTerminalLine(`❌ Failed to ${isPaused ? 'unpause' : 'pause'}: ${error.message}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const addToPrizePool = async () => {
+    if (!addPoolAmount || !walletClient) return;
+    
+    try {
+      setIsLoading(true);
+      addTerminalLine(`🔄 Adding ${addPoolAmount} VERT to prize pool...`);
+      
+      const result = await writeContract(wagmiConfig, {
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'addToPrizePool',
+        args: [parseEther(addPoolAmount)],
+      });
+      
+      addTerminalLine(`✅ Added to prize pool! Tx: ${result}`);
+      setAddPoolAmount("");
+      await checkBalances();
+    } catch (error: any) {
+      addTerminalLine(`❌ Failed to add to prize pool: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -314,11 +469,11 @@ export default function AdminTerminal() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] bg-black border-t-2 border-green-500 h-80 font-mono text-sm">
+    <div className="fixed bottom-0 left-0 right-0 z-[9999] bg-black border-t-2 border-green-500 h-96 font-mono text-sm">
       {/* Terminal Header */}
       <div className="flex items-center justify-between bg-green-500/10 border-b border-green-500/30 px-4 py-2">
         <div className="text-green-400 font-bold">
-          👑 ADMIN TERMINAL - Prize Pool Monitor
+          👑 ADMIN CONTROL PANEL - Contract: {contractAddress.slice(0,6)}...{contractAddress.slice(-4)}
         </div>
         <div className="flex items-center gap-2">
           {monitorData && (
@@ -335,12 +490,155 @@ export default function AdminTerminal() {
         </div>
       </div>
 
+      {/* Admin GUI Controls */}
+      <div className="bg-gray-900 border-b border-green-500/30 p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          
+          {/* Price Controls */}
+          <div className="space-y-2">
+            <h3 className="text-green-400 font-bold text-xs">💰 MINT PRICES</h3>
+            
+            <div className="space-y-2">
+              <div>
+                <label className="text-green-300 text-xs">VIRTUAL Price:</label>
+                <div className="flex gap-1">
+                  <input
+                    type="number"
+                    step="0.001"
+                    value={virtualPrice}
+                    onChange={(e) => setVirtualPrice(e.target.value)}
+                    placeholder="0.1"
+                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1 text-xs rounded"
+                    disabled={isLoading}
+                  />
+                  <button
+                    onClick={updateVirtualPrice}
+                    disabled={isLoading || !virtualPrice}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                  >
+                    Set
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-green-300 text-xs">VERT Price:</label>
+                <div className="flex gap-1">
+                  <input
+                    type="number"
+                    step="0.001"
+                    value={vertPrice}
+                    onChange={(e) => setVertPrice(e.target.value)}
+                    placeholder="500"
+                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1 text-xs rounded"
+                    disabled={isLoading}
+                  />
+                  <button
+                    onClick={updateVertPrice}
+                    disabled={isLoading || !vertPrice}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                  >
+                    Set
+                  </button>
+                </div>
+              </div>
+              
+              <button
+                onClick={updateBothPrices}
+                disabled={isLoading || !virtualPrice || !vertPrice}
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+              >
+                Update Both Prices
+              </button>
+            </div>
+          </div>
+
+          {/* Contract Controls */}
+          <div className="space-y-2">
+            <h3 className="text-green-400 font-bold text-xs">⚙️ CONTRACT CONTROLS</h3>
+            
+            <div className="space-y-2">
+              <button
+                onClick={togglePause}
+                disabled={isLoading}
+                className={`w-full px-2 py-1 text-xs rounded ${
+                  isPaused 
+                    ? 'bg-green-600 hover:bg-green-700 text-white' 
+                    : 'bg-red-600 hover:bg-red-700 text-white'
+                } disabled:bg-gray-600`}
+              >
+                {isPaused ? '▶️ Unpause Contract' : '⏸️ Pause Contract'}
+              </button>
+              
+              <button
+                onClick={() => checkBalances()}
+                disabled={isLoading}
+                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+              >
+                🔄 Check Balances
+              </button>
+              
+              <button
+                onClick={manualSync}
+                disabled={isLoading}
+                className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+              >
+                🔗 Manual Sync
+              </button>
+            </div>
+          </div>
+
+          {/* Prize Pool Controls */}
+          <div className="space-y-2">
+            <h3 className="text-green-400 font-bold text-xs">🏆 PRIZE POOL</h3>
+            
+            <div className="space-y-2">
+              <div>
+                <label className="text-green-300 text-xs">Add VERT to Pool:</label>
+                <div className="flex gap-1">
+                  <input
+                    type="number"
+                    step="0.001"
+                    value={addPoolAmount}
+                    onChange={(e) => setAddPoolAmount(e.target.value)}
+                    placeholder="100"
+                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1 text-xs rounded"
+                    disabled={isLoading}
+                  />
+                  <button
+                    onClick={addToPrizePool}
+                    disabled={isLoading || !addPoolAmount}
+                    className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+              
+              {monitorData && (
+                <div className="text-xs space-y-1">
+                  <div className="text-green-300">Current Pool: {monitorData.recordedPool} VERT</div>
+                  <div className="text-blue-300">Actual Balance: {monitorData.actualBalance} VERT</div>
+                  <div className={`${monitorData.unaccounted !== "0" ? 'text-yellow-300' : 'text-green-300'}`}>
+                    Unaccounted: {monitorData.unaccounted} VERT
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {isLoading && (
+          <div className="mt-2 text-yellow-300 text-xs">⏳ Transaction in progress...</div>
+        )}
+      </div>
+
       {/* Terminal Content */}
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-60">
         {/* Output Area */}
         <div 
           ref={terminalRef}
-          className="flex-1 overflow-y-auto p-4 text-green-300 space-y-1"
+          className="flex-1 overflow-y-auto p-2 text-green-300 space-y-0.5 text-xs"
         >
           {terminalLines.map((line, index) => (
             <div key={index} className="whitespace-pre-wrap">
@@ -350,15 +648,15 @@ export default function AdminTerminal() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-green-500/30 p-4">
+        <div className="border-t border-green-500/30 p-2">
           <div className="flex items-center gap-2">
-            <span className="text-green-400">admin@vert:~$</span>
+            <span className="text-green-400 text-xs">admin@vert:~$</span>
             <input
               type="text"
               value={currentInput}
               onChange={(e) => setCurrentInput(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="flex-1 bg-transparent text-green-300 outline-none border-none"
+              className="flex-1 bg-transparent text-green-300 outline-none border-none text-xs"
               placeholder="Type 'help' for commands..."
               autoFocus
             />
