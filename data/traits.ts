@@ -24,7 +24,7 @@ export interface TraitsData {
 }
 
 // Import the JSON data
-import traitsData from '../traits/verticals_with_charactercolor.json';
+const traitsData = require('../traits/verticals_with_charactercolor.json');
 
 // Validate the data structure
 function validateTraitsData(data: any): data is TraitsData {
