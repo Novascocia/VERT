@@ -9,7 +9,7 @@ const testEdgeCases = require("./test_edge_cases.js");
 
 async function main() {
   console.log("🚀 Running Complete Test Suite for VerticalProjectNFT...\n");
-  console.log("📍 Contract Address: 0x9ede64fe689aa03B049497E2A70676d02f3437E9");
+  console.log("📍 Contract Address: 0x653015826EdbF26Fe61ad08E5220cD6150D9cB56");
   console.log("🌐 Network: Base Sepolia Testnet");
   
   const [signer] = await ethers.getSigners();

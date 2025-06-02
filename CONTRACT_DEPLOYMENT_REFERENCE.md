@@ -134,10 +134,10 @@ CONTRACT_ADDRESS=[NEW_CONTRACT_ADDRESS]
 ### **Quick Command to Find All Contract Address References:**
 ```bash
 # Windows PowerShell
-Get-ChildItem -Recurse -Include "*.js","*.jsx","*.ts","*.tsx","*.json","*.md" | Select-String -Pattern "0xc03605b09aF6010bb2097d285b9aF4024ecAf098" -CaseSensitive
+Get-ChildItem -Recurse -Include "*.js","*.jsx","*.ts","*.tsx","*.json","*.md" | Select-String -Pattern "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56" -CaseSensitive
 
 # Linux/Mac
-grep -r "0xc03605b09aF6010bb2097d285b9aF4024ecAf098" --include="*.js" --include="*.jsx" --include="*.ts" --include="*.tsx" --include="*.json" --include="*.md" .
+grep -r "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56" --include="*.js" --include="*.jsx" --include="*.ts" --include="*.tsx" --include="*.json" --include="*.md" .
 ```
 
 ---
@@ -178,7 +178,7 @@ grep -r "0xc03605b09aF6010bb2097d285b9aF4024ecAf098" --include="*.js" --include=
 
 ## ⚠️ **Critical Notes**
 
-- **Old Contract**: `0xc03605b09aF6010bb2097d285b9aF4024ecAf098`
+- **Old Contract**: `0x653015826EdbF26Fe61ad08E5220cD6150D9cB56`
 - **New Contract**: `[TO_BE_DEPLOYED]`
 - **OpenSea**: New contract = new collection (clean slate)
 - **Admin Terminal**: Update deployer address detection

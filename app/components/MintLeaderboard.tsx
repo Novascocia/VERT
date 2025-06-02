@@ -18,10 +18,12 @@ interface MintEntry {
   rank: number;
 }
 
+const CONTRACT_ADDRESS = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+
 export default function MintLeaderboard({ 
   maxEntries = 10, 
   title = "🏆 Mint Leaderboard",
-  contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098'
+  contractAddress = CONTRACT_ADDRESS
 }: MintLeaderboardProps) {
   const [leaderboard, setLeaderboard] = useState<MintEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -4,9 +4,9 @@ async function main() {
   console.log("🧪 Testing Minting Functions...\n");
 
   // Contract addresses
-  const NFT_CONTRACT = "0x9ede64fe689aa03B049497E2A70676d02f3437E9";
-  const VERT_TOKEN = "0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd";
-  const VIRTUAL_TOKEN = "0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a";
+  const NFT_CONTRACT = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+  const VERT_TOKEN = "0x0000000000000000000000000000000000000000";
+  const VIRTUAL_TOKEN = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
 
   const [signer] = await ethers.getSigners();
   console.log("👤 Testing with account:", signer.address);
@@ -96,111 +96,6 @@ async function main() {
       testResults.push({ test: "mintWithVirtual()", status: "❌ Failed", error: error.message });
     }
 
-    // Test 3: Approve VERT spending
-    console.log("\n🧪 Test 3: Approve VERT spending");
-    try {
-      const approveTx = await vertToken.approve(NFT_CONTRACT, vertPrice);
-      const receipt = await approveTx.wait();
-      const gasUsed = receipt.gasUsed;
-      console.log(`✅ VERT approval: Passed | Gas used: ${gasUsed.toString()}`);
-      testResults.push({ test: "VERT approval", status: "✅ Passed", gas: gasUsed.toString() });
-    } catch (error) {
-      console.log(`❌ VERT approval: Failed | Error: ${error.message}`);
-      testResults.push({ test: "VERT approval", status: "❌ Failed", error: error.message });
-    }
-
-    // Test 4: Mint with VERT
-    console.log("\n🧪 Test 4: Mint with VERT");
-    try {
-      const initialPrizePool = await nftContract.getPrizePoolBalance();
-      const initialUserBalance = await vertToken.balanceOf(signer.address);
-
-      const mintTx = await nftContract.mintWithVert("ipfs://QmTestURI2");
-      const receipt = await mintTx.wait();
-      const gasUsed = receipt.gasUsed;
-
-      // Check if token ID incremented again
-      const newTokenId = await nftContract.nextTokenId();
-      const mintedTokenId = newTokenId - 1n;
-
-      // Check rarity
-      const rarity = await nftContract.tokenRarity(mintedTokenId);
-      const rarityNames = ["Common", "Rare", "Epic", "Legendary", "Mythical"];
-
-      // Check prize pool and balance changes
-      const finalPrizePool = await nftContract.getPrizePoolBalance();
-      const finalUserBalance = await vertToken.balanceOf(signer.address);
-      
-      const prizePoolIncreased = finalPrizePool > initialPrizePool;
-      const userBalanceDecreased = finalUserBalance < initialUserBalance;
-
-      // Parse events
-      let nftMintedEvent = null;
-      let prizeClaimedEvent = null;
-      let prizePoolUpdatedEvent = null;
-
-      for (const log of receipt.logs) {
-        try {
-          const parsedLog = nftContract.interface.parseLog(log);
-          if (parsedLog.name === "NFTMinted") {
-            nftMintedEvent = parsedLog;
-          } else if (parsedLog.name === "PrizeClaimed") {
-            prizeClaimedEvent = parsedLog;
-          } else if (parsedLog.name === "PrizePoolUpdated") {
-            prizePoolUpdatedEvent = parsedLog;
-          }
-        } catch (e) {
-          continue;
-        }
-      }
-
-      console.log(`✅ mintWithVert(): Passed | Gas used: ${gasUsed.toString()}`);
-      console.log(`   Minted Token ID: ${mintedTokenId}`);
-      console.log(`   Rarity: ${rarityNames[rarity]} (${rarity})`);
-      console.log(`   Prize pool increased: ${prizePoolIncreased ? "✅" : "❌"} (${ethers.formatEther(finalPrizePool - initialPrizePool)} VERT)`);
-      console.log(`   User balance decreased: ${userBalanceDecreased ? "✅" : "❌"} (${ethers.formatEther(initialUserBalance - finalUserBalance)} VERT)`);
-      
-      if (nftMintedEvent) {
-        console.log(`   NFTMinted event: ✅`);
-      }
-      if (prizeClaimedEvent) {
-        console.log(`   PrizeClaimed event: ✅ (${ethers.formatEther(prizeClaimedEvent.args.amount)} VERT)`);
-      }
-      if (prizePoolUpdatedEvent) {
-        console.log(`   PrizePoolUpdated event: ✅`);
-      }
-
-      testResults.push({ test: "mintWithVert()", status: "✅ Passed", gas: gasUsed.toString() });
-    } catch (error) {
-      console.log(`❌ mintWithVert(): Failed | Error: ${error.message}`);
-      testResults.push({ test: "mintWithVert()", status: "❌ Failed", error: error.message });
-    }
-
-    // Test 5: Verify final state
-    console.log("\n🧪 Test 5: Verify final state");
-    try {
-      const finalTokenId = await nftContract.nextTokenId();
-      const finalTotalMinted = await nftContract.getTotalMinted();
-      
-      const expectedTokenId = initialTokenId + 2n;
-      const expectedTotalMinted = initialTotalMinted + 2n;
-      
-      const tokenIdCorrect = finalTokenId === expectedTokenId;
-      const totalMintedCorrect = finalTotalMinted === expectedTotalMinted;
-
-      console.log(`✅ Final state verification: ${tokenIdCorrect && totalMintedCorrect ? "Passed" : "Failed"}`);
-      console.log(`   Final Token ID: ${finalTokenId} (expected: ${expectedTokenId}) ${tokenIdCorrect ? "✅" : "❌"}`);
-      console.log(`   Final Total Minted: ${finalTotalMinted} (expected: ${expectedTotalMinted}) ${totalMintedCorrect ? "✅" : "❌"}`);
-
-      testResults.push({ 
-        test: "Final state verification", 
-        status: tokenIdCorrect && totalMintedCorrect ? "✅ Passed" : "❌ Failed" 
-      });
-    } catch (error) {
-      console.log(`❌ Final state verification: Failed | Error: ${error.message}`);
-      testResults.push({ test: "Final state verification", status: "❌ Failed", error: error.message });
-    }
-
   } catch (error) {
     console.error("❌ Test suite failed:", error.message);
   }
@@ -233,4 +128,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = main; 
+module.exports = main;

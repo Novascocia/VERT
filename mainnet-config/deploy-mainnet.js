@@ -5,23 +5,25 @@ async function main() {
   console.log("=".repeat(60));
   
   // Validate environment
-  if (!process.env.MAINNET_RPC_URL || !process.env.PRIVATE_KEY) {
-    throw new Error("❌ Missing required environment variables: MAINNET_RPC_URL, PRIVATE_KEY");
+  if (!process.env.RPC_URL || !process.env.PRIVATE_KEY) {
+    throw new Error("❌ Missing required environment variables: RPC_URL, PRIVATE_KEY");
   }
   
   // Contract addresses
-  const VIRTUAL_TOKEN_ADDRESS = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b"; // Real VIRTUAL mainnet
-  const VERT_TOKEN_ADDRESS = "0x0000000000000000000000000000000000000000"; // address(0) for Phase 1
-  const TREASURY_ADDRESS = process.env.TREASURY_WALLET;
+  const VIRTUAL_TOKEN_ADDRESS = process.env.VIRTUAL_TOKEN_ADDRESS || "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b"; // Real VIRTUAL mainnet
+  const VERT_TOKEN_ADDRESS = process.env.VERT_TOKEN_ADDRESS || "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b"; // Placeholder - will be updated in Phase 2
+  const TREASURY_ADDRESS = process.env.TREASURY_ADDRESS;
   
   if (!TREASURY_ADDRESS) {
-    throw new Error("❌ TREASURY_WALLET environment variable is required");
+    throw new Error("❌ TREASURY_ADDRESS environment variable is required");
   }
   
   console.log("📋 Deployment Configuration:");
   console.log("VIRTUAL Token:", VIRTUAL_TOKEN_ADDRESS);
-  console.log("VERT Token:", VERT_TOKEN_ADDRESS, "(Phase 1 - disabled)");
+  console.log("VERT Token:", VERT_TOKEN_ADDRESS, "(placeholder - will be updated in Phase 2)");
   console.log("Treasury:", TREASURY_ADDRESS);
+  console.log("💰 Phase 1 Pricing: 0.1 VIRTUAL (launch price)");
+  console.log("💰 Phase 2 Pricing: 0.5 VIRTUAL OR 500 VERT (separate options)");
   console.log("");
 
   // Get deployer
@@ -40,7 +42,7 @@ async function main() {
 
   // Get contract factory
   console.log("🔧 Getting contract factory...");
-  const VerticalProjectNFT = await hre.ethers.getContractFactory("VerticalProjectNFT");
+  const VerticalProjectNFT = await hre.ethers.getContractFactory("contracts/VerticalProjectNFT_Fixed.sol:VerticalProjectNFT");
 
   // Estimate deployment gas
   console.log("⛽ Estimating deployment gas...");
@@ -57,7 +59,8 @@ async function main() {
   console.log("Gas estimate:", gasEstimate.toString());
   
   // Get current gas price
-  const gasPrice = await hre.ethers.provider.getGasPrice();
+  const feeData = await hre.ethers.provider.getFeeData();
+  const gasPrice = feeData.gasPrice;
   console.log("Current gas price:", hre.ethers.formatUnits(gasPrice, "gwei"), "gwei");
   
   const estimatedCost = gasEstimate * gasPrice;
@@ -86,6 +89,30 @@ async function main() {
   console.log("⏱️  Deployment time:", deploymentTime, "seconds");
   console.log("🔗 Transaction hash:", nft.deploymentTransaction().hash);
   
+  // Set correct pricing for mainnet
+  console.log("");
+  console.log("💰 Setting Phase 1 launch pricing...");
+  
+  try {
+    // Set VIRTUAL price to 0.1 VIRTUAL (0.1 * 10^18) - Launch pricing
+    const virtualPrice = hre.ethers.parseEther("0.1");
+    console.log("Setting VIRTUAL price to 0.1 VIRTUAL (launch price)...");
+    const setPriceVirtualTx = await nft.setPriceVirtual(virtualPrice);
+    await setPriceVirtualTx.wait();
+    console.log("✅ VIRTUAL price set to 0.1 VIRTUAL");
+    
+    // Set VERT price to 500 VERT (500 * 10^18) - Ready for Phase 2
+    const vertPrice = hre.ethers.parseEther("500");
+    console.log("Setting VERT price to 500 VERT (ready for Phase 2)...");
+    const setPriceVertTx = await nft.setPriceVert(vertPrice);
+    await setPriceVertTx.wait();
+    console.log("✅ VERT price set to 500 VERT (ready for Phase 2)");
+    
+  } catch (error) {
+    console.warn("⚠️  Failed to set prices during deployment:", error.message);
+    console.log("   You can set prices manually after deployment");
+  }
+  
   // Verify deployment
   console.log("");
   console.log("🔍 Verifying deployment...");
@@ -96,6 +123,7 @@ async function main() {
     const symbol = await nft.symbol();
     const totalMinted = await nft.getTotalMinted();
     const priceVirtual = await nft.priceVirtual();
+    const priceVert = await nft.priceVert();
     const paused = await nft.paused();
     
     console.log("✅ Contract verification successful:");
@@ -103,6 +131,7 @@ async function main() {
     console.log("   Symbol:", symbol);
     console.log("   Total Minted:", totalMinted.toString());
     console.log("   VIRTUAL Price:", hre.ethers.formatEther(priceVirtual), "VIRTUAL");
+    console.log("   VERT Price:", hre.ethers.formatEther(priceVert), "VERT");
     console.log("   Paused:", paused);
     
     // Verify constructor parameters

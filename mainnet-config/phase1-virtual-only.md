@@ -4,7 +4,7 @@
 
 ## 🎯 **Phase 1 Goals**
 - Deploy NFT contract on Base mainnet
-- Enable VIRTUAL token minting only
+- Enable VIRTUAL token minting only (0.1 VIRTUAL per mint - launch pricing)
 - Establish basic infrastructure
 - Ensure frontend works with mainnet
 
@@ -85,10 +85,16 @@ const publicClient = usePublicClient({ chainId: base.id });
 ### **5. Contract Configuration**
 
 **Initial NFT Contract State:**
-- VIRTUAL token minting: ✅ Enabled
+- VIRTUAL token minting: ✅ Enabled (0.1 VIRTUAL per mint - launch price)
 - VERT token minting: ❌ Disabled (address(0))
+- VERT price: Set to 500 VERT (ready for Phase 2)
 - Prize pool: ❌ Empty (will be funded in Phase 3)
-- Pricing: Set appropriate mainnet prices
+
+**Phase 1 Launch Pricing:**
+- **VIRTUAL minting**: 0.1 VIRTUAL tokens per NFT (launch price)
+- **VERT minting**: Disabled (will be 500 VERT per NFT in Phase 2)
+
+**Note**: In Phase 2, users will choose between 0.5 VIRTUAL OR 500 VERT per mint (separate options).
 
 ### **6. Frontend Features**
 
@@ -134,7 +140,7 @@ const prizePoolEnabled = process.env.PRIZE_POOL_ENABLED === 'true';
 
 ### **What Users CAN Do:**
 - Connect wallets
-- Mint NFTs with VIRTUAL tokens
+- Mint NFTs with VIRTUAL tokens (0.1 VIRTUAL each - launch price)
 - View their minted NFTs
 - Share NFTs on social media
 - See mint leaderboard
@@ -149,13 +155,14 @@ const prizePoolEnabled = process.env.PRIZE_POOL_ENABLED === 'true';
 
 Before deploying to mainnet:
 - [ ] Deploy to Base testnet first with Phase 1 config
-- [ ] Test VIRTUAL minting works
+- [ ] Test VIRTUAL minting works at 0.1 VIRTUAL launch price
 - [ ] Verify VERT minting is properly disabled
 - [ ] Check all frontend components load correctly
 - [ ] Test NFT generation and IPFS uploads
 - [ ] Verify share functionality works
 - [ ] Test with real VIRTUAL tokens on testnet
 - [ ] Confirm gas estimates are reasonable for mainnet
+- [ ] Verify pricing displays correctly in UI (0.1 VIRTUAL)
 
 ## 📊 **Monitoring**
 
@@ -171,9 +178,10 @@ Before deploying to mainnet:
 **When VERT token launches:**
 1. Get VERT token address from Virtuals Protocol
 2. Call `setVertToken(vertTokenAddress)` on NFT contract
-3. Update environment variables
-4. Enable VERT minting in frontend
-5. Update documentation
+3. **Increase VIRTUAL price to 0.5 VIRTUAL** (`setPriceVirtual(0.5 ether)`)
+4. Update environment variables
+5. Enable VERT minting in frontend (500 VERT per mint)
+6. Update documentation and UI pricing displays
 
 **What to Monitor:**
 - Virtuals Protocol announcements

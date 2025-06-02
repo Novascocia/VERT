@@ -85,7 +85,7 @@ contract VerticalProjectNFT is ERC721URIStorage, IERC2981, Ownable, Pausable, Re
         
         require(address(vertTokenCache) != address(0), "VERT token not set");
         require(vertTokenCache.transferFrom(msg.sender, address(this), priceVertCache), "VERT payment failed");
-
+        
         // FIXED: Calculate prize from CURRENT pool BEFORE updating it
         uint256 currentPrizePool = prizePool;
         
@@ -111,7 +111,7 @@ contract VerticalProjectNFT is ERC721URIStorage, IERC2981, Ownable, Pausable, Re
 
         Rarity rarity = _assignRarity(currentTokenId);
         tokenRarity[currentTokenId] = rarity;
-
+        
         // Calculate prize from the provided prize pool amount (not current storage)
         uint256 prize = _getPrizeAmount(rarity, prizePoolForCalculation);
         
@@ -228,6 +228,10 @@ contract VerticalProjectNFT is ERC721URIStorage, IERC2981, Ownable, Pausable, Re
 
     function pause() external onlyOwner { _pause(); }
     function unpause() external onlyOwner { _unpause(); }
+
+    // ================================
+    // AUTO-SYNC FUNCTIONALITY
+    // ================================
 
     /**
      * @dev Internal auto-sync function that safely checks for unaccounted VERT tokens

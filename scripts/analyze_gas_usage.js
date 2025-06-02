@@ -4,7 +4,7 @@ const VerticalABI = require('../abis/Vertical.json').abi;
 async function analyzeGasUsage() {
   try {
     const provider = new ethers.JsonRpcProvider('https://sepolia.base.org');
-    const contractAddress = '0x9ede64fe689aa03B049497E2A70676d02f3437E9';
+    const contractAddress = '0x653015826EdbF26Fe61ad08E5220cD6150D9cB56';
     const contract = new ethers.Contract(contractAddress, VerticalABI, provider);
     
     console.log('⛽ Analyzing gas usage for VERT contract...');

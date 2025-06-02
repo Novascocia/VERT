@@ -6,7 +6,7 @@ async function unpauseContract() {
   try {
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://sepolia.base.org');
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-    const contractAddress = '0x9ede64fe689aa03B049497E2A70676d02f3437E9';
+    const contractAddress = '0x653015826EdbF26Fe61ad08E5220cD6150D9cB56';
     const contract = new ethers.Contract(contractAddress, VerticalABI, wallet);
     
     console.log('🔍 Checking current pause status...');

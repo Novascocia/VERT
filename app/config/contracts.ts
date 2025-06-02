@@ -1,6 +1,6 @@
 export const CONTRACT_ADDRESSES = {
   mainnet: {
-    nft: '0xc03605b09aF6010bb2097d285b9aF4024ecAf098',
+    nft: '0x653015826EdbF26Fe61ad08E5220cD6150D9cB56',
     vertToken: 'YOUR_VERT_TOKEN_ADDRESS',
     virtualToken: '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b',
     treasury: 'YOUR_TREASURY_ADDRESS'

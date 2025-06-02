@@ -12,6 +12,7 @@ const path = require('path');
  */
 
 const OLD_CONTRACT_ADDRESS = '0xc03605b09aF6010bb2097d285b9aF4024ecAf098';
+const PREVIOUS_CONTRACT_ADDRESS = '0x9114420a6e77E41784590a9D2eE66AE3751F434c';
 
 // All files that need contract address updates
 const FILES_TO_UPDATE = [

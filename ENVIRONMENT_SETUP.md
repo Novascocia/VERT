@@ -1,51 +1,48 @@
-# Environment Setup
+# Environment Setup for Vertical Project
 
-## Required Environment Variables
+## Frontend Environment Variables (.env.local)
 
-Create a `.env.local` file in the project root with the following variables:
+Create a `.env.local` file in the root directory with these values:
 
-### Frontend Configuration (Base Sepolia Testnet)
 ```bash
-NEXT_PUBLIC_CONTRACT_ADDRESS=0x9ede64fe689aa03B049497E2A70676d02f3437E9
-NEXT_PUBLIC_VERT_TOKEN_ADDRESS=0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd
-NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS=0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a
-NEXT_PUBLIC_TREASURY_ADDRESS=0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23
+NEXT_PUBLIC_CONTRACT_ADDRESS=0x653015826EdbF26Fe61ad08E5220cD6150D9cB56
+NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS=0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b
+NEXT_PUBLIC_VERT_TOKEN_ADDRESS=[TO_BE_ANNOUNCED]
 ```
 
-### Optional Performance Enhancement
+## Backend Environment Variables (.env)
+
+Create a `.env` file for backend operations:
+
 ```bash
-# Alchemy API key for better RPC performance
-NEXT_PUBLIC_ALCHEMY_KEY=your_alchemy_key_here
+# Contract addresses (MAINNET - CORRECT)
+CONTRACT_ADDRESS=0x653015826EdbF26Fe61ad08E5220cD6150D9cB56
+VIRTUAL_TOKEN_ADDRESS=0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b
+VERT_TOKEN_ADDRESS=[TO_BE_ANNOUNCED]
+
+# Network configuration
+RPC_URL=https://mainnet.base.org
+PRIVATE_KEY=[YOUR_DEPLOYER_PRIVATE_KEY]
+
+# API Keys
+PINATA_API_KEY=[YOUR_PINATA_API_KEY]
+PINATA_SECRET_API_KEY=[YOUR_PINATA_SECRET]
+BASESCAN_API_KEY=[YOUR_BASESCAN_API_KEY]
 ```
 
-### Network Configuration
-```bash
-NEXT_PUBLIC_CHAIN_ID=84532
-NEXT_PUBLIC_NETWORK_NAME=base-sepolia
-```
+## Contract Information
 
-### Backend API Configuration
-```bash
-CONTRACT_ADDRESS=0x9ede64fe689aa03B049497E2A70676d02f3437E9
-VERT_TOKEN_ADDRESS=0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd
-VIRTUAL_TOKEN_ADDRESS=0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a
-RPC_URL=https://sepolia.base.org
-PRIVATE_KEY=your_private_key_here
-PINATA_JWT=your_pinata_jwt_here
-```
+- **NFT Contract**: `0x653015826EdbF26Fe61ad08E5220cD6150D9cB56` (Mainnet deployment - CORRECT)
+- **VIRTUAL Token**: `0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b` 
+- **VERT Token**: [TO BE ANNOUNCED BY VIRTUALS PROTOCOL]
+- **Network**: Base Mainnet (Chain ID: 8453)
 
-## Current Contract Addresses (Base Sepolia)
+## Verification Links
 
-- **NFT Contract**: `0x9ede64fe689aa03B049497E2A70676d02f3437E9` (Latest deployed)
-- **VERT Token**: `0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd`
-- **VIRTUAL Token**: `0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a`
-- **Treasury**: `0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23`
+- **BaseScan Contract**: https://basescan.org/address/0x653015826EdbF26Fe61ad08E5220cD6150D9cB56
+- **VIRTUAL Token**: https://basescan.org/address/0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b
+- **OpenSea Collection**: [TO BE UPDATED]
 
-## Fallback Behavior
+## ⚠️ DEPRECATED ADDRESSES (DO NOT USE)
 
-If environment variables are not set, the application will use the hardcoded addresses from `testnet.addresses.json` as fallbacks.
-
-## Verification
-
-You can verify the contract on BaseScan:
-https://sepolia.basescan.org/address/0x9ede64fe689aa03B049497E2A70676d02f3437E9 
+- ~~`0x9ede64fe689aa03B049497E2A70676d02f3437E9`~~ - First deployment (wrong script) 

@@ -4,9 +4,9 @@ async function main() {
   console.log("🧪 Testing Admin Functions...\n");
 
   // Contract addresses
-  const NFT_CONTRACT = "0x9ede64fe689aa03B049497E2A70676d02f3437E9";
-  const VERT_TOKEN = "0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd";
-  const VIRTUAL_TOKEN = "0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a";
+  const NFT_CONTRACT = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+  const VERT_TOKEN = "0x0000000000000000000000000000000000000000";
+  const VIRTUAL_TOKEN = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
 
   const [owner, user1] = await ethers.getSigners();
   console.log("👤 Owner account:", owner.address);

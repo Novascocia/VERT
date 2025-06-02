@@ -269,4 +269,10 @@ git push origin main
 ---
 
 *Last Updated: [UPDATE_DATE]*
-*Contract Version: VerticalProjectNFT_Fixed.sol with Auto-Sync v2.0* 
+*Contract Version: VerticalProjectNFT_Fixed.sol with Auto-Sync v2.0*
+
+# Example with the current deployed contract
+node CONTRACT_UPDATE_AUTOMATION.js 0x653015826EdbF26Fe61ad08E5220cD6150D9cB56
+
+# Update environment variables
+# In .env.local: NEXT_PUBLIC_CONTRACT_ADDRESS=0x653015826EdbF26Fe61ad08E5220cD6150D9cB56 

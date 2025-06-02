@@ -138,24 +138,20 @@ export const VERTICAL_ABI = [
     ]
   },
   
-  // NEW: Auto-sync functions
+  // Auto-sync functions (NEW)
   {
     type: 'function',
     name: 'syncPrizePool',
     stateMutability: 'nonpayable',
     inputs: [],
-    outputs: [
-      { name: '', type: 'uint256' }
-    ]
+    outputs: [{ name: '', type: 'uint256' }]
   },
   {
     type: 'function',
     name: 'getUnaccountedBalance',
     stateMutability: 'view',
     inputs: [],
-    outputs: [
-      { name: '', type: 'uint256' }
-    ]
+    outputs: [{ name: '', type: 'uint256' }]
   },
 
   // Prize pool management functions
@@ -204,14 +200,12 @@ export const VERTICAL_ABI = [
       { name: 'newTotal', type: 'uint256', indexed: false }
     ]
   },
-  
-  // NEW: Auto-sync events
   {
     type: 'event',
     name: 'PrizePoolSynced',
     inputs: [
       { name: 'syncedAmount', type: 'uint256', indexed: false },
-      { name: 'triggeredBy', type: 'address', indexed: true }
+      { name: 'triggeredBy', type: 'address', indexed: false }
     ]
   },
   {

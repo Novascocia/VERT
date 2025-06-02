@@ -1,17 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useAccount, usePublicClient } from "wagmi";
-import { readContract } from "@wagmi/core";
+import { useAccount, useWalletClient, usePublicClient } from "wagmi";
+import { readContract, writeContract } from "@wagmi/core";
 import { wagmiConfig } from "@/app/config/wagmiConfig";
 import { VERTICAL_ABI, ERC20_ABI } from "@/app/config/abis";
-import { formatEther } from "viem";
+import { formatEther, parseEther } from "viem";
 
 // Admin wallet address (deployer)
 const ADMIN_ADDRESS = "0x1234567890123456789012345678901234567890"; // Replace with actual deployer address
 
 export default function AdminTerminal() {
   const { address, isConnected } = useAccount();
+  const { data: walletClient } = useWalletClient();
   const publicClient = usePublicClient();
   const [isVisible, setIsVisible] = useState(false);
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
@@ -26,7 +27,7 @@ export default function AdminTerminal() {
   const terminalRef = useRef<HTMLDivElement>(null);
 
   // Contract addresses
-  const contractAddress = "0x9114420a6e77E41784590a9D2eE66AE3751F434c";
+  const contractAddress = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
   const vertTokenAddress = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b"; // VIRTUAL token for now
 
   // Check if connected wallet is admin
@@ -135,88 +136,95 @@ export default function AdminTerminal() {
     }
   };
 
-  const handleCommand = async (command: string) => {
-    const cmd = command.toLowerCase().trim();
-    addTerminalLine(`> ${command}`);
-
-    switch (cmd) {
-      case 'help':
-        addTerminalLine("📋 Available Commands:");
-        addTerminalLine("  check - Check prize pool balances");
-        addTerminalLine("  sync - Manually sync unaccounted tokens");
-        addTerminalLine("  status - Show monitor status");
-        addTerminalLine("  clear - Clear terminal");
-        addTerminalLine("  hide - Hide admin terminal");
-        break;
-
+  const executeCommand = async (command: string) => {
+    const parts = command.trim().split(' ');
+    const cmd = parts[0].toLowerCase();
+    
+    switch(cmd) {
       case 'check':
         await checkBalances();
         break;
-
+        
       case 'sync':
-        await syncUnaccountedTokens();
+        await manualSync();
         break;
-
+        
       case 'status':
-        addTerminalLine("📊 Monitor Status:");
-        addTerminalLine(`   Admin: ${isAdmin ? '✅' : '❌'}`);
-        addTerminalLine(`   Connected: ${isConnected ? '✅' : '❌'}`);
-        addTerminalLine(`   Address: ${address || 'None'}`);
-        if (monitorData) {
-          addTerminalLine(`   Last Check: ${monitorData.lastCheck}`);
-          addTerminalLine(`   Unaccounted: ${monitorData.unaccounted} VERT`);
-        }
+        await showStatus();
         break;
-
+        
+      case 'help':
+        showHelp();
+        break;
+        
       case 'clear':
         setTerminalLines([]);
         break;
-
+        
       case 'hide':
         setIsVisible(false);
         break;
-
+        
       default:
-        addTerminalLine(`❌ Unknown command: ${command}`);
-        addTerminalLine("Type 'help' for available commands");
+        addTerminalLine(`❌ Unknown command: ${cmd}. Type 'help' for available commands.`);
     }
   };
 
-  const syncUnaccountedTokens = async () => {
+  const showHelp = () => {
+    addTerminalLine("🔧 ADMIN TERMINAL COMMANDS:");
+    addTerminalLine("  check       - Check prize pool vs actual VERT balance");
+    addTerminalLine("  sync        - Manually sync unaccounted VERT tokens");
+    addTerminalLine("  status      - Show comprehensive system status");
+    addTerminalLine("  clear       - Clear terminal history");
+    addTerminalLine("  hide        - Hide admin terminal");
+    addTerminalLine("  help        - Show this help message");
+    addTerminalLine("");
+    addTerminalLine("💡 AUTO-SYNC FEATURE:");
+    addTerminalLine("  Users can now send VERT directly to contract address");
+    addTerminalLine("  Contract automatically syncs before every mint");
+    addTerminalLine("  Use 'sync' command to manually trigger sync");
+  };
+
+  const showStatus = async () => {
     try {
-      if (!publicClient) {
-        addTerminalLine("❌ No public client available");
-        return;
+      addTerminalLine("📊 System Status:");
+      addTerminalLine(`   Admin: ${isAdmin ? '✅' : '❌'}`);
+      addTerminalLine(`   Connected: ${isConnected ? '✅' : '❌'}`);
+      addTerminalLine(`   Address: ${address || 'None'}`);
+      
+      if (publicClient) {
+        // Get various system stats
+        const totalMinted = await publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: VERTICAL_ABI,
+          functionName: 'getTotalMinted',
+        }) as bigint;
+        
+        const prizePool = await publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: VERTICAL_ABI,
+          functionName: 'getPrizePoolBalance',
+        }) as bigint;
+        
+        addTerminalLine(`   Total Minted: ${totalMinted.toString()} NFTs`);
+        addTerminalLine(`   Prize Pool: ${formatEther(prizePool)} VERT`);
+        addTerminalLine(`   Auto-Sync: 🟢 Active`);
       }
-
-      addTerminalLine("🔄 Manually syncing unaccounted tokens...");
       
-      // Call the sync function on the contract
-      const result = await publicClient.readContract({
-        address: contractAddress as `0x${string}`,
-        abi: VERTICAL_ABI,
-        functionName: 'syncPrizePool',
-      }) as bigint;
-
-      const syncedAmount = formatEther(result);
-      
-      if (result > 0) {
-        addTerminalLine(`✅ Synced ${syncedAmount} VERT to prize pool`);
-        // Refresh balances after sync
-        await checkBalances();
-      } else {
-        addTerminalLine("ℹ️ No unaccounted tokens to sync");
+      if (monitorData) {
+        addTerminalLine(`   Last Check: ${monitorData.lastCheck}`);
+        addTerminalLine(`   Unaccounted: ${monitorData.unaccounted} VERT`);
       }
       
-    } catch (error: any) {
-      addTerminalLine(`❌ Sync failed: ${error.message}`);
+    } catch (error) {
+      addTerminalLine(`❌ Error getting status: ${error}`);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (currentInput.trim()) {
-        handleCommand(currentInput);
+        executeCommand(currentInput);
         setCurrentInput("");
       }
     }
@@ -256,6 +264,36 @@ export default function AdminTerminal() {
       return () => clearInterval(interval);
     }
   }, [isVisible, isAdmin]);
+
+  const manualSync = async () => {
+    try {
+      if (!walletClient) {
+        addTerminalLine("❌ No wallet connected for sync operation");
+        return;
+      }
+
+      addTerminalLine("🔄 Manually syncing unaccounted tokens...");
+      
+      // Call the sync function on the contract
+      const result = await writeContract(wagmiConfig, {
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'syncPrizePool',
+        args: [],
+      });
+
+      addTerminalLine(`⏳ Transaction submitted: ${result}`);
+      addTerminalLine("✅ Manual sync completed! Check transaction status.");
+      
+      // Refresh balances after sync
+      setTimeout(async () => {
+        await checkBalances();
+      }, 3000);
+      
+    } catch (error: any) {
+      addTerminalLine(`❌ Sync failed: ${error.message}`);
+    }
+  };
 
   // Only render if admin and visible
   if (!isAdmin || !isVisible) {

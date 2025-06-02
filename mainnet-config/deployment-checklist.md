@@ -33,10 +33,12 @@
   - [ ] VIRTUAL token: `0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b`
   - [ ] VERT token: `address(0)` (disabled)
   - [ ] Treasury: Your mainnet address
+  - [ ] Phase 1 Pricing: 0.1 VIRTUAL (launch), 500 VERT (ready for Phase 2)
 - [ ] **Verify contract on BaseScan**
 - [ ] **Test basic contract functions**
-- [ ] **Confirm VIRTUAL minting works**
+- [ ] **Confirm VIRTUAL minting works at 0.1 VIRTUAL launch price**
 - [ ] **Verify VERT minting is disabled**
+- [ ] **Verify pricing is set correctly (0.1 VIRTUAL launch price)**
 
 ### **Frontend Configuration**
 - [ ] **Update .env.local with mainnet values**
@@ -58,12 +60,13 @@
 - [ ] **Verify all functionality works on live site**
 
 ### **Testing & Verification**
-- [ ] **Test VIRTUAL minting end-to-end**
+- [ ] **Test VIRTUAL minting end-to-end at 0.1 VIRTUAL launch price**
 - [ ] **Verify NFT generation works**
 - [ ] **Test IPFS uploads and metadata**
 - [ ] **Check social sharing functionality**
 - [ ] **Test mint leaderboard updates**
 - [ ] **Verify gas estimates are reasonable**
+- [ ] **Confirm UI displays correct pricing (0.1 VIRTUAL launch price)**
 
 ### **Launch**
 - [ ] **Announce Phase 1 launch**
@@ -82,8 +85,9 @@
 
 ### **Contract Updates**
 - [ ] **Call `setVertToken(vertTokenAddress)` on NFT contract**
+- [ ] **Increase VIRTUAL price to 0.5 VIRTUAL** (`setPriceVirtual(0.5 ether)`)
 - [ ] **Test VERT minting functionality**
-- [ ] **Verify both VIRTUAL and VERT minting work**
+- [ ] **Verify both VIRTUAL (0.5) and VERT (500) minting work**
 
 ### **Frontend Updates**
 - [ ] **Add VERT token address to environment**
@@ -92,14 +96,17 @@
   ```
 - [ ] **Enable VERT minting UI**
 - [ ] **Update mint terminal to show both options**
+- [ ] **Update pricing displays (0.5 VIRTUAL, 500 VERT)**
 - [ ] **Test VERT approval flow**
-- [ ] **Update pricing displays**
+- [ ] **Verify both pricing options show correctly**
 
 ### **Testing**
-- [ ] **Test VERT minting end-to-end**
+- [ ] **Test VERT minting end-to-end at 500 VERT price**
+- [ ] **Test VIRTUAL minting at new 0.5 VIRTUAL price**
 - [ ] **Verify both mint methods work**
 - [ ] **Test token approvals**
 - [ ] **Check gas estimates for both methods**
+- [ ] **Confirm pricing UI shows 0.5 VIRTUAL OR 500 VERT as separate options**
 
 ### **Deployment**
 - [ ] **Deploy frontend updates**
