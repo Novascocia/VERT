@@ -987,6 +987,7 @@ export default function Home() {
       setMintedTokenId(mintDetails.tokenId);
 
       // Call backend to generate NFT with actual token ID
+      console.log("🚀 Calling NFT generation API for token:", mintDetails.tokenId);
       const response = await fetch("/api/generateAndStoreNFT", {
         method: "POST",
         headers: {
@@ -995,7 +996,21 @@ export default function Home() {
         body: JSON.stringify({ tokenId: mintDetails.tokenId }),
       });
 
+      console.log("📡 API Response status:", response.status);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Unknown API error" }));
+        console.error("❌ NFT Generation API failed:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        });
+        throw new Error(`NFT Generation failed: ${errorData.error || response.statusText} (${response.status})`);
+      }
+
       const data = await response.json();
+      console.log("✅ NFT Generation API success:", data);
+      
       setGeneratedImage(data.imageUrl || data.image);
       setGeneratedMetadata(data.metadata);
       setMintedNFTImageUrl(data.imageUrl || data.image);
@@ -1210,6 +1225,7 @@ export default function Home() {
       setMintedTokenId(mintDetails.tokenId);
 
       // Call backend to generate NFT with actual token ID
+      console.log("🚀 Calling NFT generation API for token:", mintDetails.tokenId);
       const response = await fetch("/api/generateAndStoreNFT", {
         method: "POST",
         headers: {
@@ -1218,7 +1234,21 @@ export default function Home() {
         body: JSON.stringify({ tokenId: mintDetails.tokenId }),
       });
 
+      console.log("📡 API Response status:", response.status);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: "Unknown API error" }));
+        console.error("❌ NFT Generation API failed:", {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        });
+        throw new Error(`NFT Generation failed: ${errorData.error || response.statusText} (${response.status})`);
+      }
+
       const data = await response.json();
+      console.log("✅ NFT Generation API success:", data);
+      
       setGeneratedImage(data.imageUrl || data.image);
       setGeneratedMetadata(data.metadata);
       setMintedNFTImageUrl(data.imageUrl || data.image);
