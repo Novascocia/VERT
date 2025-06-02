@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-// Temporarily removed this import to test: import { generateAndStoreNFT } from "@/utils/generateAndStoreNFT";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("🚀 NFT Generation API called - debugging version");
+    console.log("🚀 NFT Generation API called - SIMPLIFIED TEST VERSION");
     
     const body = await request.json();
     const { tokenId } = body;
@@ -17,72 +16,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Test import before using
+    // Test environment variables
+    console.log("🔍 Testing environment variables...");
+    const envVars = {
+      PINATA_API_KEY: !!process.env.PINATA_API_KEY,
+      PINATA_SECRET: !!process.env.PINATA_SECRET,
+      REPLICATE_API_TOKEN: !!process.env.REPLICATE_API_TOKEN,
+      RPC_URL: !!process.env.RPC_URL,
+      PRIVATE_KEY: !!process.env.PRIVATE_KEY,
+      CONTRACT_ADDRESS: !!process.env.CONTRACT_ADDRESS,
+    };
+    console.log("✅ Environment variables status:", envVars);
+
+    // Test buildPrompt import
     console.log("🔍 Testing buildPrompt import...");
-    try {
-      const { getRandomTraits } = await import("@/utils/buildPrompt");
-      console.log("✅ buildPrompt import successful");
-      
-      console.log("🎲 Generating random traits for token:", tokenId);
-      const traits = getRandomTraits();
-      console.log("✅ Generated traits:", traits);
+    const { getRandomTraits } = await import("@/utils/buildPrompt");
+    console.log("✅ buildPrompt import successful");
+    
+    const traits = getRandomTraits();
+    console.log("✅ Generated traits for token", tokenId);
 
-      // Now test generateAndStoreNFT import
-      console.log("🔍 Testing generateAndStoreNFT import...");
-      const { generateAndStoreNFT } = await import("@/utils/generateAndStoreNFT");
-      console.log("✅ generateAndStoreNFT import successful");
-
-      console.log("🚀 Starting NFT generation for token:", tokenId);
-      const result = await generateAndStoreNFT(tokenId, traits);
-
-      console.log("✨ NFT generation completed successfully!");
-      return NextResponse.json(result);
-    } catch (importError: any) {
-      console.error("❌ Import or generation error:", importError);
-      throw new Error(`Import/generation error: ${importError.message}`);
-    }
+    // Return success for now without actually generating
+    return NextResponse.json({
+      success: true,
+      message: "NFT generation simulation successful",
+      tokenId,
+      hasEnvironmentVars: envVars,
+      traitsGenerated: !!traits
+    });
 
   } catch (error: any) {
-    console.error("❌ Error in generateAndStoreNFT API:", error);
-    
-    // Extract more helpful error details
-    let errorDetails: {
-      message: string;
-      type: string;
-      stack: string[];
-      solution?: string;
-    } = {
-      message: error.message || 'Unknown error occurred',
-      type: error.constructor.name,
-      stack: error.stack?.split('\n').slice(0, 5) || [],
-    };
-    
-    // Check for specific error types
-    if (error.message?.includes('environment variable')) {
-      errorDetails.type = 'Environment Configuration Error';
-      errorDetails.solution = 'Please ensure all required environment variables are set in Vercel dashboard';
-    } else if (error.message?.includes('Replicate')) {
-      errorDetails.type = 'AI Image Generation Error';
-      errorDetails.solution = 'Replicate API issue - may be temporary';
-    } else if (error.message?.includes('Pinata')) {
-      errorDetails.type = 'IPFS Upload Error';
-      errorDetails.solution = 'Pinata/IPFS service issue';
-    } else if (error.message?.includes('traits') || error.message?.includes('Import/trait')) {
-      errorDetails.type = 'Trait Generation Error';
-      errorDetails.solution = 'Issue with trait data or generation logic';
-    } else if (error.message?.includes('Cannot find module') || error.message?.includes('import')) {
-      errorDetails.type = 'Module Import Error';
-      errorDetails.solution = 'Missing dependency or incorrect import path';
-    }
-    
-    console.error("📋 Detailed error info:", errorDetails);
+    console.error("❌ Error in simplified NFT API:", error);
     
     return NextResponse.json(
       { 
-        error: errorDetails.message,
-        type: errorDetails.type,
-        solution: errorDetails.solution,
-        details: errorDetails.stack
+        error: error.message || 'Unknown error',
+        stack: error.stack?.split('\n').slice(0, 3) || []
       },
       { status: 500 }
     );
