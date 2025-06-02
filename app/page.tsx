@@ -10,6 +10,7 @@ import { ERC20_ABI } from '@/app/config/abis';
 import { shortAddress } from '@/utils/helpers';
 import HowItWorks from '@/app/components/HowItWorks';
 import RarityOddsTable from '@/app/components/RarityOddsTable';
+import AdminTerminal from '@/app/components/AdminTerminal';
 
 import LiveMintFeed from '@/app/components/LiveMintFeed';
 import StatBubble from '@/app/components/StatBubble';
@@ -1508,6 +1509,9 @@ export default function Home() {
           <HowItWorks />
         </div>
       </div>
+      
+      {/* Admin Terminal (only shows for contract owner) */}
+      <AdminTerminal />
     </>
   );
 } 
