@@ -19,13 +19,21 @@ const requiredEnvVars = {
   PINATA_API_KEY: process.env.PINATA_API_KEY,
   PINATA_SECRET: process.env.PINATA_SECRET,
   REPLICATE_API_TOKEN: process.env.REPLICATE_API_TOKEN,
+  RPC_URL: process.env.RPC_URL,
+  PRIVATE_KEY: process.env.PRIVATE_KEY,
+  CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
 };
 
-Object.entries(requiredEnvVars).forEach(([key, value]) => {
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${key}`);
-  }
-});
+// Check environment variables and provide helpful error messages
+const missingEnvVars = Object.entries(requiredEnvVars)
+  .filter(([key, value]) => !value)
+  .map(([key]) => key);
+
+if (missingEnvVars.length > 0) {
+  const errorMessage = `Missing required environment variables: ${missingEnvVars.join(', ')}. Please configure these in Vercel dashboard or .env file.`;
+  console.error("❌ Environment validation failed:", errorMessage);
+  throw new Error(errorMessage);
+}
 
 console.log("🔑 Environment variables loaded successfully");
 
