@@ -5,7 +5,7 @@ async function main() {
   console.log("🔍 Verifying Mainnet Contract...");
   console.log("=".repeat(50));
   
-  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0xc03605b09aF6010bb2097d285b9aF4024ecAf098";
   
   console.log("📍 Contract Address:", contractAddress);
   console.log("🌐 Network:", hre.network.name);

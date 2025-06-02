@@ -18,7 +18,7 @@ interface MintEntry {
   rank: number;
 }
 
-const CONTRACT_ADDRESS = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+const CONTRACT_ADDRESS = "0xc03605b09aF6010bb2097d285b9aF4024ecAf098";
 
 export default function MintLeaderboard({ 
   maxEntries = 10, 

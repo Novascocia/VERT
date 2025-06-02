@@ -6,7 +6,7 @@ async function verifyContractOnBaseScan() {
   console.log("🔍 Verifying Vertical Project NFT Contract on BaseScan...");
   console.log("=".repeat(60));
   
-  const contractAddress = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+  const contractAddress = "0xc03605b09aF6010bb2097d285b9aF4024ecAf098";
   const virtualTokenAddress = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
   const vertTokenAddress = process.env.VERT_TOKEN_ADDRESS || "0x0000000000000000000000000000000000000000";
   const treasuryAddress = process.env.TREASURY_ADDRESS || "0x0000000000000000000000000000000000000000";

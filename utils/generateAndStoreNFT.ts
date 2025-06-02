@@ -235,7 +235,7 @@ export async function generateAndStoreNFT(
     // Set tokenURI on-chain using backend wallet
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL!);
     const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-    const contractAddress = process.env.CONTRACT_ADDRESS || "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+    const contractAddress = process.env.CONTRACT_ADDRESS || "0xc03605b09aF6010bb2097d285b9aF4024ecAf098";
     const contract = new ethers.Contract(contractAddress, contractABI.abi, signer);
     
     try {

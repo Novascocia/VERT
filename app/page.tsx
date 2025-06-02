@@ -10,7 +10,6 @@ import { ERC20_ABI } from '@/app/config/abis';
 import { shortAddress } from '@/utils/helpers';
 import HowItWorks from '@/app/components/HowItWorks';
 import RarityOddsTable from '@/app/components/RarityOddsTable';
-import AdminTerminal from '@/app/components/AdminTerminal';
 
 import LiveMintFeed from '@/app/components/LiveMintFeed';
 import StatBubble from '@/app/components/StatBubble';
@@ -42,8 +41,8 @@ const PUBLIC_RPC = ALCHEMY_API_KEY
   ? `https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
   : 'https://sepolia.base.org';
 
-// Contract addresses
-const contractAddress = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
+// Contract addresses - REVERTED TO LAST WORKING VERSION
+const contractAddress = "0xc03605b09aF6010bb2097d285b9aF4024ecAf098";
 const vertTokenAddress = process.env.NEXT_PUBLIC_VERT_TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000';
 const virtualTokenAddress = process.env.NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS || '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b';
 
@@ -1539,9 +1538,6 @@ export default function Home() {
           <HowItWorks />
         </div>
       </div>
-      
-      {/* Admin Terminal (only shows for contract owner) */}
-      <AdminTerminal />
     </>
   );
 } 

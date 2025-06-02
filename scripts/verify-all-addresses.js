@@ -5,8 +5,8 @@ console.log("🔍 COMPREHENSIVE ADDRESS VERIFICATION");
 console.log("=".repeat(60));
 
 // Correct mainnet addresses
-const CORRECT_ADDRESSES = {
-  NFT_CONTRACT: "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56",
+const ADDRESSES = {
+  NFT_CONTRACT: "0xc03605b09aF6010bb2097d285b9aF4024ecAf098",
   VIRTUAL_TOKEN: "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
   VERT_TOKEN: "[TO_BE_ANNOUNCED]",
   NETWORK: "Base Mainnet (8453)"
@@ -20,10 +20,10 @@ const DEPRECATED_ADDRESSES = [
 ];
 
 console.log("✅ CORRECT MAINNET ADDRESSES:");
-console.log(`   NFT Contract: ${CORRECT_ADDRESSES.NFT_CONTRACT}`);
-console.log(`   VIRTUAL Token: ${CORRECT_ADDRESSES.VIRTUAL_TOKEN}`);
-console.log(`   VERT Token: ${CORRECT_ADDRESSES.VERT_TOKEN}`);
-console.log(`   Network: ${CORRECT_ADDRESSES.NETWORK}`);
+console.log(`   NFT Contract: ${ADDRESSES.NFT_CONTRACT}`);
+console.log(`   VIRTUAL Token: ${ADDRESSES.VIRTUAL_TOKEN}`);
+console.log(`   VERT Token: ${ADDRESSES.VERT_TOKEN}`);
+console.log(`   Network: ${ADDRESSES.NETWORK}`);
 console.log("");
 
 console.log("❌ DEPRECATED ADDRESSES (should not be used):");
@@ -59,8 +59,8 @@ filesToCheck.forEach(filePath => {
       const content = fs.readFileSync(filePath, 'utf8');
       
       // Check for correct NFT contract address
-      const hasCorrectNFT = content.includes(CORRECT_ADDRESSES.NFT_CONTRACT);
-      const hasCorrectVIRTUAL = content.includes(CORRECT_ADDRESSES.VIRTUAL_TOKEN);
+      const hasCorrectNFT = content.includes(ADDRESSES.NFT_CONTRACT);
+      const hasCorrectVIRTUAL = content.includes(ADDRESSES.VIRTUAL_TOKEN);
       
       // Check for deprecated addresses
       const deprecatedFound = DEPRECATED_ADDRESSES.filter(addr => 
@@ -72,7 +72,7 @@ filesToCheck.forEach(filePath => {
       } else {
         console.log(`❌ ${filePath} - ISSUES FOUND`);
         if (!hasCorrectNFT) {
-          console.log(`   Missing correct NFT contract: ${CORRECT_ADDRESSES.NFT_CONTRACT}`);
+          console.log(`   Missing correct NFT contract: ${ADDRESSES.NFT_CONTRACT}`);
           issuesFound.push(`${filePath}: Missing correct NFT contract`);
         }
         if (deprecatedFound.length > 0) {
@@ -97,7 +97,7 @@ console.log("-".repeat(40));
 // Check mainnet config
 try {
   const mainnetConfig = JSON.parse(fs.readFileSync('mainnet-config/mainnet.addresses.json', 'utf8'));
-  if (mainnetConfig.NFT_CONTRACT_ADDRESS === CORRECT_ADDRESSES.NFT_CONTRACT) {
+  if (mainnetConfig.NFT_CONTRACT_ADDRESS === ADDRESSES.NFT_CONTRACT) {
     console.log("✅ mainnet-config/mainnet.addresses.json - CORRECT");
   } else {
     console.log("❌ mainnet-config/mainnet.addresses.json - INCORRECT NFT ADDRESS");
@@ -124,16 +124,16 @@ if (allCorrect && issuesFound.length === 0) {
   console.log("✅ Ready for mainnet production use");
   console.log("");
   console.log("📋 SUMMARY:");
-  console.log(`   ✅ NFT Contract: ${CORRECT_ADDRESSES.NFT_CONTRACT}`);
-  console.log(`   ✅ VIRTUAL Token: ${CORRECT_ADDRESSES.VIRTUAL_TOKEN}`);
-  console.log(`   ✅ Network: ${CORRECT_ADDRESSES.NETWORK}`);
+  console.log(`   ✅ NFT Contract: ${ADDRESSES.NFT_CONTRACT}`);
+  console.log(`   ✅ VIRTUAL Token: ${ADDRESSES.VIRTUAL_TOKEN}`);
+  console.log(`   ✅ Network: ${ADDRESSES.NETWORK}`);
   console.log(`   ✅ All scripts updated`);
   console.log(`   ✅ Frontend updated`);
   console.log(`   ✅ Backend updated`);
   console.log("");
   console.log("🔗 VERIFICATION LINKS:");
-  console.log(`   BaseScan: https://basescan.org/address/${CORRECT_ADDRESSES.NFT_CONTRACT}`);
-  console.log(`   VIRTUAL Token: https://basescan.org/address/${CORRECT_ADDRESSES.VIRTUAL_TOKEN}`);
+  console.log(`   BaseScan: https://basescan.org/address/${ADDRESSES.NFT_CONTRACT}`);
+  console.log(`   VIRTUAL Token: https://basescan.org/address/${ADDRESSES.VIRTUAL_TOKEN}`);
   
 } else {
   console.log("❌ ISSUES FOUND - NEEDS ATTENTION");
