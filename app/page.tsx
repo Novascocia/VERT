@@ -1411,7 +1411,7 @@ export default function Home() {
               <a href="https://x.com/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
                 <img src="/x_logo.webp" alt="X" className="w-full h-full object-contain filter invert" />
               </a>
-              <a href="https://t.me/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+              <a href="https://t.me/+BzqPgp2oxe0wNGI5" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
                 <img src="/telegram_logo.webp" alt="Telegram" className="w-full h-full object-contain filter invert" />
               </a>
             </nav>
