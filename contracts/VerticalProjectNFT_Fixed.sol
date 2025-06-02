@@ -33,6 +33,8 @@ contract VerticalProjectNFT is ERC721URIStorage, IERC2981, Ownable, Pausable, Re
     event PricesUpdated(uint256 newVirtualPrice, uint256 newVertPrice);
     event TreasuryUpdated(address newTreasury);
     event PrizePercentUpdated(Rarity rarity, uint256 newPercent);
+    event PrizePoolSynced(uint256 syncedAmount, address triggeredBy);
+    event AutoSyncFailed(string reason);
 
     constructor(
         address _virtualToken,
@@ -61,6 +63,9 @@ contract VerticalProjectNFT is ERC721URIStorage, IERC2981, Ownable, Pausable, Re
     }
 
     function mintWithVirtual(string memory tokenURI) external whenNotPaused nonReentrant {
+        // Auto-sync any unaccounted VERT tokens before minting
+        _autoSyncPrizePool();
+        
         IERC20 virtualTokenCache = virtualToken;
         uint256 priceVirtualCache = priceVirtual;
         
@@ -72,6 +77,9 @@ contract VerticalProjectNFT is ERC721URIStorage, IERC2981, Ownable, Pausable, Re
     }
 
     function mintWithVert(string memory tokenURI) external whenNotPaused nonReentrant {
+        // Auto-sync any unaccounted VERT tokens before minting
+        _autoSyncPrizePool();
+        
         IERC20 vertTokenCache = vertToken;
         uint256 priceVertCache = priceVert;
         
@@ -220,4 +228,72 @@ contract VerticalProjectNFT is ERC721URIStorage, IERC2981, Ownable, Pausable, Re
 
     function pause() external onlyOwner { _pause(); }
     function unpause() external onlyOwner { _unpause(); }
+
+    /**
+     * @dev Internal auto-sync function that safely checks for unaccounted VERT tokens
+     * Uses try/catch to ensure mint operations never fail due to sync issues
+     */
+    function _autoSyncPrizePool() internal {
+        try this._syncPrizePoolInternal() {
+            // Auto-sync succeeded silently
+        } catch Error(string memory reason) {
+            // Log the failure but don't revert the main transaction
+            emit AutoSyncFailed(reason);
+        } catch {
+            // Catch any other failures
+            emit AutoSyncFailed("Unknown sync error");
+        }
+    }
+
+    /**
+     * @dev Internal sync implementation that can be called via try/catch
+     * This is external so it can be called via this.functionName() for try/catch
+     */
+    function _syncPrizePoolInternal() external {
+        require(msg.sender == address(this), "Internal function only");
+        
+        uint256 actualBalance = vertToken.balanceOf(address(this));
+        uint256 recordedPool = prizePool;
+        
+        if (actualBalance > recordedPool) {
+            uint256 unaccountedAmount = actualBalance - recordedPool;
+            prizePool = actualBalance;
+            emit PrizePoolSynced(unaccountedAmount, tx.origin);
+            emit PrizePoolUpdated(actualBalance);
+        }
+    }
+
+    /**
+     * @dev Manual sync function for admin use - can be called by anyone but primarily for admin
+     * Returns the amount that was synced
+     */
+    function syncPrizePool() external returns (uint256) {
+        uint256 actualBalance = vertToken.balanceOf(address(this));
+        uint256 recordedPool = prizePool;
+        
+        if (actualBalance > recordedPool) {
+            uint256 unaccountedAmount = actualBalance - recordedPool;
+            prizePool = actualBalance;
+            emit PrizePoolSynced(unaccountedAmount, msg.sender);
+            emit PrizePoolUpdated(actualBalance);
+            return unaccountedAmount;
+        }
+        
+        return 0;
+    }
+
+    /**
+     * @dev View function to check if there are unaccounted tokens
+     * Useful for frontend monitoring
+     */
+    function getUnaccountedBalance() external view returns (uint256) {
+        uint256 actualBalance = vertToken.balanceOf(address(this));
+        uint256 recordedPool = prizePool;
+        
+        if (actualBalance > recordedPool) {
+            return actualBalance - recordedPool;
+        }
+        
+        return 0;
+    }
 } 

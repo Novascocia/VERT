@@ -51,12 +51,176 @@ export const ERC20_ABI = [
 ];
 
 export const VERTICAL_ABI = [
-  'function mintWithVert(string uri) returns (uint256)',
-  'function mintWithVirtual(string uri) returns (uint256)',
-  'function getTotalMinted() view returns (uint256)',
-  'function getPrizePoolBalance() view returns (uint256)',
-  'event NFTMinted(address indexed to, uint256 indexed tokenId, uint256 rarity)',
-  'event PrizeClaimed(address indexed user, uint256 amount)'
+  // Mint functions
+  {
+    type: 'function',
+    name: 'mintWithVert',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'tokenURI', type: 'string' }
+    ],
+    outputs: []
+  },
+  {
+    type: 'function',
+    name: 'mintWithVirtual',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'tokenURI', type: 'string' }
+    ],
+    outputs: []
+  },
+  
+  // View functions
+  {
+    type: 'function',
+    name: 'getTotalMinted',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'uint256' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'getPrizePoolBalance',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'uint256' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'owner',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'address' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'paused',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'bool' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'priceVirtual',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'uint256' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'priceVert',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'uint256' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'supportsInterface',
+    stateMutability: 'view',
+    inputs: [
+      { name: 'interfaceId', type: 'bytes4' }
+    ],
+    outputs: [
+      { name: '', type: 'bool' }
+    ]
+  },
+  
+  // NEW: Auto-sync functions
+  {
+    type: 'function',
+    name: 'syncPrizePool',
+    stateMutability: 'nonpayable',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'uint256' }
+    ]
+  },
+  {
+    type: 'function',
+    name: 'getUnaccountedBalance',
+    stateMutability: 'view',
+    inputs: [],
+    outputs: [
+      { name: '', type: 'uint256' }
+    ]
+  },
+
+  // Prize pool management functions
+  {
+    type: 'function',
+    name: 'addToPrizePool',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'amount', type: 'uint256' }
+    ],
+    outputs: []
+  },
+  {
+    type: 'function',
+    name: 'depositToPrizePool',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'amount', type: 'uint256' }
+    ],
+    outputs: []
+  },
+
+  // Events
+  {
+    type: 'event',
+    name: 'NFTMinted',
+    inputs: [
+      { name: 'user', type: 'address', indexed: true },
+      { name: 'tokenId', type: 'uint256', indexed: false },
+      { name: 'rarity', type: 'uint8', indexed: false },
+      { name: 'uri', type: 'string', indexed: false }
+    ]
+  },
+  {
+    type: 'event',
+    name: 'PrizeClaimed',
+    inputs: [
+      { name: 'user', type: 'address', indexed: true },
+      { name: 'amount', type: 'uint256', indexed: false }
+    ]
+  },
+  {
+    type: 'event',
+    name: 'PrizePoolUpdated',
+    inputs: [
+      { name: 'newTotal', type: 'uint256', indexed: false }
+    ]
+  },
+  
+  // NEW: Auto-sync events
+  {
+    type: 'event',
+    name: 'PrizePoolSynced',
+    inputs: [
+      { name: 'syncedAmount', type: 'uint256', indexed: false },
+      { name: 'triggeredBy', type: 'address', indexed: true }
+    ]
+  },
+  {
+    type: 'event',
+    name: 'AutoSyncFailed',
+    inputs: [
+      { name: 'reason', type: 'string', indexed: false }
+    ]
+  }
 ];
 
 // Keccak256(topic0) for Transfer(address,address,uint256)

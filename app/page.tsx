@@ -898,8 +898,8 @@ export default function Home() {
         });
         console.log('💰 Gas Estimate for VERT mint:', gasEstimate.toString());
         
-        // Get gas estimate with buffer
-        const gasWithBuffer = (gasEstimate * BigInt(125)) / BigInt(100); // 25% buffer
+        // Add extra buffer for auto-sync functionality (30k gas)
+        const gasWithBuffer = (gasEstimate * BigInt(140)) / BigInt(100); // 40% buffer for auto-sync
         
         // Get current gas price
         const gasPrice = await publicClient.getGasPrice();
@@ -936,11 +936,11 @@ export default function Home() {
           args: ["ipfs://QmPlaceholder"],
           account: walletClient.account.address,
         });
-        gasWithBuffer = (gasEstimate * BigInt(125)) / BigInt(100); // 25% buffer
+        gasWithBuffer = (gasEstimate * BigInt(140)) / BigInt(100); // 40% buffer for auto-sync
         console.log('💰 Final gas with buffer for transaction:', gasWithBuffer.toString());
       } catch (gasEstError: any) {
         console.warn('⚠️ Gas estimation failed, using fallback:', gasEstError.message);
-        gasWithBuffer = BigInt(200000); // Safe fallback
+        gasWithBuffer = BigInt(250000); // Higher fallback for auto-sync
       }
       
       let txHash;
@@ -1152,9 +1152,9 @@ export default function Home() {
         });
         console.log('🔍 Gas Estimate for VIRTUAL mint:', gasEstimate.toString());
         
-        // Add 25% buffer for safety
-        gasWithBuffer = (gasEstimate * BigInt(125)) / BigInt(100);
-        console.log('🛡️ Gas with 25% buffer:', gasWithBuffer.toString());
+        // Add 40% buffer for auto-sync functionality
+        gasWithBuffer = (gasEstimate * BigInt(140)) / BigInt(100);
+        console.log('🛡️ Gas with 40% buffer:', gasWithBuffer.toString());
         
         // Get current gas price
         const gasPrice = await publicClient.getGasPrice();
@@ -1165,7 +1165,7 @@ export default function Home() {
         console.log('💰 Estimated transaction cost (USD ~$2500/ETH):', '$' + (Number(formatEther(estimatedCost)) * 2500).toFixed(4));
       } catch (gasError: any) {
         console.error('❌ Gas estimation failed - using fallback gas limit:', gasError);
-        // gasWithBuffer already set to fallback value
+        gasWithBuffer = BigInt(250000); // Higher fallback for auto-sync
       }
 
       let txHash;

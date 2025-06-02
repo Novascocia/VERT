@@ -95,15 +95,21 @@ export default function AdminTerminal() {
         functionName: 'getPrizePoolBalance',
       }) as bigint;
 
+      // Use new contract function to get unaccounted balance
+      const unaccountedBalance = await publicClient.readContract({
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'getUnaccountedBalance',
+      }) as bigint;
+
       const actualFormatted = formatEther(actualBalance);
       const recordedFormatted = formatEther(recordedPool);
+      const unaccountedFormatted = formatEther(unaccountedBalance);
       
       addTerminalLine(`📊 Actual VERT Balance: ${actualFormatted}`);
       addTerminalLine(`📊 Recorded Prize Pool: ${recordedFormatted}`);
 
-      if (actualBalance > recordedPool) {
-        const unaccounted = actualBalance - recordedPool;
-        const unaccountedFormatted = formatEther(unaccounted);
+      if (unaccountedBalance > 0) {
         addTerminalLine(`🚨 UNACCOUNTED: ${unaccountedFormatted} VERT`);
         
         setMonitorData({
@@ -137,6 +143,7 @@ export default function AdminTerminal() {
       case 'help':
         addTerminalLine("📋 Available Commands:");
         addTerminalLine("  check - Check prize pool balances");
+        addTerminalLine("  sync - Manually sync unaccounted tokens");
         addTerminalLine("  status - Show monitor status");
         addTerminalLine("  clear - Clear terminal");
         addTerminalLine("  hide - Hide admin terminal");
@@ -144,6 +151,10 @@ export default function AdminTerminal() {
 
       case 'check':
         await checkBalances();
+        break;
+
+      case 'sync':
+        await syncUnaccountedTokens();
         break;
 
       case 'status':
@@ -168,6 +179,37 @@ export default function AdminTerminal() {
       default:
         addTerminalLine(`❌ Unknown command: ${command}`);
         addTerminalLine("Type 'help' for available commands");
+    }
+  };
+
+  const syncUnaccountedTokens = async () => {
+    try {
+      if (!publicClient) {
+        addTerminalLine("❌ No public client available");
+        return;
+      }
+
+      addTerminalLine("🔄 Manually syncing unaccounted tokens...");
+      
+      // Call the sync function on the contract
+      const result = await publicClient.readContract({
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'syncPrizePool',
+      }) as bigint;
+
+      const syncedAmount = formatEther(result);
+      
+      if (result > 0) {
+        addTerminalLine(`✅ Synced ${syncedAmount} VERT to prize pool`);
+        // Refresh balances after sync
+        await checkBalances();
+      } else {
+        addTerminalLine("ℹ️ No unaccounted tokens to sync");
+      }
+      
+    } catch (error: any) {
+      addTerminalLine(`❌ Sync failed: ${error.message}`);
     }
   };
 
