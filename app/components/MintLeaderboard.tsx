@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { formatEther, decodeEventLog } from 'viem';
 import { usePublicClient } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { VERTICAL_ABI } from '@/abis/Vertical';
+import { VERTICAL_ABI } from '@/app/config/abis';
 
 interface MintLeaderboardProps {
   maxEntries?: number;

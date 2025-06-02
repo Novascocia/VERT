@@ -1,4 +1,5 @@
 import { id } from 'ethers';
+import VerticalABI from '../../abis/Vertical.json';
 
 export const ERC20_ABI = [
   {
@@ -50,14 +51,8 @@ export const ERC20_ABI = [
   }
 ];
 
-export const VERTICAL_ABI = [
-  'function mintWithVert(string uri) returns (uint256)',
-  'function mintWithVirtual(string uri) returns (uint256)',
-  'function getTotalMinted() view returns (uint256)',
-  'function getPrizePoolBalance() view returns (uint256)',
-  'event NFTMinted(address indexed to, uint256 indexed tokenId, uint256 rarity)',
-  'event PrizeClaimed(address indexed user, uint256 amount)'
-];
+// Use the complete ABI from the compiled contract
+export const VERTICAL_ABI = VerticalABI.abi;
 
 // Keccak256(topic0) for Transfer(address,address,uint256)
 export const TRANSFER_EVENT_TOPIC = id("Transfer(address,address,uint256)"); 
