@@ -7,7 +7,7 @@
     "phase4": "Add staking contract address"
   },
   
-  "NFT_CONTRACT_ADDRESS": "0xc03605b09aF6010bb2097d285b9aF4024ecAf098",
+  "NFT_CONTRACT_ADDRESS": "[FILL_IN_AFTER_DEPLOYMENT]",
   "VERT_TOKEN_ADDRESS": "[FILL_IN_WHEN_VIRTUALS_LAUNCHES_VERT]",
   "VIRTUAL_TOKEN_ADDRESS": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
   "TREASURY_ADDRESS": "[FILL_IN_YOUR_MAINNET_TREASURY]",
@@ -26,15 +26,12 @@
   },
   
   "_deployment_tracker": {
-    "previous_versions": [
-      "0x9114420a6e77E41784590a9D2eE66AE3751F434c",
-      "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56"
-    ],
-    "current_version": "0xc03605b09aF6010bb2097d285b9aF4024ecAf098",
-    "deployment_date": "2024-12-19",
-    "features": ["standard-mint", "prize-pool"],
-    "network": "base-mainnet",
-    "status": "REVERTED_TO_WORKING_VERSION"
+    "nft_deployed": false,
+    "vert_token_set": false,
+    "prize_pool_funded": false,
+    "staking_integrated": false,
+    "deployment_date": "[FILL_IN_DATE]",
+    "deployer_address": "[FILL_IN_DEPLOYER_ADDRESS]"
   },
   
   "_testnet_reference": {

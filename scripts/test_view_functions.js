@@ -4,8 +4,8 @@ async function main() {
   console.log("🧪 Testing View Functions...\n");
 
   // Contract addresses
-  const NFT_CONTRACT = "0x653015826EdbF26Fe61ad08E5220cD6150D9cB56";
-  const VERT_TOKEN = "0x0000000000000000000000000000000000000000";
+  const NFT_CONTRACT = "0x9ede64fe689aa03B049497E2A70676d02f3437E9";
+  const VERT_TOKEN = "0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd";
 
   const [signer] = await ethers.getSigners();
   console.log("👤 Testing with account:", signer.address);

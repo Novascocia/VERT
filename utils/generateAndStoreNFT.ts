@@ -14,6 +14,28 @@ import contractABI from '../abis/Vertical.json';
 
 dotenv.config();
 
+// Validate environment variables
+const requiredEnvVars = {
+  PINATA_API_KEY: process.env.PINATA_API_KEY,
+  PINATA_SECRET: process.env.PINATA_SECRET,
+  REPLICATE_API_TOKEN: process.env.REPLICATE_API_TOKEN,
+};
+
+Object.entries(requiredEnvVars).forEach(([key, value]) => {
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+});
+
+console.log("🔑 Environment variables loaded successfully");
+
+const pinata = new pinataSDK({
+  pinataApiKey: process.env.PINATA_API_KEY!,
+  pinataSecretApiKey: process.env.PINATA_SECRET!,
+});
+
+const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN! });
+
 // Helper: Retry wrapper for Replicate
 async function retryReplicate(
   fn: () => Promise<any>,
@@ -49,7 +71,7 @@ async function retryReplicate(
 }
 
 // 1. Generate image with Replicate
-async function generateImage(prompt: string, negative_prompt: string, replicate: any): Promise<string> {
+async function generateImage(prompt: string, negative_prompt: string): Promise<string> {
   console.log("🧠 Generating image with prompt:", prompt);
   console.log("🚫 Using negative prompt:", negative_prompt);
 
@@ -84,7 +106,7 @@ async function generateImage(prompt: string, negative_prompt: string, replicate:
 }
 
 // 2. Download image and upload to Pinata
-async function uploadToPinata(imageUrl: string, pinata: any): Promise<string> {
+async function uploadToPinata(imageUrl: string): Promise<string> {
   console.log("📥 Downloading image from:", imageUrl);
   
   try {
@@ -126,7 +148,7 @@ async function uploadToPinata(imageUrl: string, pinata: any): Promise<string> {
 }
 
 // 3. Create metadata and upload to Pinata as a single file (not folder)
-async function uploadMetadataToPinata(tokenId: number, imageIpfsUri: string, traits: SelectedTraits, pinata: any): Promise<string> {
+async function uploadMetadataToPinata(tokenId: number, imageIpfsUri: string, traits: SelectedTraits): Promise<string> {
   console.log("📝 Creating metadata for token (direct file mode):", tokenId);
   try {
     const metadata = {
@@ -181,34 +203,6 @@ export async function generateAndStoreNFT(
 ) {
   console.log("\n🚀 Starting NFT generation for token:", tokenId);
 
-  // Validate environment variables at runtime
-  const requiredEnvVars = {
-    PINATA_API_KEY: process.env.PINATA_API_KEY,
-    PINATA_SECRET: process.env.PINATA_SECRET,
-    REPLICATE_API_TOKEN: process.env.REPLICATE_API_TOKEN,
-    RPC_URL: process.env.RPC_URL,
-    PRIVATE_KEY: process.env.PRIVATE_KEY,
-    CONTRACT_ADDRESS: process.env.CONTRACT_ADDRESS,
-  };
-
-  const missingEnvVars = Object.entries(requiredEnvVars)
-    .filter(([key, value]) => !value)
-    .map(([key]) => key);
-
-  if (missingEnvVars.length > 0) {
-    const errorMessage = `Missing required environment variables: ${missingEnvVars.join(', ')}. Please configure these in Vercel dashboard.`;
-    console.error("❌ Environment validation failed:", errorMessage);
-    throw new Error(errorMessage);
-  }
-
-  // Initialize SDKs at runtime
-  const pinata = new pinataSDK({
-    pinataApiKey: process.env.PINATA_API_KEY!,
-    pinataSecretApiKey: process.env.PINATA_SECRET!,
-  });
-
-  const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN! });
-
   try {
     const numericTokenId = typeof tokenId === 'string' ? parseInt(tokenId, 10) : tokenId;
     if (isNaN(numericTokenId)) {
@@ -226,11 +220,11 @@ export async function generateAndStoreNFT(
     console.log("✅ Prompt passed to Replicate:\n", prompt);
 
     // Generate image with Replicate
-    const rawImageUrl = await generateImage(prompt, negative_prompt, replicate);
+    const rawImageUrl = await generateImage(prompt, negative_prompt);
 
     // Upload to IPFS
-    const ipfsImageUri = await uploadToPinata(rawImageUrl, pinata);
-    const metadataUri = await uploadMetadataToPinata(numericTokenId, ipfsImageUri, traits, pinata);
+    const ipfsImageUri = await uploadToPinata(rawImageUrl);
+    const metadataUri = await uploadMetadataToPinata(numericTokenId, ipfsImageUri, traits);
 
     // Set tokenURI on-chain using backend wallet
     const provider = new ethers.JsonRpcProvider(process.env.RPC_URL!);

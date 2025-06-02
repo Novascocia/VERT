@@ -4,12 +4,12 @@ const VerticalABI = require('../abis/Vertical.json').abi;
 
 async function setMintPrices() {
   try {
-    const provider = new ethers.JsonRpcProvider(process.env.MAINNET_RPC_URL || 'https://mainnet.base.org');
+    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://sepolia.base.org');
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-    const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x653015826EdbF26Fe61ad08E5220cD6150D9cB56';
+    const contractAddress = '0x9ede64fe689aa03B049497E2A70676d02f3437E9';
     const contract = new ethers.Contract(contractAddress, VerticalABI, wallet);
     
-    console.log('💰 Setting Phase 1 launch prices...');
+    console.log('💰 Setting mint prices...');
     console.log('📝 Contract:', contractAddress);
     console.log('🔑 Wallet:', wallet.address);
     
@@ -21,13 +21,13 @@ async function setMintPrices() {
     console.log('💎 VERT:', ethers.formatEther(currentVertPrice), 'VERT');
     console.log('🌟 VIRTUAL:', ethers.formatEther(currentVirtualPrice), 'VIRTUAL');
     
-    // Set Phase 1 launch prices
-    const newVertPrice = ethers.parseEther("500");     // 500 VERT (ready for Phase 2)
-    const newVirtualPrice = ethers.parseEther("0.1");  // 0.1 VIRTUAL (Phase 1 launch price)
+    // Set reasonable prices
+    const newVertPrice = ethers.parseEther("100");      // 100 VERT per mint
+    const newVirtualPrice = ethers.parseEther("50");    // 50 VIRTUAL per mint
     
-    console.log('\n🚀 Setting Phase 1 launch prices:');
-    console.log('💎 VERT price:', ethers.formatEther(newVertPrice), 'VERT (ready for Phase 2)');
-    console.log('🌟 VIRTUAL price:', ethers.formatEther(newVirtualPrice), 'VIRTUAL (Phase 1 launch price)');
+    console.log('\n🚀 Setting new prices:');
+    console.log('💎 New VERT price:', ethers.formatEther(newVertPrice), 'VERT');
+    console.log('🌟 New VIRTUAL price:', ethers.formatEther(newVirtualPrice), 'VIRTUAL');
     
     // Verify owner
     const owner = await contract.owner();
