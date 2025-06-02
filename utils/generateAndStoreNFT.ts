@@ -8,13 +8,10 @@ import { Readable } from "stream";
 import Replicate from 'replicate';
 import { buildPrompt, getRandomTraits } from './buildPrompt';
 import { SelectedTraits } from '../types/traits';
-import { ethers } from "ethers";
-import contractABI from '../abis/Vertical.json';
-// import { getTraitsFromTokenId } from "./traitLoader"; // Uncomment if you have this
 
 dotenv.config();
 
-// Validate environment variables
+// Only validate environment variables needed for image generation and IPFS
 const requiredEnvVars = {
   PINATA_API_KEY: process.env.PINATA_API_KEY,
   PINATA_SECRET: process.env.PINATA_SECRET,
@@ -226,31 +223,32 @@ export async function generateAndStoreNFT(
     const ipfsImageUri = await uploadToPinata(rawImageUrl);
     const metadataUri = await uploadMetadataToPinata(numericTokenId, ipfsImageUri, traits);
 
-    // Set tokenURI on-chain using backend wallet
-    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL!);
-    const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
-    const contractAddress = process.env.CONTRACT_ADDRESS || "0xc03605b09aF6010bb2097d285b9aF4024ecAf098";
-    const contract = new ethers.Contract(contractAddress, contractABI.abi, signer);
-    
-    try {
-      console.log(`🔗 Setting TokenURI for token ${numericTokenId}...`);
-      const tx = await contract.setTokenURI(numericTokenId, metadataUri);
-      await tx.wait();
-      console.log(`✅ TokenURI set for token ${numericTokenId}: ${metadataUri}`);
-    } catch (error) {
-      console.error(`❌ Failed to set TokenURI for token ${numericTokenId}:`, error);
-      // Don't throw error - metadata is still available via IPFS
-      console.log(`📄 Metadata still available via IPFS: ${metadataUri}`);
-    }
+    // Note: setTokenURI is not called here for security reasons
+    // The NFT metadata is available via IPFS and can be updated later if needed
+    console.log("📄 NFT metadata available on IPFS - no blockchain interaction required");
 
     console.log("\n✨ NFT generation completed successfully!");
     console.log("📸 Image URI:", ipfsImageUri);
     console.log("📄 Metadata URI:", metadataUri);
 
     return {
-      image: ipfsImageUri,
-      metadata: metadataUri,
-      traits,
+      imageUrl: ipfsImageUri,
+      metadata: JSON.stringify({
+        name: `Vertical Project #${numericTokenId}`,
+        description: "An AI-generated Vertical character.",
+        image: ipfsImageUri,
+        attributes: [
+          {
+            trait_type: "Rarity",
+            value: traits.rarity
+          },
+          {
+            trait_type: "Species", 
+            value: traits.Species.name
+          }
+        ]
+      }),
+      success: true
     };
   } catch (error) {
     console.error("❌ Error in generateAndStoreNFT:", error);

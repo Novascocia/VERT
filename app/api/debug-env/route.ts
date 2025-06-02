@@ -2,14 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    // Check critical environment variables (without exposing secrets)
+    // Check only the environment variables actually needed for NFT generation
     const envCheck = {
       hasReplicateToken: !!process.env.REPLICATE_API_TOKEN,
       hasPinataApiKey: !!process.env.PINATA_API_KEY,
       hasPinataSecret: !!process.env.PINATA_SECRET,
-      hasPrivateKey: !!process.env.PRIVATE_KEY,
-      hasRpcUrl: !!process.env.RPC_URL,
-      hasContractAddress: !!process.env.CONTRACT_ADDRESS,
       replicateTokenLength: process.env.REPLICATE_API_TOKEN?.length || 0,
       pinataApiKeyLength: process.env.PINATA_API_KEY?.length || 0,
       pinataSecretLength: process.env.PINATA_SECRET?.length || 0,
@@ -23,9 +20,8 @@ export async function GET(request: NextRequest) {
       environment: envCheck,
       allCriticalVarsPresent: envCheck.hasReplicateToken && 
                             envCheck.hasPinataApiKey && 
-                            envCheck.hasPinataSecret &&
-                            envCheck.hasPrivateKey &&
-                            envCheck.hasRpcUrl
+                            envCheck.hasPinataSecret,
+      message: "✅ Backend only needs Replicate + Pinata for security - no private keys required"
     });
     
   } catch (error: any) {
