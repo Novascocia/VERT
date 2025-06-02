@@ -469,7 +469,7 @@ export default function AdminTerminal() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[9999] bg-black border-t-2 border-green-500 h-96 font-mono text-sm">
+    <div className="fixed bottom-0 left-0 right-0 z-[9999] bg-black border-t-2 border-green-500 h-[32rem] font-mono text-sm">
       {/* Terminal Header */}
       <div className="flex items-center justify-between bg-green-500/10 border-b border-green-500/30 px-4 py-2">
         <div className="text-green-400 font-bold">
@@ -491,16 +491,16 @@ export default function AdminTerminal() {
       </div>
 
       {/* Admin GUI Controls */}
-      <div className="bg-gray-900 border-b border-green-500/30 p-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-gray-900 border-b border-green-500/30 p-3 max-h-[12rem] overflow-y-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
           
           {/* Price Controls */}
           <div className="space-y-2">
             <h3 className="text-green-400 font-bold text-xs">💰 MINT PRICES</h3>
             
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div>
-                <label className="text-green-300 text-xs">VIRTUAL Price:</label>
+                <label className="text-green-300 text-xs block mb-1">VIRTUAL Price:</label>
                 <div className="flex gap-1">
                   <input
                     type="number"
@@ -508,13 +508,13 @@ export default function AdminTerminal() {
                     value={virtualPrice}
                     onChange={(e) => setVirtualPrice(e.target.value)}
                     placeholder="0.1"
-                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1 text-xs rounded"
+                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1.5 text-xs rounded"
                     disabled={isLoading}
                   />
                   <button
                     onClick={updateVirtualPrice}
                     disabled={isLoading || !virtualPrice}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-3 py-1.5 text-xs rounded"
                   >
                     Set
                   </button>
@@ -522,7 +522,7 @@ export default function AdminTerminal() {
               </div>
               
               <div>
-                <label className="text-green-300 text-xs">VERT Price:</label>
+                <label className="text-green-300 text-xs block mb-1">VERT Price:</label>
                 <div className="flex gap-1">
                   <input
                     type="number"
@@ -530,13 +530,13 @@ export default function AdminTerminal() {
                     value={vertPrice}
                     onChange={(e) => setVertPrice(e.target.value)}
                     placeholder="500"
-                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1 text-xs rounded"
+                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1.5 text-xs rounded"
                     disabled={isLoading}
                   />
                   <button
                     onClick={updateVertPrice}
                     disabled={isLoading || !vertPrice}
-                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                    className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white px-3 py-1.5 text-xs rounded"
                   >
                     Set
                   </button>
@@ -546,7 +546,7 @@ export default function AdminTerminal() {
               <button
                 onClick={updateBothPrices}
                 disabled={isLoading || !virtualPrice || !vertPrice}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-2 py-1.5 text-xs rounded"
               >
                 Update Both Prices
               </button>
@@ -557,11 +557,11 @@ export default function AdminTerminal() {
           <div className="space-y-2">
             <h3 className="text-green-400 font-bold text-xs">⚙️ CONTRACT CONTROLS</h3>
             
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <button
                 onClick={togglePause}
                 disabled={isLoading}
-                className={`w-full px-2 py-1 text-xs rounded ${
+                className={`w-full px-2 py-1.5 text-xs rounded ${
                   isPaused 
                     ? 'bg-green-600 hover:bg-green-700 text-white' 
                     : 'bg-red-600 hover:bg-red-700 text-white'
@@ -573,7 +573,7 @@ export default function AdminTerminal() {
               <button
                 onClick={() => checkBalances()}
                 disabled={isLoading}
-                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                className="w-full bg-yellow-600 hover:bg-yellow-700 disabled:bg-gray-600 text-white px-2 py-1.5 text-xs rounded"
               >
                 🔄 Check Balances
               </button>
@@ -581,7 +581,7 @@ export default function AdminTerminal() {
               <button
                 onClick={manualSync}
                 disabled={isLoading}
-                className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                className="w-full bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 text-white px-2 py-1.5 text-xs rounded"
               >
                 🔗 Manual Sync
               </button>
@@ -592,9 +592,9 @@ export default function AdminTerminal() {
           <div className="space-y-2">
             <h3 className="text-green-400 font-bold text-xs">🏆 PRIZE POOL</h3>
             
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div>
-                <label className="text-green-300 text-xs">Add VERT to Pool:</label>
+                <label className="text-green-300 text-xs block mb-1">Add VERT to Pool:</label>
                 <div className="flex gap-1">
                   <input
                     type="number"
@@ -602,13 +602,13 @@ export default function AdminTerminal() {
                     value={addPoolAmount}
                     onChange={(e) => setAddPoolAmount(e.target.value)}
                     placeholder="100"
-                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1 text-xs rounded"
+                    className="flex-1 bg-black border border-green-500/30 text-green-300 px-2 py-1.5 text-xs rounded"
                     disabled={isLoading}
                   />
                   <button
                     onClick={addToPrizePool}
                     disabled={isLoading || !addPoolAmount}
-                    className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-2 py-1 text-xs rounded"
+                    className="bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white px-3 py-1.5 text-xs rounded"
                   >
                     Add
                   </button>
@@ -616,7 +616,7 @@ export default function AdminTerminal() {
               </div>
               
               {monitorData && (
-                <div className="text-xs space-y-1">
+                <div className="text-xs space-y-1 bg-black/30 p-2 rounded">
                   <div className="text-green-300">Current Pool: {monitorData.recordedPool} VERT</div>
                   <div className="text-blue-300">Actual Balance: {monitorData.actualBalance} VERT</div>
                   <div className={`${monitorData.unaccounted !== "0" ? 'text-yellow-300' : 'text-green-300'}`}>
@@ -629,16 +629,16 @@ export default function AdminTerminal() {
         </div>
         
         {isLoading && (
-          <div className="mt-2 text-yellow-300 text-xs">⏳ Transaction in progress...</div>
+          <div className="mt-2 text-yellow-300 text-xs animate-pulse">⏳ Transaction in progress...</div>
         )}
       </div>
 
       {/* Terminal Content */}
-      <div className="flex flex-col h-60">
+      <div className="flex flex-col h-[18rem]">
         {/* Output Area */}
         <div 
           ref={terminalRef}
-          className="flex-1 overflow-y-auto p-2 text-green-300 space-y-0.5 text-xs"
+          className="flex-1 overflow-y-auto p-3 text-green-300 space-y-0.5 text-xs"
         >
           {terminalLines.map((line, index) => (
             <div key={index} className="whitespace-pre-wrap">
@@ -648,7 +648,7 @@ export default function AdminTerminal() {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-green-500/30 p-2">
+        <div className="border-t border-green-500/30 p-3">
           <div className="flex items-center gap-2">
             <span className="text-green-400 text-xs">admin@vert:~$</span>
             <input
