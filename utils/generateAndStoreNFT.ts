@@ -48,13 +48,6 @@ async function retryReplicate(
   throw new Error(`Failed after ${maxRetries} attempts. Last error: ${lastError.message}`);
 }
 
-const pinata = new pinataSDK({
-  pinataApiKey: process.env.PINATA_API_KEY!,
-  pinataSecretApiKey: process.env.PINATA_SECRET!,
-});
-
-const replicate = new Replicate({ auth: process.env.REPLICATE_API_TOKEN! });
-
 // 1. Generate image with Replicate
 async function generateImage(prompt: string, negative_prompt: string, replicate: any): Promise<string> {
   console.log("🧠 Generating image with prompt:", prompt);
