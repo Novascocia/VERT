@@ -22,46 +22,11 @@ export async function POST(request: NextRequest) {
 
     console.log("🚀 Starting NFT generation for token:", tokenId);
     
-    // Try to generate NFT with timeout
-    try {
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('NFT generation timed out after 45 seconds')), 45000);
-      });
-      
-      const generationPromise = generateAndStoreNFT(tokenId, traits);
-      
-      const result = await Promise.race([generationPromise, timeoutPromise]);
+    // Generate the NFT - let it take as long as it needs
+    const result = await generateAndStoreNFT(tokenId, traits);
 
-      console.log("✨ NFT generation completed successfully!");
-      return NextResponse.json(result);
-      
-    } catch (timeoutError: any) {
-      console.warn("⏰ NFT generation timed out, returning placeholder:", timeoutError.message);
-      
-      // Return a placeholder NFT that can be updated later
-      const placeholderResult = {
-        imageUrl: "https://via.placeholder.com/400x400/000000/00ff00?text=VERT+NFT+%23" + tokenId,
-        metadata: JSON.stringify({
-          name: `Vertical Project #${tokenId}`,
-          description: "AI-generated Vertical character (processing...)",
-          image: "https://via.placeholder.com/400x400/000000/00ff00?text=VERT+NFT+%23" + tokenId,
-          attributes: [
-            { trait_type: "Status", value: "Processing" },
-            { trait_type: "Rarity", value: traits.rarity }
-          ]
-        }),
-        success: true,
-        placeholder: true,
-        message: "NFT generated with placeholder - image will be updated shortly"
-      };
-      
-      // Continue generation in background (fire and forget)
-      generateAndStoreNFT(tokenId, traits).catch(err => {
-        console.error("❌ Background NFT generation failed:", err);
-      });
-      
-      return NextResponse.json(placeholderResult);
-    }
+    console.log("✨ NFT generation completed successfully!");
+    return NextResponse.json(result);
 
   } catch (error: any) {
     console.error("❌ Error in generateAndStoreNFT API:", error);
