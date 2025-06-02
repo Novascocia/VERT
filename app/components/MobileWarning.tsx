@@ -128,7 +128,7 @@ export default function MobileWarning() {
           <div className="space-y-3">
             {/* Litepaper button - primary action */}
             <a
-              href="https://novascocia.gitbook.io/litepaper/"
+              href="https://vertical-3.gitbook.io/vertical/"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-4 rounded transition-colors duration-200 font-mono text-sm"
