@@ -154,6 +154,32 @@ export const VERTICAL_ABI = [
     outputs: [{ name: '', type: 'uint256' }]
   },
 
+  // Admin functions (MISSING - ADDING NOW)
+  {
+    type: 'function',
+    name: 'setPrices',
+    stateMutability: 'nonpayable',
+    inputs: [
+      { name: 'newVirtualPrice', type: 'uint256' },
+      { name: 'newVertPrice', type: 'uint256' }
+    ],
+    outputs: []
+  },
+  {
+    type: 'function',
+    name: 'pause',
+    stateMutability: 'nonpayable',
+    inputs: [],
+    outputs: []
+  },
+  {
+    type: 'function',
+    name: 'unpause',
+    stateMutability: 'nonpayable',
+    inputs: [],
+    outputs: []
+  },
+
   // Prize pool management functions
   {
     type: 'function',
