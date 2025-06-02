@@ -7,7 +7,7 @@ A modern, cel-shaded NFT minting platform for the Vertical Project.
 - 🎨 MFKZ-inspired cel-shaded UI
 - 💰 Mint with VIRTUAL or VERT tokens
 - 🎯 Real-time prize pool tracking
-- 🔄 Live minting statistics
+- 🔄 Live statistics
 - 🎮 Interactive minting experience
 
 ## Tech Stack
