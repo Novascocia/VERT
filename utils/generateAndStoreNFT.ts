@@ -8,14 +8,17 @@ import { Readable } from "stream";
 import Replicate from 'replicate';
 import { buildPrompt, getRandomTraits } from './buildPrompt';
 import { SelectedTraits } from '../types/traits';
+import { ethers } from "ethers";
+import contractABI from '../abis/Vertical.json';
 
 dotenv.config();
 
-// Only validate environment variables needed for image generation and IPFS
+// Validate environment variables needed for image generation and IPFS
 const requiredEnvVars = {
   PINATA_API_KEY: process.env.PINATA_API_KEY,
   PINATA_SECRET: process.env.PINATA_SECRET,
   REPLICATE_API_TOKEN: process.env.REPLICATE_API_TOKEN,
+  PRIVATE_KEY: process.env.PRIVATE_KEY, // Required for setTokenURI
 };
 
 Object.entries(requiredEnvVars).forEach(([key, value]) => {
@@ -223,9 +226,24 @@ export async function generateAndStoreNFT(
     const ipfsImageUri = await uploadToPinata(rawImageUrl);
     const metadataUri = await uploadMetadataToPinata(numericTokenId, ipfsImageUri, traits);
 
-    // Note: setTokenURI is not called here for security reasons
-    // The NFT metadata is available via IPFS and can be updated later if needed
-    console.log("📄 NFT metadata available on IPFS - no blockchain interaction required");
+    // Set tokenURI on-chain using backend wallet with hardcoded fallbacks
+    const rpcUrl = process.env.RPC_URL || 'https://mainnet.base.org';
+    const contractAddress = process.env.CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098';
+    
+    const provider = new ethers.JsonRpcProvider(rpcUrl);
+    const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);
+    const contract = new ethers.Contract(contractAddress, contractABI.abi, signer);
+    
+    try {
+      console.log(`🔗 Setting TokenURI for token ${numericTokenId}...`);
+      const tx = await contract.setTokenURI(numericTokenId, metadataUri);
+      await tx.wait();
+      console.log(`✅ TokenURI set for token ${numericTokenId}: ${metadataUri}`);
+    } catch (error) {
+      console.error(`❌ Failed to set TokenURI for token ${numericTokenId}:`, error);
+      // Don't throw error - metadata is still available via IPFS
+      console.log(`📄 Metadata still available via IPFS: ${metadataUri}`);
+    }
 
     console.log("\n✨ NFT generation completed successfully!");
     console.log("📸 Image URI:", ipfsImageUri);
