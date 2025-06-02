@@ -6,12 +6,13 @@ export async function GET(request: NextRequest) {
     const envCheck = {
       hasReplicateToken: !!process.env.REPLICATE_API_TOKEN,
       hasPinataApiKey: !!process.env.PINATA_API_KEY,
-      hasPinataSecret: !!process.env.PINATA_SECRET_API_KEY,
+      hasPinataSecret: !!process.env.PINATA_SECRET,
       hasPrivateKey: !!process.env.PRIVATE_KEY,
       hasRpcUrl: !!process.env.RPC_URL,
       hasContractAddress: !!process.env.CONTRACT_ADDRESS,
       replicateTokenLength: process.env.REPLICATE_API_TOKEN?.length || 0,
       pinataApiKeyLength: process.env.PINATA_API_KEY?.length || 0,
+      pinataSecretLength: process.env.PINATA_SECRET?.length || 0,
       nodeEnv: process.env.NODE_ENV,
       vercelEnv: process.env.VERCEL_ENV,
       timestamp: new Date().toISOString()
