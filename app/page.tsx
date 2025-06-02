@@ -41,8 +41,8 @@ const PUBLIC_RPC = ALCHEMY_API_KEY
   ? `https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
   : 'https://sepolia.base.org';
 
-// Contract addresses
-const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098';
+// Contract addresses - FORCE CORRECT ADDRESS (overriding any env vars)
+const contractAddress = '0xc03605b09aF6010bb2097d285b9aF4024ecAf098'; // WORKING CONTRACT - FORCED
 const vertTokenAddress = process.env.NEXT_PUBLIC_VERT_TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000';
 const virtualTokenAddress = process.env.NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS || '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b';
 
