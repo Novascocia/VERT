@@ -11,6 +11,7 @@ import { ERC20_ABI } from '@/app/config/abis';
 import { shortAddress } from '@/utils/helpers';
 import HowItWorks from '@/app/components/HowItWorks';
 import RarityOddsTable from '@/app/components/RarityOddsTable';
+import { debugLog, userLog } from '@/utils/debug';
 
 import LiveMintFeed from '@/app/components/LiveMintFeed';
 import StatBubble from '@/app/components/StatBubble';
@@ -54,7 +55,7 @@ const ADMIN_WALLET_ADDRESS = getAdminAddress();
 // Remove the mock implementation and replace with real API call
 async function generateAndStoreNFT(tokenId: string) {
   try {
-    console.log("🚀 Calling backend to generate NFT for token:", tokenId);
+    debugLog.log("🚀 Calling backend to generate NFT for token:", tokenId);
     const response = await fetch('/api/generateAndStoreNFT', {
       method: 'POST',
       headers: {
@@ -68,10 +69,10 @@ async function generateAndStoreNFT(tokenId: string) {
     }
 
     const data = await response.json();
-    console.log("✨ NFT generated successfully:", data);
+    debugLog.log("✨ NFT generated successfully:", data);
     return data;
   } catch (error) {
-    console.error("❌ Error generating NFT:", error);
+    userLog.error("❌ Error generating NFT:", error);
     throw error;
   }
 }
@@ -108,7 +109,7 @@ function ipfsToHttp(ipfsUrl: string) {
 // Helper to extract token ID from transaction receipt
 async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
   try {
-    console.log('🔍 Getting transaction receipt for hash:', txHash);
+    debugLog.log('🔍 Getting transaction receipt for hash:', txHash);
     
     // Add retry logic for getting transaction receipt with better error handling
     let receipt;
@@ -124,7 +125,7 @@ async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
         break;
       } catch (receiptError: any) {
         retries++;
-        console.log(`⚠️ Attempt ${retries}/${maxRetries} to get receipt failed:`, receiptError.message);
+        debugLog.log(`⚠️ Attempt ${retries}/${maxRetries} to get receipt failed:`, receiptError.message);
         
         // Check if this is an RPC connectivity issue vs a transaction failure
         const isRpcError = receiptError.message?.includes('503') || 
@@ -134,7 +135,7 @@ async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
                           receiptError.message?.includes('timeout');
         
         if (isRpcError) {
-          console.log(`🌐 RPC connectivity issue detected on attempt ${retries}`);
+          debugLog.log(`🌐 RPC connectivity issue detected on attempt ${retries}`);
           if (retries >= maxRetries) {
             throw new Error('RPC network issues - Base Sepolia is experiencing connectivity problems. Please try again later.');
           }
@@ -142,7 +143,7 @@ async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
           await new Promise(resolve => setTimeout(resolve, 5000 * retries));
         } else {
           // This is likely a transaction execution failure
-          console.log('❌ Transaction execution failed:', receiptError.message);
+          debugLog.log('❌ Transaction execution failed:', receiptError.message);
           if (retries >= maxRetries) {
             throw new Error(`Transaction failed: ${receiptError.message}`);
           }
@@ -156,7 +157,7 @@ async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
       throw new Error('Failed to obtain transaction receipt after multiple attempts');
     }
     
-    console.log('📋 Transaction receipt:', {
+    debugLog.log('📋 Transaction receipt:', {
       status: receipt.status,
       gasUsed: receipt.gasUsed.toString(),
       blockNumber: receipt.blockNumber.toString(),
@@ -172,14 +173,14 @@ async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
     let rarity: Rarity | null = null;
     let prizeWon = '0';
     
-    console.log('🔎 Parsing logs from transaction...');
+    debugLog.log('🔎 Parsing logs from transaction...');
     
     // Parse all events from our contract
     for (const log of receipt.logs) {
       try {
         // Check if this log is from our contract
         if (log.address.toLowerCase() === contractAddress.toLowerCase()) {
-          console.log('📝 Found log from our contract:', log);
+          debugLog.log('📝 Found log from our contract:', log);
           
           const decoded = decodeEventLog({
             abi: VERTICAL_ABI,
@@ -187,37 +188,37 @@ async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
             topics: log.topics,
           });
           
-          console.log('🎯 Decoded event:', decoded.eventName, decoded.args);
+          debugLog.log('🎯 Decoded event:', decoded.eventName, decoded.args);
           
           // Get token ID and rarity from NFTMinted event
           if (decoded.eventName === 'NFTMinted' && decoded.args) {
             const args = decoded.args as any;
             tokenId = args.tokenId.toString();
             rarity = parseRarityEnum(Number(args.rarity));
-            console.log('🎨 NFT Minted event found:', { tokenId, rarity });
+            debugLog.log('🎨 NFT Minted event found:', { tokenId, rarity });
           }
           
           // Get actual prize amount from PrizeClaimed event
           if (decoded.eventName === 'PrizeClaimed' && decoded.args) {
             const args = decoded.args as any;
             prizeWon = formatEther(args.amount);
-            console.log('🏆 Prize Claimed event found:', { prizeWon });
+            debugLog.log('🏆 Prize Claimed event found:', { prizeWon });
           }
         }
       } catch (e) {
         // Skip logs that can't be decoded
-        console.log('ℹ️ Skipping log that could not be decoded:', e);
+        debugLog.log('ℹ️ Skipping log that could not be decoded:', e);
         continue;
       }
     }
     
     if (!tokenId) {
-      console.error('❌ Token ID not found in transaction logs');
-      console.log('Available logs:', receipt.logs);
+      debugLog.error('❌ Token ID not found in transaction logs');
+      debugLog.log('Available logs:', receipt.logs);
       throw new Error('Token ID not found in transaction receipt');
     }
     
-    console.log('✅ Successfully extracted mint details:', { tokenId, rarity, prizeWon });
+    debugLog.log('✅ Successfully extracted mint details:', { tokenId, rarity, prizeWon });
     
     return {
       tokenId,
@@ -225,17 +226,17 @@ async function getMintDetailsFromTxReceipt(txHash: string, publicClient: any) {
       prizeWon
     };
   } catch (error: any) {
-    console.error('❌ Error extracting mint details:', error);
+    debugLog.error('❌ Error extracting mint details:', error);
     
     // Provide more context for common errors
     if (error.message?.includes('execution reverted')) {
-      console.error('🔴 Transaction execution reverted - this indicates the mint transaction itself failed');
-      console.error('💡 Common causes:');
-      console.error('   - Insufficient token balance');
-      console.error('   - Insufficient allowance');
-      console.error('   - Contract is paused');
-      console.error('   - Invalid parameters');
-      console.error('   - Gas limit too low');
+      debugLog.error('🔴 Transaction execution reverted - this indicates the mint transaction itself failed');
+      debugLog.error('💡 Common causes:');
+      debugLog.error('   - Insufficient token balance');
+      debugLog.error('   - Insufficient allowance');
+      debugLog.error('   - Contract is paused');
+      debugLog.error('   - Invalid parameters');
+      debugLog.error('   - Gas limit too low');
     }
     
     throw error;
@@ -290,25 +291,25 @@ export default function Home() {
 
   // Log mounted state changes for debugging
   useEffect(() => {
-    console.log('✅ Component mounted state changed:', mounted);
+    debugLog.log('✅ Component mounted state changed:', mounted);
     if (mounted) {
-      console.log('🎯 UI should now render!');
+      debugLog.log('🎯 UI should now render!');
     }
   }, [mounted]);
 
   // Debug network connection
   useEffect(() => {
     if (mounted && isConnected) {
-      console.log('🔍 Network Debug Info:');
-      console.log('Current Chain ID:', chainId);
-      console.log('Expected Chain ID (Base Mainnet):', 8453);
-      console.log('Is on Base Mainnet:', chainId === 8453);
-      console.log('Contract Address:', contractAddress);
+      debugLog.log('🔍 Network Debug Info:');
+      debugLog.log('Current Chain ID:', chainId);
+      debugLog.log('Expected Chain ID (Base Mainnet):', 8453);
+      debugLog.log('Is on Base Mainnet:', chainId === 8453);
+      debugLog.log('Contract Address:', contractAddress);
       
       if (chainId !== 8453) {
-        console.warn('⚠️ WARNING: You are not connected to Base Mainnet!');
-        console.warn('Current network chain ID:', chainId);
-        console.warn('Please switch to Base Mainnet (chain ID: 8453) for Phase 1 launch');
+        debugLog.warn('⚠️ WARNING: You are not connected to Base Mainnet!');
+        debugLog.warn('Current network chain ID:', chainId);
+        debugLog.warn('Please switch to Base Mainnet (chain ID: 8453) for Phase 1 launch');
       }
     }
   }, [mounted, isConnected, chainId]);
@@ -319,11 +320,11 @@ export default function Home() {
       if (!publicClient || !mounted) return;
       
       try {
-        console.log('🔍 Verifying contract interface...');
+        debugLog.log('🔍 Verifying contract interface...');
         
         // Check if contract exists
         const code = await publicClient.getBytecode({ address: contractAddress as `0x${string}` });
-        console.log('📝 Contract bytecode length:', code?.length || 0);
+        debugLog.log('📝 Contract bytecode length:', code?.length || 0);
         
         // Test standard ERC-721 functions
         try {
@@ -332,9 +333,9 @@ export default function Home() {
             abi: VERTICAL_ABI,
             functionName: 'name',
           });
-          console.log('📛 Contract name:', name);
+          debugLog.log('📛 Contract name:', name);
         } catch (e) {
-          console.warn('⚠️ Could not read contract name:', e);
+          debugLog.warn('⚠️ Could not read contract name:', e);
         }
         
         try {
@@ -343,9 +344,9 @@ export default function Home() {
             abi: VERTICAL_ABI,
             functionName: 'symbol',
           });
-          console.log('🔖 Contract symbol:', symbol);
+          debugLog.log('🔖 Contract symbol:', symbol);
         } catch (e) {
-          console.warn('⚠️ Could not read contract symbol:', e);
+          debugLog.warn('⚠️ Could not read contract symbol:', e);
         }
         
         // Test supportsInterface for ERC-721
@@ -356,27 +357,27 @@ export default function Home() {
             functionName: 'supportsInterface',
             args: ['0x80ac58cd'], // ERC-721 interface ID
           });
-          console.log('🎨 Supports ERC-721:', supportsERC721);
+          debugLog.log('🎨 Supports ERC-721:', supportsERC721);
         } catch (e) {
-          console.warn('⚠️ Could not check ERC-721 support:', e);
+          debugLog.warn('⚠️ Could not check ERC-721 support:', e);
         }
         
       } catch (error) {
-        console.error('❌ Contract verification failed:', error);
+        debugLog.error('❌ Contract verification failed:', error);
       }
     };
     
     if (mounted && publicClient) {
       // Make contract verification non-blocking
       verifyContract().catch(err => {
-        console.warn('Contract verification failed:', err);
+        debugLog.warn('Contract verification failed:', err);
       });
     }
   }, [mounted, publicClient]);
 
   // Clear any stale WalletConnect sessions on mount
   useEffect(() => {
-    console.log('🚀 Component mounting...');
+    debugLog.log('🚀 Component mounting...');
     
     // Prevent WalletConnect auto-popup immediately
     preventWalletAutoPopup();
@@ -389,7 +390,7 @@ export default function Home() {
     // Fallback timeout to ensure UI renders in development
     const fallbackTimeout = setTimeout(() => {
       if (!mounted) {
-        console.log('🚨 Fallback: Setting mounted to true after timeout');
+        debugLog.log('🚨 Fallback: Setting mounted to true after timeout');
         setMounted(true);
       }
     }, 2000); // 2 second fallback
@@ -417,7 +418,7 @@ export default function Home() {
         setNetworkStatus('unhealthy');
       }
     } catch (error: any) {
-      console.log('❌ Network health check failed:', error.message);
+      debugLog.log('❌ Network health check failed:', error.message);
       if (error.message?.includes('503') || error.message?.includes('no backend')) {
         setNetworkStatus('unhealthy');
       } else {
@@ -431,13 +432,13 @@ export default function Home() {
     if (mounted && publicClient) {
       // Make network health check non-blocking
       checkNetworkHealth().catch(err => {
-        console.warn('Initial network health check failed:', err);
+        debugLog.warn('Initial network health check failed:', err);
         setNetworkStatus('degraded');
       });
       
       const interval = setInterval(() => {
         checkNetworkHealth().catch(err => {
-          console.warn('Periodic network health check failed:', err);
+          debugLog.warn('Periodic network health check failed:', err);
         });
       }, 30000); // Check every 30 seconds
       return () => clearInterval(interval);
@@ -526,21 +527,21 @@ export default function Home() {
   // Initial data loading
   useEffect(() => {
     if (mounted && publicClient) {
-      console.log('🔄 Initial data loading started...');
+      debugLog.log('🔄 Initial data loading started...');
       setIsLoadingStats(true);
       
       Promise.all([
         checkNetworkHealth(),
-        fetchContractData().catch(err => console.warn('Failed to fetch contract data:', err)),
-        fetchPrizePool().catch(err => console.warn('Failed to fetch prize pool:', err)),
-        fetchTotalMinted().catch(err => console.warn('Failed to fetch total minted:', err)),
-        fetchMintPrices().catch(err => console.warn('Failed to fetch mint prices:', err)),
-        fetchTotalPaidOut().catch(err => console.warn('Failed to fetch total paid out:', err))
+        fetchContractData().catch(err => debugLog.warn('Failed to fetch contract data:', err)),
+        fetchPrizePool().catch(err => debugLog.warn('Failed to fetch prize pool:', err)),
+        fetchTotalMinted().catch(err => debugLog.warn('Failed to fetch total minted:', err)),
+        fetchMintPrices().catch(err => debugLog.warn('Failed to fetch mint prices:', err)),
+        fetchTotalPaidOut().catch(err => debugLog.warn('Failed to fetch total paid out:', err))
       ]).then(() => {
         setIsLoadingStats(false);
-        console.log('✅ All stats loaded successfully');
+        debugLog.log('✅ All stats loaded successfully');
       }).catch(err => {
-        console.error('❌ Error during initial data loading:', err);
+        debugLog.error('❌ Error during initial data loading:', err);
         setIsLoadingStats(false);
       });
     }
@@ -558,15 +559,15 @@ export default function Home() {
     try {
       if (!publicClient) return;
       
-      console.log('🔍 Fetching total VERT paid out from prize claims...');
+      debugLog.log('🔍 Fetching total VERT paid out from prize claims...');
       
       // Get current block number
       let currentBlock: bigint;
       try {
         currentBlock = await publicClient.getBlockNumber();
-        console.log(`📊 Current block: ${currentBlock.toString()}`);
+        debugLog.log(`📊 Current block: ${currentBlock.toString()}`);
       } catch (e) {
-        console.warn('Could not get current block, setting total paid out to 0');
+        debugLog.warn('Could not get current block, setting total paid out to 0');
         setTotalPaidOut('0');
         return;
       }
@@ -582,17 +583,17 @@ export default function Home() {
       let toBlock = currentBlock;
       let queriesRun = 0;
       
-      console.log(`📊 Querying in ${BLOCK_RANGE} block chunks, max ${MAX_QUERIES} queries`);
+      debugLog.log(`📊 Querying in ${BLOCK_RANGE} block chunks, max ${MAX_QUERIES} queries`);
       
       while (queriesRun < MAX_QUERIES) {
         const fromBlock = toBlock - BigInt(BLOCK_RANGE) + BigInt(1);
         
         if (fromBlock < BigInt(0)) {
-          console.log('📊 Reached genesis block, stopping');
+          debugLog.log('📊 Reached genesis block, stopping');
           break;
         }
         
-        console.log(`📊 Query ${queriesRun + 1}: Blocks ${fromBlock.toString()} to ${toBlock.toString()}`);
+        debugLog.log(`📊 Query ${queriesRun + 1}: Blocks ${fromBlock.toString()} to ${toBlock.toString()}`);
         
         try {
           const prizeClaimedEvents = await publicClient.getLogs({
@@ -609,7 +610,7 @@ export default function Home() {
             toBlock: toBlock
           });
           
-          console.log(`📄 Found ${prizeClaimedEvents.length} prize events in this range`);
+          debugLog.log(`📄 Found ${prizeClaimedEvents.length} prize events in this range`);
           totalEvents += prizeClaimedEvents.length;
           
           // Sum all prize amounts from this chunk
@@ -624,17 +625,17 @@ export default function Home() {
               if (decoded.eventName === 'PrizeClaimed' && decoded.args) {
                 const args = decoded.args as any;
                 totalPaid += args.amount;
-                console.log(`💰 Prize claim: ${formatEther(args.amount)} VERT to ${args.user}`);
+                debugLog.log(`💰 Prize claim: ${formatEther(args.amount)} VERT to ${args.user}`);
               }
             } catch (e) {
-              console.warn('⚠️ Could not decode prize event:', e);
+              debugLog.warn('⚠️ Could not decode prize event:', e);
             }
           }
           
         } catch (queryError: any) {
           // Don't log the full error which contains the API key in the URL
           const sanitizedMessage = queryError.message?.replace(/\/v2\/[^\/\s]+/g, '/v2/[HIDDEN]') || 'Unknown error';
-          console.warn(`⚠️ Query failed for blocks ${fromBlock.toString()}-${toBlock.toString()}:`, sanitizedMessage);
+          debugLog.warn(`⚠️ Query failed for blocks ${fromBlock.toString()}-${toBlock.toString()}:`, sanitizedMessage);
           // Continue with next range instead of failing completely
         }
         
@@ -644,11 +645,11 @@ export default function Home() {
       }
       
       const totalPaidFormatted = formatEther(totalPaid);
-      console.log(`✅ Total VERT paid out: ${totalPaidFormatted} VERT (from ${totalEvents} events across ${queriesRun} queries)`);
+      debugLog.log(`✅ Total VERT paid out: ${totalPaidFormatted} VERT (from ${totalEvents} events across ${queriesRun} queries)`);
       setTotalPaidOut(totalPaidFormatted);
       
     } catch (error) {
-      console.error('❌ Error fetching total paid out:', error);
+      debugLog.error('❌ Error fetching total paid out:', error);
       // Fallback: set to 0 instead of crashing
       setTotalPaidOut('0');
     }
@@ -678,16 +679,16 @@ export default function Home() {
       
       setLastMintTime(now);
 
-      console.log('🚀 Starting VERT mint process...');
+      debugLog.log('🚀 Starting VERT mint process...');
 
       // Enhanced pre-mint validation
       try {
-        console.log('🔍 Pre-mint validation starting...');
+        debugLog.log('🔍 Pre-mint validation starting...');
         
         // First, check RPC health by testing a simple call
         try {
           const blockNumber = await publicClient.getBlockNumber();
-          console.log('✅ RPC health check passed, current block:', blockNumber.toString());
+          debugLog.log('✅ RPC health check passed, current block:', blockNumber.toString());
         } catch (rpcError: any) {
           if (rpcError.message?.includes('503') || rpcError.message?.includes('no backend')) {
             throw new Error('Network connectivity issues detected. Base Sepolia RPC is experiencing problems. Please try again later.');
@@ -703,7 +704,7 @@ export default function Home() {
           args: [walletClient.account.address],
         }) as bigint;
         
-        console.log('💰 User VERT balance:', formatEther(userBalance), 'VERT');
+        debugLog.log('💰 User VERT balance:', formatEther(userBalance), 'VERT');
         
         // Get current mint price
         const currentPrice = await publicClient.readContract({
@@ -712,7 +713,7 @@ export default function Home() {
           functionName: 'priceVert',
         }) as bigint;
         
-        console.log('💸 VERT mint price:', formatEther(currentPrice), 'VERT');
+        debugLog.log('💸 VERT mint price:', formatEther(currentPrice), 'VERT');
         
         // Check if user has enough balance
         if (userBalance < currentPrice) {
@@ -727,12 +728,12 @@ export default function Home() {
           args: [walletClient.account.address, contractAddress as `0x${string}`],
         }) as bigint;
         
-        console.log('✅ Current VERT allowance:', formatEther(currentAllowance), 'VERT');
+        debugLog.log('✅ Current VERT allowance:', formatEther(currentAllowance), 'VERT');
         
         // Check if allowance is sufficient
         if (currentAllowance < currentPrice) {
-          console.log('🔍 VERT allowance insufficient, requesting approval...');
-          console.log('🔍 VERT Approval Debug:', {
+          debugLog.log('🔍 VERT allowance insufficient, requesting approval...');
+          debugLog.log('🔍 VERT Approval Debug:', {
             spender: contractAddress,
             amount: 'MAX_UINT256', // Approve maximum so user only needs to approve once
             currentAllowance: formatEther(currentAllowance)
@@ -750,7 +751,7 @@ export default function Home() {
               args: [contractAddress as `0x${string}`, MAX_UINT256], // Approve maximum for convenience
             });
             
-            console.log('🔄 VERT Approval transaction sent:', approvalTxHash);
+            debugLog.log('🔄 VERT Approval transaction sent:', approvalTxHash);
             toast('Waiting for VERT approval confirmation...');
             
             // Wait for approval transaction to be confirmed
@@ -759,14 +760,14 @@ export default function Home() {
               confirmations: 1
             });
             
-            console.log('✅ VERT Approval transaction confirmed in block:', approvalReceipt.blockNumber);
+            debugLog.log('✅ VERT Approval transaction confirmed in block:', approvalReceipt.blockNumber);
             toast.success('VERT approved ✅ - No more approvals needed!');
             
             // Refresh allowances after approval
             await checkAllowances();
-            console.log('✅ VERT approval completed successfully');
+            debugLog.log('✅ VERT approval completed successfully');
           } catch (approvalError: any) {
-            console.error('❌ VERT approval failed:', approvalError);
+            debugLog.error('❌ VERT approval failed:', approvalError);
             setIsWaitingForTx(false);
             
             if (approvalError.message?.includes('User rejected') || approvalError.code === 4001) {
@@ -788,16 +789,16 @@ export default function Home() {
           throw new Error('Contract is currently paused');
         }
         
-        console.log('✅ All pre-mint checks passed');
+        debugLog.log('✅ All pre-mint checks passed');
         
       } catch (validationError: any) {
-        console.error('❌ Pre-mint validation failed:', validationError);
+        debugLog.error('❌ Pre-mint validation failed:', validationError);
         setIsWaitingForTx(false);
         throw new Error('Pre-mint validation failed: ' + validationError.message);
       }
 
       // Debug contract state right before sending transaction
-      console.log('🔧 Final contract state check before transaction:');
+      debugLog.log('🔧 Final contract state check before transaction:');
       await debugContractState();
 
       // Set waiting state BEFORE sending transaction
@@ -814,10 +815,10 @@ export default function Home() {
       toast("Confirm transaction in wallet");
       
       // Add comprehensive debugging right before minting
-      console.log('🔍 Final pre-mint validation...');
+      debugLog.log('🔍 Final pre-mint validation...');
       
       // Debug RPC endpoint being used
-      console.log('🌐 RPC Configuration:', {
+      debugLog.log('🌐 RPC Configuration:', {
         alchemyKey: process.env.NEXT_PUBLIC_ALCHEMY_KEY ? 'SET' : 'NOT SET',
         chainId: publicClient?.chain?.id,
         chainName: publicClient?.chain?.name
@@ -847,7 +848,7 @@ export default function Home() {
           functionName: 'priceVert',
         }) as bigint;
         
-        console.log('💰 Pre-mint validation:', {
+        debugLog.log('💰 Pre-mint validation:', {
           userBalance: formatEther(currentBalance),
           requiredAmount: formatEther(currentVertPrice),
           hasEnoughBalance: currentBalance >= currentVertPrice,
@@ -874,10 +875,10 @@ export default function Home() {
           abi: VERTICAL_ABI,
           functionName: 'getTotalMinted',
         }) as bigint;
-        console.log('📊 Current total minted:', totalMinted.toString());
+        debugLog.log('📊 Current total minted:', totalMinted.toString());
         
         // TRY TO SIMULATE THE EXACT CALL TO SEE WHAT FAILS
-        console.log('🧪 Attempting to simulate mint call...');
+        debugLog.log('🧪 Attempting to simulate mint call...');
         try {
           const simulateResult = await publicClient.simulateContract({
             address: contractAddress as `0x${string}`,
@@ -886,10 +887,10 @@ export default function Home() {
             args: ["ipfs://QmPlaceholder"],
             account: walletClient.account.address,
           });
-          console.log('✅ Simulate successful, result:', simulateResult);
+          debugLog.log('✅ Simulate successful, result:', simulateResult);
         } catch (simulateError: any) {
-          console.error('❌ SIMULATE FAILED - This is why the transaction reverts:', simulateError);
-          console.error('📋 Simulate error details:', {
+          debugLog.error('❌ SIMULATE FAILED - This is why the transaction reverts:', simulateError);
+          debugLog.error('📋 Simulate error details:', {
             message: simulateError.message,
             cause: simulateError.cause,
             data: simulateError.data
@@ -897,7 +898,7 @@ export default function Home() {
           
           // Try to decode the revert reason if available
           if (simulateError.data) {
-            console.log('🔍 Raw error data:', simulateError.data);
+            debugLog.log('🔍 Raw error data:', simulateError.data);
           }
           
           setIsWaitingForTx(false);
@@ -905,7 +906,7 @@ export default function Home() {
         }
         
       } catch (validationError: any) {
-        console.error('❌ Pre-mint validation failed:', validationError);
+        debugLog.error('❌ Pre-mint validation failed:', validationError);
         setIsWaitingForTx(false);
         throw new Error('Pre-mint validation failed: ' + validationError.message);
       }
@@ -919,19 +920,19 @@ export default function Home() {
           args: ["ipfs://QmPlaceholder"],
           account: walletClient.account.address,
         });
-        console.log('💰 Gas Estimate for VERT mint:', gasEstimate.toString());
+        debugLog.log('💰 Gas Estimate for VERT mint:', gasEstimate.toString());
         
         // Get gas estimate with buffer
         const gasWithBuffer = (gasEstimate * BigInt(125)) / BigInt(100); // 25% buffer
         
         // Get current gas price
         const gasPrice = await publicClient.getGasPrice();
-        console.log('⛽ Current gas price:', formatEther(gasPrice), 'ETH');
+        debugLog.log('⛽ Current gas price:', formatEther(gasPrice), 'ETH');
         
         const estimatedCost = gasWithBuffer * gasPrice;
-        console.log('💰 Estimated transaction cost:', formatEther(estimatedCost), 'ETH');
+        debugLog.log('💰 Estimated transaction cost:', formatEther(estimatedCost), 'ETH');
       } catch (gasError: any) {
-        console.error('❌ Gas estimation failed - this suggests the transaction will fail:', gasError);
+        debugLog.error('❌ Gas estimation failed - this suggests the transaction will fail:', gasError);
         setIsWaitingForTx(false);
         
         // Provide detailed error message based on the gas estimation failure
@@ -947,7 +948,7 @@ export default function Home() {
         throw new Error(errorMessage + ' - ' + gasError.message);
       }
 
-      console.log('📤 Sending mint transaction...');
+      debugLog.log('📤 Sending mint transaction...');
       
       // Get gas estimate with buffer for transaction
       let gasWithBuffer: bigint;
@@ -960,9 +961,9 @@ export default function Home() {
           account: walletClient.account.address,
         });
         gasWithBuffer = (gasEstimate * BigInt(125)) / BigInt(100); // 25% buffer
-        console.log('💰 Final gas with buffer for transaction:', gasWithBuffer.toString());
+        debugLog.log('💰 Final gas with buffer for transaction:', gasWithBuffer.toString());
       } catch (gasEstError: any) {
-        console.warn('⚠️ Gas estimation failed, using fallback:', gasEstError.message);
+        debugLog.warn('⚠️ Gas estimation failed, using fallback:', gasEstError.message);
         gasWithBuffer = BigInt(200000); // Safe fallback
       }
       
@@ -977,7 +978,7 @@ export default function Home() {
           gas: gasWithBuffer, // Use buffered gas estimate
         });
       } catch (writeError: any) {
-        console.error('❌ writeContract failed:', writeError);
+        debugLog.error('❌ writeContract failed:', writeError);
         setIsWaitingForTx(false);
         
         // Handle specific contract execution errors
@@ -994,7 +995,7 @@ export default function Home() {
         }
       }
       
-      console.log('✅ Transaction sent:', txHash);
+      debugLog.log('✅ Transaction sent:', txHash);
       
       // Transaction confirmed, now start processing
       setIsWaitingForTx(false);
@@ -1002,9 +1003,9 @@ export default function Home() {
       toast.success("Transaction confirmed! Generating NFT...");
 
       // Wait for transaction confirmation and get mint details
-      console.log('⏳ Waiting for transaction receipt...');
+      debugLog.log('⏳ Waiting for transaction receipt...');
       const mintDetails = await getMintDetailsFromTxReceipt(txHash, publicClient);
-      console.log('📄 Mint details extracted:', mintDetails);
+      debugLog.log('📄 Mint details extracted:', mintDetails);
 
       // Store the minted token ID
       setMintedTokenId(mintDetails.tokenId);
@@ -1050,36 +1051,36 @@ export default function Home() {
     } catch (error: any) {
       setIsWaitingForTx(false);
       setIsProcessing(false);
-      console.error("❌ Minting failed:", error);
+      debugLog.error("❌ Minting failed:", error);
       
       // More detailed error logging
       if (error?.message?.includes('execution reverted')) {
-        console.error('🔴 Contract execution reverted - possible reasons:');
-        console.error('- Insufficient VERT balance');
-        console.error('- Insufficient allowance');
-        console.error('- Contract is paused');
-        console.error('- Invalid parameters');
-        console.error('- Gas limit too low');
+        debugLog.error('🔴 Contract execution reverted - possible reasons:');
+        debugLog.error('- Insufficient VERT balance');
+        debugLog.error('- Insufficient allowance');
+        debugLog.error('- Contract is paused');
+        debugLog.error('- Invalid parameters');
+        debugLog.error('- Gas limit too low');
         
         // Check if this is a post-transaction revert (transaction was sent but failed)
         if (error?.message?.includes('Transaction failed: Execution reverted')) {
-          console.error('🚨 CRITICAL: Transaction was sent but reverted during execution');
-          console.error('🔍 This suggests a race condition or contract state change');
-          console.error('💡 Recommended actions:');
-          console.error('   1. Wait 30 seconds before trying again');
-          console.error('   2. Check if contract was paused');
-          console.error('   3. Verify no other transactions are pending');
-          console.error('   4. Try refreshing the page');
+          debugLog.error('🚨 CRITICAL: Transaction was sent but reverted during execution');
+          debugLog.error('🔍 This suggests a race condition or contract state change');
+          debugLog.error('💡 Recommended actions:');
+          debugLog.error('   1. Wait 30 seconds before trying again');
+          debugLog.error('   2. Check if contract was paused');
+          debugLog.error('   3. Verify no other transactions are pending');
+          debugLog.error('   4. Try refreshing the page');
           
           // Provide user-friendly error message for post-transaction reverts
           setMintError('Transaction sent but failed during execution. This may be due to network congestion or a race condition. Please wait 30 seconds and try again.');
           
           // Run debug check to see what went wrong
-          console.log('🚨 POST-FAILURE DEBUG CHECK:');
+          debugLog.log('🚨 POST-FAILURE DEBUG CHECK:');
           await debugContractState();
         }
       } else if (error?.message?.includes('503') || error?.message?.includes('no backend')) {
-        console.error('🌐 RPC connectivity issues detected');
+        debugLog.error('🌐 RPC connectivity issues detected');
         setMintError('Network connectivity issues. Base Sepolia RPC is experiencing problems. Please try again later.');
       }
       
@@ -1141,7 +1142,7 @@ export default function Home() {
       
       // 3. Approve if needed
       if (allowance < price) {
-        console.log('🔍 VIRTUAL Approval Debug:', {
+        debugLog.log('🔍 VIRTUAL Approval Debug:', {
           spender: contractAddress,
           amount: 'MAX_UINT256', // Approve maximum so user only needs to approve once
           requiredPrice: price.toString(),
@@ -1158,7 +1159,7 @@ export default function Home() {
           args: [contractAddress as `0x${string}`, MAX_UINT256], // Approve maximum for convenience
         });
         
-        console.log('🔄 Approval transaction sent:', approvalTxHash);
+        debugLog.log('🔄 Approval transaction sent:', approvalTxHash);
         toast('Waiting for approval confirmation...');
         
         // Wait for approval transaction to be confirmed
@@ -1167,12 +1168,12 @@ export default function Home() {
           confirmations: 1
         });
         
-        console.log('✅ Approval transaction confirmed in block:', approvalReceipt.blockNumber);
+        debugLog.log('✅ Approval transaction confirmed in block:', approvalReceipt.blockNumber);
         toast.success('VIRTUAL approved ✅ - No more approvals needed!');
         
         // Refresh allowances to verify approval worked
         await checkAllowances();
-        console.log('🔄 Allowances refreshed after approval');
+        debugLog.log('🔄 Allowances refreshed after approval');
       }
       
       // 4. Mint NFT
@@ -1188,21 +1189,21 @@ export default function Home() {
           args: ['ipfs://QmPlaceholder'],
           account: walletClient.account.address,
         });
-        console.log('🔍 Gas Estimate for VIRTUAL mint:', gasEstimate.toString());
+        debugLog.log('🔍 Gas Estimate for VIRTUAL mint:', gasEstimate.toString());
         
         // Add 25% buffer for safety
         gasWithBuffer = (gasEstimate * BigInt(125)) / BigInt(100);
-        console.log('🛡️ Gas with 25% buffer:', gasWithBuffer.toString());
+        debugLog.log('🛡️ Gas with 25% buffer:', gasWithBuffer.toString());
         
         // Get current gas price
         const gasPrice = await publicClient.getGasPrice();
-        console.log('⛽ Current gas price:', formatEther(gasPrice), 'ETH');
+        debugLog.log('⛽ Current gas price:', formatEther(gasPrice), 'ETH');
         
         const estimatedCost = gasWithBuffer * gasPrice;
-        console.log('💰 Estimated transaction cost:', formatEther(estimatedCost), 'ETH');
-        console.log('💰 Estimated transaction cost (USD ~$2500/ETH):', '$' + (Number(formatEther(estimatedCost)) * 2500).toFixed(4));
+        debugLog.log('💰 Estimated transaction cost:', formatEther(estimatedCost), 'ETH');
+        debugLog.log('💰 Estimated transaction cost (USD ~$2500/ETH):', '$' + (Number(formatEther(estimatedCost)) * 2500).toFixed(4));
       } catch (gasError: any) {
-        console.error('❌ Gas estimation failed - using fallback gas limit:', gasError);
+        debugLog.error('❌ Gas estimation failed - using fallback gas limit:', gasError);
         // gasWithBuffer already set to fallback value
       }
 
@@ -1217,7 +1218,7 @@ export default function Home() {
           gas: gasWithBuffer, // Use buffered gas estimate
         });
       } catch (writeError: any) {
-        console.error('❌ writeContract failed:', writeError);
+        debugLog.error('❌ writeContract failed:', writeError);
         setIsWaitingForTx(false);
         
         // Handle specific contract execution errors
@@ -1234,7 +1235,7 @@ export default function Home() {
         }
       }
       
-      console.log('✅ Transaction sent:', txHash);
+      debugLog.log('✅ Transaction sent:', txHash);
       
       // Transaction confirmed, now start processing
       setIsWaitingForTx(false);
@@ -1288,7 +1289,7 @@ export default function Home() {
     } catch (error: any) {
       setIsWaitingForTx(false);
       setIsProcessing(false);
-      console.error('Minting failed:', error);
+      debugLog.error('Minting failed:', error);
       // Remove error toasts - terminal handles error display
       // Re-throw so MintTerminal can handle it
       throw error;
@@ -1298,12 +1299,12 @@ export default function Home() {
   // Add debugging function to check contract state
   const debugContractState = async () => {
     if (!publicClient || !address) {
-      console.log('❌ Cannot debug - missing publicClient or address');
+      debugLog.log('❌ Cannot debug - missing publicClient or address');
       return;
     }
 
     try {
-      console.log('🔍 DEBUGGING CONTRACT STATE:');
+      debugLog.log('🔍 DEBUGGING CONTRACT STATE:');
       
       // Check if contract is paused
       const isPaused = await publicClient.readContract({
@@ -1311,7 +1312,7 @@ export default function Home() {
         abi: VERTICAL_ABI,
         functionName: 'paused',
       }) as boolean;
-      console.log(`⏸️ Contract paused: ${isPaused}`);
+      debugLog.log(`⏸️ Contract paused: ${isPaused}`);
       
       // Check user VERT balance
       const vertBalance = await publicClient.readContract({
@@ -1320,7 +1321,7 @@ export default function Home() {
         functionName: 'balanceOf',
         args: [address],
       }) as bigint;
-      console.log(`💰 VERT balance: ${formatEther(vertBalance)}`);
+      debugLog.log(`💰 VERT balance: ${formatEther(vertBalance)}`);
       
       // Check VERT allowance
       const vertAllowance = await publicClient.readContract({
@@ -1329,7 +1330,7 @@ export default function Home() {
         functionName: 'allowance',
         args: [address, contractAddress as `0x${string}`],
       }) as bigint;
-      console.log(`✅ VERT allowance: ${formatEther(vertAllowance)}`);
+      debugLog.log(`✅ VERT allowance: ${formatEther(vertAllowance)}`);
       
       // Check mint price
       const mintPrice = await publicClient.readContract({
@@ -1337,7 +1338,7 @@ export default function Home() {
         abi: VERTICAL_ABI,
         functionName: 'priceVert',
       }) as bigint;
-      console.log(`💸 Mint price: ${formatEther(mintPrice)}`);
+      debugLog.log(`💸 Mint price: ${formatEther(mintPrice)}`);
       
       // Check total minted
       const totalMinted = await publicClient.readContract({
@@ -1345,7 +1346,7 @@ export default function Home() {
         abi: VERTICAL_ABI,
         functionName: 'getTotalMinted',
       }) as bigint;
-      console.log(`📊 Total minted: ${totalMinted.toString()}`);
+      debugLog.log(`📊 Total minted: ${totalMinted.toString()}`);
       
       // Check if there are any pending transactions
       const nonce = await publicClient.getTransactionCount({
@@ -1356,9 +1357,9 @@ export default function Home() {
         address: address,
         blockTag: 'latest'
       });
-      console.log(`🔢 Pending nonce: ${nonce}, Latest nonce: ${latestNonce}`);
+      debugLog.log(`🔢 Pending nonce: ${nonce}, Latest nonce: ${latestNonce}`);
       if (nonce > latestNonce) {
-        console.log(`⚠️ WARNING: ${nonce - latestNonce} pending transactions detected!`);
+        debugLog.log(`⚠️ WARNING: ${nonce - latestNonce} pending transactions detected!`);
       }
       
       // Try to simulate a mint to see if it would fail
@@ -1370,25 +1371,25 @@ export default function Home() {
           args: ["ipfs://QmDebugTest"],
           account: address,
         });
-        console.log('✅ Simulation still passes - this is very strange!');
+        debugLog.log('✅ Simulation still passes - this is very strange!');
         
         // Verify function selector
-        console.log('🔍 Checking function selector...');
+        debugLog.log('🔍 Checking function selector...');
         const functionData = encodeFunctionData({
           abi: VERTICAL_ABI,
           functionName: 'mintWithVert',
           args: ["ipfs://QmPlaceholder"]
         });
-        console.log('📄 Function data:', functionData);
-        console.log('🎯 Function selector:', functionData.slice(0, 10));
+        debugLog.log('📄 Function data:', functionData);
+        debugLog.log('🎯 Function selector:', functionData.slice(0, 10));
         
       } catch (simError: any) {
-        console.log('❌ Simulation now fails:', simError.message);
+        debugLog.log('❌ Simulation now fails:', simError.message);
         return simError.message;
       }
       
     } catch (error: any) {
-      console.error('❌ Debug failed:', error);
+      debugLog.error('❌ Debug failed:', error);
     }
   };
 

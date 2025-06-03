@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTypewriter } from '@/app/hooks/useTypewriter';
+import { debugLog } from '@/utils/debug';
 
 interface MintFeedPanelProps {
   isProcessing: boolean;
@@ -182,7 +183,7 @@ export default function MintFeedPanel({
                   <div className="text-center mt-3">
                     <button
                       onClick={() => {
-                        console.log('🔍 Share button clicked:', {
+                        debugLog.log('🔍 Share button clicked:', {
                           mintedTokenId,
                           mintedNFTImageUrl,
                           lastMintedRarity,
@@ -190,7 +191,7 @@ export default function MintFeedPanel({
                         });
                         
                         if (!mintedTokenId) {
-                          console.warn('⚠️ No token ID available for sharing, using fallback approach');
+                          debugLog.warn('⚠️ No token ID available for sharing, using fallback approach');
                           // Fallback to old approach if token ID is missing
                           const imageUrl = ipfsToTwitter(mintedNFTImageUrl);
                           const baseText = `Just minted a ${lastMintedRarity || 'Vertical'} NFT on @VerticalOnBase! ${lastMintedPrize ? `Won ${lastMintedPrize} VERT! 🎉` : ''} #vertnft`;
@@ -205,12 +206,12 @@ export default function MintFeedPanel({
                         
                         // Create share URL with proper Twitter Card meta tags
                         const shareUrl = `${window.location.origin}/api/share/${mintedTokenId}?image=${encodeURIComponent(imageUrl)}&rarity=${encodeURIComponent(lastMintedRarity || 'Vertical')}&prize=${encodeURIComponent(lastMintedPrize || '0')}`;
-                        console.log('📤 Created share URL:', shareUrl);
+                        debugLog.log('📤 Created share URL:', shareUrl);
                         
                         // Create tweet with the share URL (this will show Twitter Card)
                         const tweetText = `${baseText}\n\nCheck it out: ${shareUrl}`;
                         const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
-                        console.log('🐦 Opening Twitter with:', tweetUrl);
+                        debugLog.log('🐦 Opening Twitter with:', tweetUrl);
                         window.open(tweetUrl, '_blank');
                       }}
                       className="text-green-400 hover:text-white hover:bg-green-900/20 px-2 py-1 rounded transition-colors font-mono text-xs border border-green-500/30 hover:border-green-400"

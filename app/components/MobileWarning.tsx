@@ -1,37 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
+import { Smartphone, ExternalLink } from 'lucide-react';
+import { debugLog } from '@/utils/debug';
 
 export default function MobileWarning() {
   const [isMobile, setIsMobile] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
   const [animatedText, setAnimatedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [isWideScreen, setIsWideScreen] = useState(false);
 
   const fullText = "VERTICAL";
 
   useEffect(() => {
-    const checkMobile = () => {
-      // More aggressive mobile detection
+    const checkScreenSize = () => {
       const screenWidth = window.innerWidth;
-      const userAgent = navigator.userAgent;
-      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-      const isSmallScreen = screenWidth <= 900; // Increased from 768px
+      const isMobileDevice = screenWidth < 768;
+      const isWide = screenWidth >= 1024;
       
-      setIsMobile(isMobileUA || isSmallScreen);
+      setIsMobile(isMobileDevice);
+      setIsWideScreen(isWide);
       
-      // Debug logging (remove in production)
-      console.log('Mobile Detection:', {
+      debugLog.log('Mobile Detection:', {
         screenWidth,
-        isMobileUA,
-        isSmallScreen,
-        finalResult: isMobileUA || isSmallScreen
+        isMobile: isMobileDevice,
+        isWide,
+        userAgent: navigator.userAgent.slice(0, 50) + '...'
       });
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // Animated typing effect for VERTICAL text

@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAccount } from 'wagmi';
 import { useAccumulativeTypewriter } from '@/app/hooks/useAccumulativeTypewriter';
+import { debugLog } from '@/utils/debug';
 
 interface MintTerminalProps {
   onMintWithVirtual: () => Promise<void>;
@@ -67,14 +68,10 @@ export default function MintTerminal({
     isActive: isProcessing
   });
 
-  // Simplified initialization - runs only once
+  // Track terminal state for UI coordination
   useEffect(() => {
-    if (hasInitialized) return;
+    debugLog.log('🎯 Terminal initializing with:', { isConnected, canMint });
     
-    setHasInitialized(true);
-    console.log('🎯 Terminal initializing with:', { isConnected, canMint });
-
-    // Show appropriate initial state
     if (!isConnected) {
       setLines([
         { id: 'noWallet', text: '> wallet not connected', type: 'error' },
@@ -96,76 +93,12 @@ export default function MintTerminal({
         { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
       ]);
     }
-  }, [hasInitialized]); // Only depend on hasInitialized
+  }, [isConnected, canMint]);
 
-  // Update terminal when wallet connection or canMint changes
+  // Log state changes for debugging
   useEffect(() => {
-    if (!hasInitialized) return; // Don't run before initial setup
-    
-    // Only log significant state changes, not every update
-    if (isWaitingForTx || isProcessing) {
-      console.log('🔄 Terminal state change:', { isWaitingForTx, isProcessing });
-    }
-    
-    if (!isConnected) {
-      setLines([
-        { id: 'noWallet', text: '> wallet not connected', type: 'error' },
-        { id: 'connect', text: '> please connect your wallet to continue', type: 'system' }
-      ]);
-    } else if (isWaitingForTx) {
-      // Show waiting for transaction confirmation (highest priority)
-      setLines([
-        { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
-        { id: 'waiting', text: '> waiting for transaction confirmation...', type: 'waiting' }
-      ]);
-    } else if (!canMint) {
-      // Show network issues only if not waiting or processing
-      setLines([
-        { id: 'connected', text: '> wallet connected ✅', type: 'success' },
-        { id: 'networkIssue', text: '> network connectivity issues detected', type: 'error' },
-        { id: 'retry', text: '> please refresh page and try again', type: 'system' }
-      ]);
-    } else {
-      // Show working terminal (normal state)
-      setLines([
-        { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
-        { id: 'select', text: '> select mint type:', type: 'system' },
-        { id: 'opt1', text: `  [1] mint with virtual (${priceVirtual} virtual)`, type: 'option', clickable: true },
-        { id: 'opt2', text: `  [2] mint with vert (${priceVert} vert)`, type: 'option', clickable: false },
-        { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
-      ]);
-    }
-  }, [hasInitialized, isConnected, canMint, priceVirtual, priceVert, isWaitingForTx]);
-
-  // Separate effect for processing state with typewriter messages
-  useEffect(() => {
-    if (!isProcessing) return;
-    
-    // Show processing state with accumulative marketing messages
-    const processingLines: TerminalLine[] = [
-      { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' }
-    ];
-    
-    // Add completed messages
-    completedMessages.forEach((message, index) => {
-      processingLines.push({
-        id: `marketing-completed-${index}`,
-        text: `> ${message}`,
-        type: 'marketing'
-      });
-    });
-    
-    // Add current message being typed (only if it's not empty and not already in completed)
-    if (currentMessage && !completedMessages.includes(currentMessage)) {
-      processingLines.push({
-        id: 'current-marketing',
-        text: `> ${currentMessage}`,
-        type: 'marketing'
-      });
-    }
-    
-    setLines(processingLines);
-  }, [isProcessing, completedMessages, currentMessage]);
+    debugLog.log('🔄 Terminal state change:', { isWaitingForTx, isProcessing });
+  }, [isWaitingForTx, isProcessing]);
 
   // Handle mint option selection
   const handleOptionSelect = useCallback(async (option: 'virtual' | 'vert') => {
@@ -199,7 +132,7 @@ export default function MintTerminal({
       }, 2000);
       
     } catch (error: any) {
-      console.log('🚫 Mint error caught in terminal:', error);
+      debugLog.log('🚫 Mint error caught in terminal:', error);
       
       // Determine the type of error for better user feedback
       let errorMessage = '> mint failed ❌';
@@ -250,7 +183,7 @@ export default function MintTerminal({
         handleOptionSelect('virtual');
       } else if (event.key === '2') {
         // VERT minting disabled - do nothing
-        console.log('⚠️ VERT minting coming soon!');
+        debugLog.log('⚠️ VERT minting coming soon!');
       }
     };
 
@@ -293,7 +226,7 @@ export default function MintTerminal({
       handleOptionSelect('virtual');
     } else if (line.id === 'opt2') {
       // VERT option is disabled - do nothing
-      console.log('⚠️ VERT minting coming soon!');
+      debugLog.log('⚠️ VERT minting coming soon!');
     }
   };
 
@@ -381,6 +314,25 @@ export default function MintTerminal({
             </div>
           </div>
         )}
+
+        <div className="border-2 border-green-500 rounded-lg p-4">
+          <h3 className="text-yellow-400 text-lg mb-4 font-mono">⚠️ VERT MINTING PHASE</h3>
+          <div className="space-y-3">
+            <div className="text-gray-300">
+              VERT minting will be available once the VERT token launches.
+            </div>
+            <div className="text-gray-400 text-sm">
+              Current Status: <span className="text-yellow-400">Awaiting VERT Token Deployment</span>
+            </div>
+            <button 
+              onClick={() => debugLog.log('⚠️ VERT minting coming soon!')}
+              className="w-full bg-yellow-900/20 border border-yellow-500 text-yellow-400 py-3 px-4 rounded font-mono text-sm hover:bg-yellow-900/30 transition-colors cursor-not-allowed"
+              disabled
+            >
+              &gt; mint_with_vert --status=coming_soon
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

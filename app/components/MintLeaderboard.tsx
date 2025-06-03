@@ -1,11 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { formatEther, decodeEventLog } from 'viem';
 import { usePublicClient } from 'wagmi';
 import { base } from 'wagmi/chains';
 import { VERTICAL_ABI } from '@/app/config/abis';
 import { getContractAddress } from '@/app/config/contracts';
+import { createPublicClient, http } from 'viem';
+import { debugLog } from '@/utils/debug';
 
 interface MintLeaderboardProps {
   maxEntries?: number;
@@ -29,6 +32,7 @@ export default function MintLeaderboard({
   const [error, setError] = useState<string | null>(null);
   const [totalMinted, setTotalMinted] = useState('0');
   const [consecutiveFailures, setConsecutiveFailures] = useState(0);
+  const [isStopped, setIsStopped] = useState(false);
   const publicClient = usePublicClient({ chainId: base.id });
 
   const fetchLeaderboardData = async () => {
@@ -68,10 +72,9 @@ export default function MintLeaderboard({
       let currentBlock: bigint;
       try {
         currentBlock = await publicClient.getBlockNumber();
-        console.log(`📊 MintLeaderboard: Current block: ${currentBlock.toString()}`);
+        debugLog.log(`📊 MintLeaderboard: Current block: ${currentBlock.toString()}`);
       } catch (e) {
-        console.warn('Could not get current block for leaderboard, skipping');
-        setError('Network temporarily unavailable');
+        debugLog.warn('Could not get current block for leaderboard, skipping');
         return;
       }
       
@@ -85,17 +88,17 @@ export default function MintLeaderboard({
       let toBlock = currentBlock;
       let queriesRun = 0;
       
-      console.log(`📊 MintLeaderboard: Querying in ${BLOCK_RANGE} block chunks, max ${MAX_QUERIES} queries`);
+      debugLog.log(`📊 MintLeaderboard: Querying in ${BLOCK_RANGE} block chunks, max ${MAX_QUERIES} queries`);
       
       while (queriesRun < MAX_QUERIES) {
         const fromBlock = toBlock - BigInt(BLOCK_RANGE) + BigInt(1);
         
         if (fromBlock < BigInt(0)) {
-          console.log('📊 Reached genesis block, stopping leaderboard query');
+          debugLog.log('📊 Reached genesis block, stopping leaderboard query');
           break;
         }
         
-        console.log(`📊 MintLeaderboard Query ${queriesRun + 1}: Blocks ${fromBlock.toString()} to ${toBlock.toString()}`);
+        debugLog.log(`📊 MintLeaderboard Query ${queriesRun + 1}: Blocks ${fromBlock.toString()} to ${toBlock.toString()}`);
         
         try {
           const mintEvents = await publicClient.getLogs({
@@ -114,13 +117,13 @@ export default function MintLeaderboard({
             toBlock: toBlock
           });
           
-          console.log(`📄 MintLeaderboard: Found ${mintEvents.length} mint events in this range`);
+          debugLog.log(`📄 MintLeaderboard: Found ${mintEvents.length} mint events in this range`);
           allMintEvents = allMintEvents.concat(mintEvents);
           
         } catch (queryError: any) {
           // Sanitize error message to hide API key
           const sanitizedMessage = queryError.message?.replace(/\/v2\/[^\/\s]+/g, '/v2/[HIDDEN]') || 'Unknown error';
-          console.warn(`⚠️ MintLeaderboard query failed for blocks ${fromBlock.toString()}-${toBlock.toString()}:`, sanitizedMessage);
+          debugLog.warn(`⚠️ MintLeaderboard query failed for blocks ${fromBlock.toString()}-${toBlock.toString()}:`, sanitizedMessage);
           // Continue with next range instead of failing completely
         }
         
@@ -159,7 +162,7 @@ export default function MintLeaderboard({
       // Only update leaderboard if we have data - preserve existing data during failures
       if (sortedEntries.length > 0) {
         setLeaderboard(sortedEntries);
-        console.log(`✅ MintLeaderboard: Updated with ${sortedEntries.length} entries from ${allMintEvents.length} total events`);
+        debugLog.log(`✅ MintLeaderboard: Updated with ${sortedEntries.length} entries from ${allMintEvents.length} total events`);
       }
       
       // Reset failure counter on successful fetch
@@ -168,7 +171,7 @@ export default function MintLeaderboard({
     } catch (err: any) {
       // Sanitize error message to hide API key from console logs
       const sanitizedMessage = err.message?.replace(/\/v2\/[^\/\s]+/g, '/v2/[HIDDEN]') || 'Unknown error';
-      console.error('Error fetching leaderboard data:', sanitizedMessage);
+      debugLog.error('Error fetching leaderboard data:', sanitizedMessage);
       
       // Check if it's a network/RPC error (503, timeout, etc.)
       const isNetworkError = err.message?.includes('503') || 
@@ -182,7 +185,7 @@ export default function MintLeaderboard({
         const newFailureCount = consecutiveFailures + 1;
         setConsecutiveFailures(newFailureCount);
         setError('Network temporarily unavailable');
-        console.log(`🔥 RPC failure #${newFailureCount}/3 - ${newFailureCount >= 3 ? 'stopping polling' : 'will retry'}`);
+        debugLog.log(`🔥 RPC failure #${newFailureCount}/3 - ${newFailureCount >= 3 ? 'stopping polling' : 'will retry'}`);
       } else {
         setError('Failed to load leaderboard data');
       }
