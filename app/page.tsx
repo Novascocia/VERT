@@ -247,8 +247,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [prizePool, setPrizePool] = useState('0');
   const [totalMinted, setTotalMinted] = useState('0');
-  const [priceVirtual, setPriceVirtual] = useState('0');
-  const [priceVert, setPriceVert] = useState('0');
+  const [priceVirtual, setPriceVirtual] = useState(MINT_PRICES.virtual);
+  const [priceVert, setPriceVert] = useState(MINT_PRICES.vert);
   const [mintedNFT, setMintedNFT] = useState<{
     imageUrl: string;
     rarity: Rarity;
@@ -480,37 +480,87 @@ export default function Home() {
 
   const fetchMintPrices = async () => {
     try {
-      if (!publicClient) return;
-      const vPrice = await publicClient.readContract({
-        address: contractAddress as `0x${string}`,
-        abi: VERTICAL_ABI,
-        functionName: 'priceVirtual',
-      }) as bigint;
-      const vertPrice = await publicClient.readContract({
-        address: contractAddress as `0x${string}`,
-        abi: VERTICAL_ABI,
-        functionName: 'priceVert',
-      }) as bigint;
+      debugLog.log('🔄 Fetching mint prices from contract...');
+      
+      if (!publicClient) {
+        debugLog.warn('⚠️ No publicClient available, using fallback prices');
+        setPriceVirtual(MINT_PRICES.virtual);
+        setPriceVert(MINT_PRICES.vert);
+        return;
+      }
+
+      debugLog.log('📍 Contract address:', contractAddress);
+      debugLog.log('🌐 Using RPC provider:', publicClient.transport?.url || 'unknown');
+
+      const [vPrice, vertPrice] = await Promise.all([
+        publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: VERTICAL_ABI,
+          functionName: 'priceVirtual',
+        }) as Promise<bigint>,
+        publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: VERTICAL_ABI,
+          functionName: 'priceVert',
+        }) as Promise<bigint>
+      ]);
       
       const vPriceFormatted = formatEther(vPrice);
       const vertPriceFormatted = formatEther(vertPrice);
       
-      // Use fallback prices from config if contract returns 0 (might indicate contract issues)
-      setPriceVirtual(vPriceFormatted === '0' ? MINT_PRICES.virtual : vPriceFormatted);
-      setPriceVert(vertPriceFormatted === '0' ? MINT_PRICES.vert : vertPriceFormatted);
-      
-      // Log for debugging
-      debugLog.log('💰 Contract prices:', { 
-        virtual: vPriceFormatted, 
-        vert: vertPriceFormatted,
-        usingFallback: vPriceFormatted === '0' || vertPriceFormatted === '0'
+      debugLog.log('💰 Raw contract prices:', { 
+        virtualRaw: vPrice.toString(),
+        vertRaw: vertPrice.toString()
       });
       
-    } catch (error) {
-      // Use fallback prices if contract read fails
+      debugLog.log('💰 Formatted contract prices:', { 
+        virtual: vPriceFormatted, 
+        vert: vertPriceFormatted
+      });
+
+      // More robust price validation - check for both 0 and very small values
+      const virtualPriceIsValid = vPrice > BigInt(0) && vPriceFormatted !== '0.0' && vPriceFormatted !== '0';
+      const vertPriceIsValid = vertPrice > BigInt(0) && vertPriceFormatted !== '0.0' && vertPriceFormatted !== '0';
+      
+      // Set prices with improved fallback logic
+      const finalVirtualPrice = virtualPriceIsValid ? vPriceFormatted : MINT_PRICES.virtual;
+      const finalVertPrice = vertPriceIsValid ? vertPriceFormatted : MINT_PRICES.vert;
+      
+      setPriceVirtual(finalVirtualPrice);
+      setPriceVert(finalVertPrice);
+      
+      // Enhanced logging for debugging
+      debugLog.log('💰 Final prices set:', { 
+        virtual: finalVirtualPrice,
+        vert: finalVertPrice,
+        usingVirtualFallback: !virtualPriceIsValid,
+        usingVertFallback: !vertPriceIsValid
+      });
+
+      if (!virtualPriceIsValid || !vertPriceIsValid) {
+        debugLog.warn('⚠️ Using fallback prices due to invalid contract values:', {
+          contractVirtual: vPriceFormatted,
+          contractVert: vertPriceFormatted,
+          fallbackVirtual: MINT_PRICES.virtual,
+          fallbackVert: MINT_PRICES.vert
+        });
+      } else {
+        debugLog.log('✅ Using contract prices successfully');
+      }
+      
+    } catch (error: any) {
+      debugLog.error('❌ Error fetching prices from contract:', {
+        message: error.message,
+        code: error.code,
+        contractAddress,
+        fallbackAction: 'Using config fallback values'
+      });
+      
+      // Always ensure prices are set to something valid
       setPriceVirtual(MINT_PRICES.virtual);
       setPriceVert(MINT_PRICES.vert);
-      debugLog.warn('⚠️ Failed to fetch prices from contract, using fallback values');
+      
+      debugLog.warn('⚠️ Set fallback prices due to fetch error:', MINT_PRICES);
     }
   };
 
@@ -560,6 +610,39 @@ export default function Home() {
         debugLog.error('❌ Error during initial data loading:', err);
         setIsLoadingStats(false);
       });
+    }
+  }, [mounted, publicClient]);
+
+  // Dedicated price loading with retry mechanism
+  useEffect(() => {
+    let retryCount = 0;
+    const maxRetries = 3;
+    
+    const loadPricesWithRetry = async () => {
+      if (!mounted || !publicClient) return;
+      
+      try {
+        await fetchMintPrices();
+        debugLog.log('✅ Mint prices loaded successfully');
+      } catch (error) {
+        retryCount++;
+        debugLog.warn(`⚠️ Mint price loading attempt ${retryCount} failed:`, error);
+        
+        if (retryCount < maxRetries) {
+          debugLog.log(`🔄 Retrying in ${retryCount * 2} seconds...`);
+          setTimeout(() => {
+            loadPricesWithRetry();
+          }, retryCount * 2000); // Progressive delay: 2s, 4s, 6s
+        } else {
+          debugLog.error('❌ All mint price loading attempts failed, using fallbacks');
+          setPriceVirtual(MINT_PRICES.virtual);
+          setPriceVert(MINT_PRICES.vert);
+        }
+      }
+    };
+
+    if (mounted && publicClient) {
+      loadPricesWithRetry();
     }
   }, [mounted, publicClient]);
 
