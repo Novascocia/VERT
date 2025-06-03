@@ -740,13 +740,25 @@ export default function Home() {
           // Request approval from user
           toast('Approve VERT token spending (one-time approval)');
           try {
-            await writeContract(wagmiConfig, {
+            // Get approval transaction hash
+            const approvalTxHash = await writeContract(wagmiConfig, {
               account: walletClient.account.address,
               address: vertTokenAddress as `0x${string}`,
               abi: ERC20_ABI,
               functionName: 'approve',
               args: [contractAddress as `0x${string}`, MAX_UINT256], // Approve maximum for convenience
             });
+            
+            console.log('🔄 VERT Approval transaction sent:', approvalTxHash);
+            toast('Waiting for VERT approval confirmation...');
+            
+            // Wait for approval transaction to be confirmed
+            const approvalReceipt = await publicClient.waitForTransactionReceipt({
+              hash: approvalTxHash,
+              confirmations: 1
+            });
+            
+            console.log('✅ VERT Approval transaction confirmed in block:', approvalReceipt.blockNumber);
             toast.success('VERT approved ✅ - No more approvals needed!');
             
             // Refresh allowances after approval
@@ -1135,16 +1147,31 @@ export default function Home() {
           allowance: allowance.toString()
         });
         toast('Approve VIRTUAL token spending (one-time approval)');
-        await writeContract(wagmiConfig, {
+        
+        // Get approval transaction hash
+        const approvalTxHash = await writeContract(wagmiConfig, {
           account: walletClient.account.address,
           address: virtualTokenAddress as `0x${string}`,
           abi: ERC20_ABI,
           functionName: 'approve',
           args: [contractAddress as `0x${string}`, MAX_UINT256], // Approve maximum for convenience
         });
+        
+        console.log('🔄 Approval transaction sent:', approvalTxHash);
+        toast('Waiting for approval confirmation...');
+        
+        // Wait for approval transaction to be confirmed
+        const approvalReceipt = await publicClient.waitForTransactionReceipt({
+          hash: approvalTxHash,
+          confirmations: 1
+        });
+        
+        console.log('✅ Approval transaction confirmed in block:', approvalReceipt.blockNumber);
         toast.success('VIRTUAL approved ✅ - No more approvals needed!');
-        // Refresh allowances
+        
+        // Refresh allowances to verify approval worked
         await checkAllowances();
+        console.log('🔄 Allowances refreshed after approval');
       }
       
       // 4. Mint NFT
