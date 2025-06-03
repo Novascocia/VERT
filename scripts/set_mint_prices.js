@@ -4,9 +4,9 @@ const VerticalABI = require('../abis/Vertical.json').abi;
 
 async function setMintPrices() {
   try {
-    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://sepolia.base.org');
+    const provider = new ethers.JsonRpcProvider(process.env.RPC_URL || 'https://mainnet.base.org');
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-    const contractAddress = '0x9ede64fe689aa03B049497E2A70676d02f3437E9';
+    const contractAddress = process.env.CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098';
     const contract = new ethers.Contract(contractAddress, VerticalABI, wallet);
     
     console.log('💰 Setting mint prices...');
@@ -21,12 +21,12 @@ async function setMintPrices() {
     console.log('💎 VERT:', ethers.formatEther(currentVertPrice), 'VERT');
     console.log('🌟 VIRTUAL:', ethers.formatEther(currentVirtualPrice), 'VIRTUAL');
     
-    // Set reasonable prices
-    const newVertPrice = ethers.parseEther("100");      // 100 VERT per mint
-    const newVirtualPrice = ethers.parseEther("50");    // 50 VIRTUAL per mint
+    // Set new prices - Virtual price to 0.01, keep VERT price the same
+    const newVertPrice = currentVertPrice;  // Keep current VERT price
+    const newVirtualPrice = ethers.parseEther("0.01");  // Set VIRTUAL to 0.01
     
     console.log('\n🚀 Setting new prices:');
-    console.log('💎 New VERT price:', ethers.formatEther(newVertPrice), 'VERT');
+    console.log('💎 VERT price (unchanged):', ethers.formatEther(newVertPrice), 'VERT');
     console.log('🌟 New VIRTUAL price:', ethers.formatEther(newVirtualPrice), 'VIRTUAL');
     
     // Verify owner
@@ -38,12 +38,16 @@ async function setMintPrices() {
       return;
     }
     
+    console.log('✅ Owner verification passed');
+    
     const tx = await contract.setPrices(newVirtualPrice, newVertPrice);
     console.log('📤 Transaction sent:', tx.hash);
+    console.log('⏳ Waiting for confirmation...');
     
     const receipt = await tx.wait();
     console.log('✅ Prices set successfully!');
     console.log('🧾 Gas used:', receipt.gasUsed.toString());
+    console.log('🔗 Block number:', receipt.blockNumber);
     
     // Verify new prices
     const finalVertPrice = await contract.priceVert();
@@ -53,13 +57,19 @@ async function setMintPrices() {
     console.log('💎 VERT:', ethers.formatEther(finalVertPrice), 'VERT');
     console.log('🌟 VIRTUAL:', ethers.formatEther(finalVirtualPrice), 'VIRTUAL');
     
-    console.log('\n📈 Prize Pool Impact:');
-    console.log('Per VERT mint (100 VERT):');
-    console.log('   💼 To treasury (25%): 25 VERT');
-    console.log('   🏆 To prize pool (75%): 75 VERT');
+    console.log('\n📈 New Mint Economics:');
+    console.log('Per VIRTUAL mint (0.01 VIRTUAL):');
+    console.log('   💼 Goes to treasury: 0.01 VIRTUAL');
+    console.log('   🏆 Prize pool: No change (VIRTUAL mints don\'t fund prize pool)');
     
   } catch (error) {
     console.error('❌ Error setting mint prices:', error.message);
+    if (error.reason) {
+      console.error('🔍 Reason:', error.reason);
+    }
+    if (error.code) {
+      console.error('🔢 Error code:', error.code);
+    }
   }
 }
 

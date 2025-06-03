@@ -227,8 +227,8 @@ export async function generateAndStoreNFT(
     const metadataUri = await uploadMetadataToPinata(numericTokenId, ipfsImageUri, traits);
 
     // Set tokenURI on-chain using backend wallet with hardcoded fallbacks
-    const rpcUrl = process.env.RPC_URL || 'https://mainnet.base.org';
-    const contractAddress = process.env.CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098';
+    const rpcUrl = process.env.RPC_URL || process.env.MAINNET_RPC_URL || 'https://mainnet.base.org';
+    const contractAddress = process.env.CONTRACT_ADDRESS || process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2';
     
     const provider = new ethers.JsonRpcProvider(rpcUrl);
     const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);

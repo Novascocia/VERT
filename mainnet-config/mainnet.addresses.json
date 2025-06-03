@@ -1,17 +1,17 @@
 {
-  "_comment": "Mainnet contract addresses - Fill in as contracts are deployed",
+  "_comment": "Mainnet contract addresses - Updated after deployment",
   "_deployment_phases": {
-    "phase1": "Deploy NFT contract with VIRTUAL only",
+    "phase1": "Deploy NFT contract with VIRTUAL only - ✅ COMPLETE",
     "phase2": "Add VERT token address when launched by Virtuals Protocol",
     "phase3": "Prize pool funding (no new addresses)",
     "phase4": "Add staking contract address"
   },
   
-  "NFT_CONTRACT_ADDRESS": "[FILL_IN_AFTER_DEPLOYMENT]",
-  "VERT_TOKEN_ADDRESS": "[FILL_IN_WHEN_VIRTUALS_LAUNCHES_VERT]",
+  "NFT_CONTRACT_ADDRESS": "0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2",
+  "VERT_TOKEN_ADDRESS": "0x0000000000000000000000000000000000000000",
   "VIRTUAL_TOKEN_ADDRESS": "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b",
-  "TREASURY_ADDRESS": "[FILL_IN_YOUR_MAINNET_TREASURY]",
-  "OPERATIONAL_ADDRESS": "[FILL_IN_YOUR_OPERATIONAL_WALLET]",
+  "TREASURY_ADDRESS": "0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23",
+  "OPERATIONAL_ADDRESS": "0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca",
   
   "_staking_contracts": {
     "STAKING_CONTRACT_ADDRESS": "[FILL_IN_WHEN_STAKING_LAUNCHES]",
@@ -26,12 +26,14 @@
   },
   
   "_deployment_tracker": {
-    "nft_deployed": false,
+    "nft_deployed": true,
     "vert_token_set": false,
     "prize_pool_funded": false,
     "staking_integrated": false,
-    "deployment_date": "[FILL_IN_DATE]",
-    "deployer_address": "[FILL_IN_DEPLOYER_ADDRESS]"
+    "deployment_date": "December 2024",
+    "deployer_address": "0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca",
+    "deployment_tx": "0x272f3b30fa540b504b96a68f852e141ba43a49cebdedc4cf10b84793da65ca9e",
+    "basescan_verified": true
   },
   
   "_testnet_reference": {
@@ -40,5 +42,12 @@
     "testnet_vert": "0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd",
     "testnet_virtual": "0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a",
     "testnet_treasury": "0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23"
+  },
+  
+  "_manual_sync_features": {
+    "contract_name": "VerticalProjectNFT_WithManualSync",
+    "sync_function": "syncPrizePool()",
+    "unaccounted_check": "getUnaccountedBalance()",
+    "admin_wallet": "0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca"
   }
 } 

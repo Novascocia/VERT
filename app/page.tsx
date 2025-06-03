@@ -28,6 +28,7 @@ import MintLeaderboard from '@/app/components/MintLeaderboard';
 import PrizePoolTerminal from '@/app/components/PrizePoolTerminal';
 import StatsTerminal from '@/app/components/StatsTerminal';
 import { preventWalletAutoPopup } from '@/app/utils/walletUtils';
+import AdminPanel from '@/app/components/AdminPanel';
 
 // Constants
 const BASE_SEPOLIA_CHAIN_ID = '0x14A34';
@@ -38,13 +39,16 @@ const MAX_UINT256 = maxUint256;
 // Add a public RPC/Alchemy key for read-only stats
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_KEY || '';
 const PUBLIC_RPC = ALCHEMY_API_KEY
-  ? `https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
-  : 'https://sepolia.base.org';
+  ? `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
+  : 'https://mainnet.base.org';
 
-// Contract addresses - FORCE CORRECT ADDRESS (overriding any env vars)
-const contractAddress = '0xc03605b09aF6010bb2097d285b9aF4024ecAf098'; // WORKING CONTRACT - FORCED
+// Contract addresses - Use environment variables with mainnet fallbacks
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2';
 const vertTokenAddress = process.env.NEXT_PUBLIC_VERT_TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000';
 const virtualTokenAddress = process.env.NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS || '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b';
+
+// Admin wallet address (deployer) - from environment variable
+const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS || '0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca';
 
 // Remove the mock implementation and replace with real API call
 async function generateAndStoreNFT(tokenId: string) {
@@ -268,6 +272,10 @@ export default function Home() {
   const [networkStatus, setNetworkStatus] = useState<'healthy' | 'degraded' | 'unhealthy'>('healthy');
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [lastMintTime, setLastMintTime] = useState<number>(0);
+  
+  // Admin panel state
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
   const isOnBaseMainnet = chainId === 8453;
@@ -275,6 +283,9 @@ export default function Home() {
   const publicClient = usePublicClient({ chainId: base.id });
   const [mounted, setMounted] = useState(false);
   const { disconnect } = useDisconnect();
+
+  // Check if current user is admin
+  const isAdmin = address && address.toLowerCase() === ADMIN_WALLET_ADDRESS.toLowerCase();
 
   // Log mounted state changes for debugging
   useEffect(() => {
@@ -1507,7 +1518,25 @@ export default function Home() {
           {/* <LiveMintFeed /> */}
           <HowItWorks />
         </div>
+        
+        {/* Admin Button - Bottom Right Corner (Only visible to admin) */}
+        {isAdmin && (
+          <button
+            onClick={() => setShowAdminPanel(true)}
+            className="fixed bottom-6 right-6 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-full shadow-lg transition-colors z-50 font-mono text-sm"
+            title="Admin Panel"
+          >
+            🔧 ADMIN
+          </button>
+        )}
       </div>
+      
+      {/* Admin Panel Modal */}
+      <AdminPanel
+        contractAddress={contractAddress}
+        isVisible={showAdminPanel}
+        onClose={() => setShowAdminPanel(false)}
+      />
     </>
   );
 } 

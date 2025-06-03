@@ -25,12 +25,30 @@ module.exports = {
       gasPrice: "auto",
       gasMultiplier: 1.2
     },
+    base_mainnet: {
+      url: process.env.MAINNET_RPC_URL || "https://mainnet.base.org",
+      accounts: [process.env.PRIVATE_KEY],
+      gasPrice: "auto",
+      gasMultiplier: 1.1,
+      chainId: 8453
+    },
     // ... other networks ...
   },
   etherscan: {
     apiKey: {
-      baseSepolia: process.env.BASESCAN_API_KEY
-    }
+      baseSepolia: process.env.BASESCAN_API_KEY,
+      base: process.env.BASESCAN_API_KEY
+    },
+    customChains: [
+      {
+        network: "base",
+        chainId: 8453,
+        urls: {
+          apiURL: "https://api.basescan.org/api",
+          browserURL: "https://basescan.org"
+        }
+      }
+    ]
   },
   typechain: {
     outDir: 'app/typechain-types',

@@ -21,7 +21,7 @@ interface MintEntry {
 export default function MintLeaderboard({ 
   maxEntries = 10, 
   title = "🏆 Mint Leaderboard",
-  contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xc03605b09aF6010bb2097d285b9aF4024ecAf098'
+  contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2'
 }: MintLeaderboardProps) {
   const [leaderboard, setLeaderboard] = useState<MintEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
