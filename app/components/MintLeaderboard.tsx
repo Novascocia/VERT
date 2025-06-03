@@ -79,7 +79,7 @@ export default function MintLeaderboard({
       
       do {
         try {
-          const response = await fetch(`https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`, {
+          const response = await fetch(`https://base-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
