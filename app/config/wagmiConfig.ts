@@ -26,6 +26,9 @@ const connectors = connectorsForWallets(
   ],
   {
     appName: 'Verticals',
+    // WalletConnect Project ID - if users see warnings when connecting,
+    // this project needs to be verified at https://cloud.walletconnect.com/
+    // The warning appears because this is an unverified WalletConnect project
     projectId: '1209303285d90dccca865a8af6f9c959',
   }
 );

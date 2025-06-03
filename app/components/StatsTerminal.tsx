@@ -1,11 +1,78 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface StatsTerminalProps {
   vertStaked: string;
   totalMinted: string;
   totalPaidOut: string;
+}
+
+// Cycling text effect component
+function CyclingTypewriter() {
+  const messages = [
+    "📊 Real-time network data",
+    "⛓️ On-chain verification active",
+    "🔄 Live blockchain sync",
+    "📈 Statistics updating...",
+    "🚀 Network health: optimal"
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    const currentMessage = messages[currentIndex];
+    
+    if (isTyping) {
+      // Typing effect
+      if (displayText.length < currentMessage.length) {
+        const timer = setTimeout(() => {
+          setDisplayText(currentMessage.slice(0, displayText.length + 1));
+        }, 60); // Typing speed
+        return () => clearTimeout(timer);
+      } else {
+        // Finished typing, wait then start deleting
+        const timer = setTimeout(() => {
+          setIsTyping(false);
+        }, 2000); // Wait time after typing
+        return () => clearTimeout(timer);
+      }
+    } else {
+      // Deleting effect
+      if (displayText.length > 0) {
+        const timer = setTimeout(() => {
+          setDisplayText(displayText.slice(0, -1));
+        }, 40); // Deleting speed (faster)
+        return () => clearTimeout(timer);
+      } else {
+        // Finished deleting, move to next message
+        const timer = setTimeout(() => {
+          setCurrentIndex((prev) => (prev + 1) % messages.length);
+          setIsTyping(true);
+        }, 500); // Small pause before next message
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [displayText, isTyping, currentIndex]);
+
+  // Cursor blinking effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <span className="text-green-400 text-base">
+      {displayText}
+      <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity`}>|</span>
+    </span>
+  );
 }
 
 export default function StatsTerminal({ vertStaked, totalMinted, totalPaidOut }: StatsTerminalProps) {
@@ -40,11 +107,9 @@ export default function StatsTerminal({ vertStaked, totalMinted, totalPaidOut }:
             </div>
           </div>
 
-          {/* Bottom message area */}
+          {/* Bottom message area with cycling text */}
           <div className="text-center min-h-[24px] overflow-hidden">
-            <div className="text-green-400 text-base">
-              📊 Real-time network data
-            </div>
+            <CyclingTypewriter />
           </div>
         </div>
 

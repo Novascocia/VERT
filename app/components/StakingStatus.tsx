@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { 
   formatStakedAmount,
@@ -9,6 +9,54 @@ import { useStaking } from '../hooks/useStaking';
 
 interface StakingStatusProps {
   className?: string;
+}
+
+// Blinking cursor component
+function BlinkingCursor() {
+  const [visible, setVisible] = useState(true);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(prev => !prev);
+    }, 500);
+    
+    return () => clearInterval(interval);
+  }, []);
+  
+  return <span className={`${visible ? 'opacity-100' : 'opacity-0'} text-green-400`}>█</span>;
+}
+
+// Typewriter effect for terminal output
+function TerminalOutput({ text, delay = 0 }: { text: string; delay?: number }) {
+  const [displayText, setDisplayText] = useState('');
+  const [showCursor, setShowCursor] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCursor(true);
+      let i = 0;
+      const typeTimer = setInterval(() => {
+        if (i <= text.length) {
+          setDisplayText(text.slice(0, i));
+          i++;
+        } else {
+          clearInterval(typeTimer);
+          setShowCursor(false);
+        }
+      }, 30);
+      
+      return () => clearInterval(typeTimer);
+    }, delay);
+    
+    return () => clearTimeout(timer);
+  }, [text, delay]);
+  
+  return (
+    <span>
+      {displayText}
+      {showCursor && <BlinkingCursor />}
+    </span>
+  );
 }
 
 export default function StakingStatus({ className = '' }: StakingStatusProps) {
@@ -25,10 +73,18 @@ export default function StakingStatus({ className = '' }: StakingStatusProps) {
 
   if (!isConnected) {
     return (
-      <div className={`card-cel ${className}`}>
-        <div className="text-center py-4">
-          <h3 className="heading-comic text-lg mb-2">Staking Status</h3>
-          <p className="font-comic text-gray-600">Connect wallet to view staking status</p>
+      <div className={`bg-black border border-green-500/50 rounded-none font-mono text-sm p-6 ${className}`}>
+        <div className="text-green-400 mb-2">
+          <span className="text-green-500">root@verticals:~$</span> check_staking_status
+        </div>
+        <div className="text-red-400 mb-2">
+          <TerminalOutput text="ERROR: No wallet connection detected" delay={300} />
+        </div>
+        <div className="text-gray-400">
+          <TerminalOutput text="> Please connect wallet to continue..." delay={800} />
+        </div>
+        <div className="mt-4 text-green-400">
+          <span className="text-green-500">root@verticals:~$</span> <BlinkingCursor />
         </div>
       </div>
     );
@@ -36,90 +92,160 @@ export default function StakingStatus({ className = '' }: StakingStatusProps) {
 
   if (!isStakingAvailable) {
     return (
-      <div className={`card-cel ${className}`}>
-        <div className="text-center py-4">
-          <h3 className="heading-comic text-lg mb-2">Staking Status</h3>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <p className="font-comic text-blue-800 text-sm mb-2">
-              🚀 <strong>Coming to Mainnet!</strong>
-            </p>
-            <p className="font-comic text-blue-700 text-xs">
-              Staking tiers will be available after mainnet launch when Virtuals protocol deploys the VERT staking contract.
-            </p>
-          </div>
+      <div className={`bg-black border border-green-500/50 rounded-none font-mono text-sm p-6 ${className}`}>
+        <div className="text-green-400 mb-2">
+          <span className="text-green-500">root@verticals:~$</span> check_staking_status
+        </div>
+        <div className="text-yellow-400 mb-2">
+          <TerminalOutput text="STAKING MODULE: OFFLINE" delay={200} />
+        </div>
+        <div className="text-green-300 text-xs">
+          {'> deploy_status:'} <span className="text-green-400">awaiting_virtuals_protocol_launch</span>
+        </div>
+        <div className="text-green-400 mb-2">
+          <TerminalOutput text="> Expected: Post mainnet launch" delay={1000} />
+        </div>
+        <div className="text-gray-400 mb-4">
+          <TerminalOutput text="> Staking tiers will be activated when VERT contract is live" delay={1400} />
+        </div>
+        <div className="text-green-400">
+          <span className="text-green-500">root@verticals:~$</span> <BlinkingCursor />
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className={`bg-black border border-green-500/50 rounded-none font-mono text-sm p-6 ${className}`}>
+        <div className="text-green-400 mb-2">
+          <span className="text-green-500">root@verticals:~$</span> fetch_staking_data
+        </div>
+        <div className="text-yellow-400 mb-2 flex items-center">
+          <span>Querying staking contract</span>
+          <span className="ml-2 animate-pulse">...</span>
+        </div>
+        <div className="text-gray-400 mb-2">
+          <span className="animate-pulse">[████████████████████] 100%</span>
+        </div>
+        <div className="text-green-400">
+          <span className="text-green-500">root@verticals:~$</span> <BlinkingCursor />
         </div>
       </div>
     );
   }
 
   return (
-    <div className={`card-cel ${className}`}>
-      <h3 className="heading-comic text-lg mb-4">Your Staking Status</h3>
+    <div className={`bg-black border border-green-500/50 rounded-none font-mono text-sm p-6 relative overflow-hidden ${className}`}>
+      {/* Terminal scanning line effect */}
+      <div className="absolute top-0 left-0 w-full h-0.5 bg-green-500/60 animate-scan-terminal"></div>
       
-      {isLoading ? (
-        <div className="text-center py-4">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-vert-accent mx-auto"></div>
-          <p className="font-comic text-sm mt-2">Loading staking status...</p>
+      <div className="relative z-10">
+        {/* Terminal Header */}
+        <div className="text-green-400 mb-4">
+          <span className="text-green-500">root@verticals:~$</span> get_user_staking_profile
         </div>
-      ) : (
-        <div className="space-y-4">
-          {/* Current Tier */}
-          <div className={`${currentTier.bgColor} border-2 border-black rounded-lg p-4`}>
-            <div className="flex items-center justify-between mb-2">
-              <span className={`font-bold ${currentTier.color} font-comic`}>
-                {currentTier.name}
-              </span>
-              {currentTier.id > 0 && (
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-comic">
-                  +{((currentTier.rarityMultiplier - 1) * 100).toFixed(0)}% Rare Odds
-                </span>
-              )}
-            </div>
-            <p className="text-sm font-comic text-gray-700 mb-2">{currentTier.description}</p>
-            <p className="text-lg font-bold font-comic">
-              {formatStakedAmount(stakedAmount)} VERT Staked
-            </p>
-          </div>
 
-          {/* Progress to Next Tier */}
-          {nextTier && (
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <div className="flex justify-between items-center mb-2">
-                <span className="font-comic text-sm text-gray-600">
-                  Progress to {nextTier.name}
-                </span>
-                <span className="font-comic text-sm text-gray-600">
-                  {formatStakedAmount(stakedAmount)} / {formatStakedAmount(nextTier.minStake)}
-                </span>
-              </div>
-              
-              <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                <div 
-                  className="bg-vert-accent h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${Math.min(progressToNextTier, 100)}%` }}
-                ></div>
-              </div>
-              
-              <p className="text-xs font-comic text-gray-600">
-                Stake {formatStakedAmount(amountNeededForNextTier)} more VERT to unlock{' '}
-                <span className={nextTier.color}>{nextTier.name}</span> tier
-              </p>
+        {/* User Staking Info */}
+        <div className="space-y-2 mb-4">
+          <div className="text-green-300">
+            <TerminalOutput text={`> USER_TIER: ${currentTier.name.toUpperCase()}`} delay={200} />
+          </div>
+          <div className="text-green-300">
+            <TerminalOutput text={`> STAKED_BALANCE: ${formatStakedAmount(stakedAmount)} VERT`} delay={400} />
+          </div>
+          {currentTier.id > 0 && (
+            <div className="text-yellow-400">
+              <TerminalOutput 
+                text={`> RARITY_BONUS: +${((currentTier.rarityMultiplier - 1) * 100).toFixed(0)}% multiplier`} 
+                delay={600} 
+              />
             </div>
           )}
-
-          {/* Tier Benefits */}
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-            <h4 className="font-comic text-sm font-bold text-yellow-800 mb-2">
-              💡 Staking Benefits
-            </h4>
-            <ul className="text-xs font-comic text-yellow-700 space-y-1">
-              <li>• Higher staking tiers boost your odds of getting rare NFTs</li>
-              <li>• Prize pool percentages remain the same for all tiers</li>
-              <li>• Stake more VERT to unlock better rarity multipliers</li>
-            </ul>
+          <div className="text-green-300">
+            <TerminalOutput text={`> TIER_DESCRIPTION: ${currentTier.description}`} delay={800} />
           </div>
         </div>
-      )}
+
+        {/* Progress to Next Tier */}
+        {nextTier && (
+          <div className="mb-4 border-t border-green-500/30 pt-3">
+            <div className="text-green-400 mb-2">
+              <TerminalOutput text="> PROGRESSION_ANALYSIS:" delay={1000} />
+            </div>
+            <div className="text-gray-300 ml-4 space-y-1">
+              <div>
+                <TerminalOutput text={`└─ Next Tier: ${nextTier.name.toUpperCase()}`} delay={1200} />
+              </div>
+              <div>
+                <TerminalOutput text={`└─ Required: ${formatStakedAmount(nextTier.minStake)} VERT`} delay={1400} />
+              </div>
+              <div>
+                <TerminalOutput text={`└─ Needed: ${formatStakedAmount(amountNeededForNextTier)} VERT`} delay={1600} />
+              </div>
+              
+              {/* ASCII Progress Bar */}
+              <div className="mt-2">
+                <div className="text-green-400 text-xs">
+                  <TerminalOutput 
+                    text={`└─ Progress: [${Array(20).fill('').map((_, i) => (
+                      i < (progressToNextTier / 5) ? '█' : '░'
+                    )).join('')}] ${Math.round(progressToNextTier)}%`}
+                    delay={1800}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tier Benefits */}
+        <div className="border-t border-green-500/30 pt-3 mb-4">
+          <div className="text-green-400 mb-2">
+            <TerminalOutput text="> STAKING_BENEFITS:" delay={2000} />
+          </div>
+          <div className="text-gray-300 ml-4 space-y-1 text-xs">
+            <div>
+              <TerminalOutput text="└─ Higher tiers = Better rarity odds" delay={2200} />
+            </div>
+            <div>
+              <TerminalOutput text="└─ Prize percentages remain constant" delay={2400} />
+            </div>
+            <div>
+              <TerminalOutput text="└─ Multiplicative bonus on rare+ drops" delay={2600} />
+            </div>
+          </div>
+        </div>
+
+        {/* Terminal Prompt */}
+        <div className="text-green-400 mt-4">
+          <span className="text-green-500">root@verticals:~$</span> <BlinkingCursor />
+        </div>
+      </div>
+
+      {/* Terminal glow effects */}
+      <div className="absolute top-2 left-2 w-2 h-2 bg-green-500/50 rounded-full blur-sm animate-pulse"></div>
+      <div className="absolute top-2 right-2 w-2 h-2 bg-green-500/50 rounded-full blur-sm animate-pulse delay-300"></div>
+
+      <style jsx>{`
+        @keyframes scan-terminal {
+          0% { 
+            transform: translateY(0); 
+            opacity: 1; 
+          }
+          50% { 
+            opacity: 0.3; 
+          }
+          100% { 
+            transform: translateY(300px); 
+            opacity: 1; 
+          }
+        }
+
+        .animate-scan-terminal {
+          animation: scan-terminal 4s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 } 

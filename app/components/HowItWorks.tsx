@@ -58,26 +58,36 @@ export default function HowItWorks() {
               ))}
             </div>
 
-            {/* Process Flow Diagram */}
+            {/* Contract Information Terminal */}
             <div className="border border-green-500/30 rounded p-4 bg-black/50 mt-4">
-              <div className="text-green-400 text-xs mb-2">
-                {'> execution_flow:'}
+              <div className="text-green-400 text-xs mb-3">
+                {'> contract_addresses:'}
               </div>
-              <div className="text-green-300 text-xs font-mono">
-                {'wallet_connect → token_select → mint_execute → rng_roll → nft_create → prize_check → complete'}
-              </div>
-            </div>
-
-            {/* Technical Notes */}
-            <div className="border border-cyan-500/30 rounded p-3 bg-cyan-900/10">
-              <div className="text-cyan-400 text-xs mb-2">
-                {'> technical_notes:'}
-              </div>
-              <div className="text-cyan-300 text-xs space-y-1">
-                <div>{'│ rarity_calculation: on_chain_vrf_powered'}</div>
-                <div>{'│ prize_pool: automated_distribution_system'}</div>
-                <div>{'│ storage: ipfs_decentralized_metadata'}</div>
-                <div>{'│ update_frequency: realtime_blockchain_sync'}</div>
+              <div className="text-green-300 text-xs font-mono space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">nft_contract:</span>
+                  <span className="text-white">0xA35Ff1a9aC137F92914bE0b16764B28AF7437c7d</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">virtual_token:</span>
+                  <span className="text-white">0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">vert_token:</span>
+                  <span className="text-yellow-400">coming_soon_phase_2</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">treasury:</span>
+                  <span className="text-white">0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">network:</span>
+                  <span className="text-cyan-400">base_mainnet_8453</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">metadata_storage:</span>
+                  <span className="text-purple-400">ipfs_decentralized</span>
+                </div>
               </div>
             </div>
           </div>

@@ -134,7 +134,7 @@ export default function MintFeedPanel({
                 exit={{ opacity: 0 }}
                 className="h-full flex flex-col justify-center items-center"
               >
-                <div className="text-gray-400 text-center">
+                <div className="text-white text-center">
                   <div className="mb-2">&gt; mint feed initialized</div>
                   <div className="text-sm">&gt; your minted NFT appears here</div>
                 </div>
