@@ -306,33 +306,8 @@ export default function MintTerminal({
             <div className="text-green-500/70 text-xs mt-1">
               First time minting? Approve token spending. Select Max for best experience.
             </div>
-            <div className="text-yellow-500/70 text-xs mt-1">
-              📍 Phase 1: Virtual only minting
-            </div>
-            <div className="text-yellow-500/70 text-xs mt-1">
-              🚀 Phase 2: Dual token minting + live prize pool!
-            </div>
           </div>
         )}
-
-        <div className="border-2 border-green-500 rounded-lg p-4">
-          <h3 className="text-yellow-400 text-lg mb-4 font-mono">⚠️ VERT MINTING PHASE</h3>
-          <div className="space-y-3">
-            <div className="text-gray-300">
-              VERT minting will be available once the VERT token launches.
-            </div>
-            <div className="text-gray-400 text-sm">
-              Current Status: <span className="text-yellow-400">Awaiting VERT Token Deployment</span>
-            </div>
-            <button 
-              onClick={() => debugLog.log('⚠️ VERT minting coming soon!')}
-              className="w-full bg-yellow-900/20 border border-yellow-500 text-yellow-400 py-3 px-4 rounded font-mono text-sm hover:bg-yellow-900/30 transition-colors cursor-not-allowed"
-              disabled
-            >
-              &gt; mint_with_vert --status=coming_soon
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
