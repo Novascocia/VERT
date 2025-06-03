@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
-import { Smartphone, ExternalLink } from 'lucide-react';
 import { debugLog } from '@/utils/debug';
 
 export default function MobileWarning() {
