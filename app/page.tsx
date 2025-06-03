@@ -1444,7 +1444,7 @@ export default function Home() {
             <nav className="flex gap-4 items-center">
               <a href="https://vertical-3.gitbook.io/vertical/" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm">VERT Litepaper</a>
               <a href="#" className="btn-header-green text-sm">VERT Token</a>
-              <a href="https://opensea.io/collection/vertical-project" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+              <a href="https://opensea.io/collection/vertical-by-virtuals" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
                 <img src="/opensea_logo.webp" alt="OpenSea" className="w-full h-full object-contain filter invert" />
               </a>
               <a href="https://x.com/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
