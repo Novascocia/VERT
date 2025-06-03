@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import { VERTICAL_ABI, TRANSFER_EVENT_TOPIC } from '@/app/config/abis';
+import { getContractAddress, getVirtualTokenAddress, getVertTokenAddress, getAdminAddress } from '@/app/config/contracts';
 import { Interface } from 'ethers';
 import RarityReveal from '@/app/components/RarityReveal';
 import { ERC20_ABI } from '@/app/config/abis';
@@ -42,13 +43,13 @@ const PUBLIC_RPC = ALCHEMY_API_KEY
   ? `https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}`
   : 'https://mainnet.base.org';
 
-// Contract addresses - Use environment variables with mainnet fallbacks
-const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2';
-const vertTokenAddress = process.env.NEXT_PUBLIC_VERT_TOKEN_ADDRESS || '0x0000000000000000000000000000000000000000';
-const virtualTokenAddress = process.env.NEXT_PUBLIC_VIRTUAL_TOKEN_ADDRESS || '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b';
+// Contract addresses - Use new configuration system
+const contractAddress = getContractAddress();
+const vertTokenAddress = getVertTokenAddress();
+const virtualTokenAddress = getVirtualTokenAddress();
 
-// Admin wallet address (deployer) - from environment variable
-const ADMIN_WALLET_ADDRESS = process.env.NEXT_PUBLIC_ADMIN_WALLET_ADDRESS || '0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca';
+// Admin wallet address (deployer) - from configuration
+const ADMIN_WALLET_ADDRESS = getAdminAddress();
 
 // Remove the mock implementation and replace with real API call
 async function generateAndStoreNFT(tokenId: string) {

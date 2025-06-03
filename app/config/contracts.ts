@@ -1,16 +1,42 @@
-export const CONTRACT_ADDRESSES = {
-  mainnet: {
-    nft: '0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2',
-    vertToken: '0x0000000000000000000000000000000000000000',
-    virtualToken: '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b',
-    treasury: '0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23'
+export const CONTRACTS = {
+  // Mainnet addresses
+  MAINNET: {
+    CONTRACT_ADDRESS: '0xA35Ff1a9aC137F92914bE0b16764B28AF7437c7d', // NEW Fixed contract
+    VIRTUAL_TOKEN: '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b',
+    VERT_TOKEN: '0x0000000000000000000000000000000000000000', // Phase 1: Zero address
+    TREASURY: '0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23',
+    ADMIN: '0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca'
   },
-  testnet: {
-    nft: '0x9114420a6e77E41784590a9D2eE66AE3751F434c',
-    vertToken: '0x7D86001Ce94197d948EF603df04AaB9A2D3010Dd',
-    virtualToken: '0x8F8BD1Ea9a8A18737b20cBA1f8577a7A4238580a',
-    treasury: '0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23'
+  
+  // Testnet addresses (keeping for reference)
+  TESTNET: {
+    CONTRACT_ADDRESS: '0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2', // Old contract
+    VIRTUAL_TOKEN: '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b',
+    VERT_TOKEN: '0x0000000000000000000000000000000000000000',
+    TREASURY: '0x6e176D974Ed81b08bf8069c7Bf6A5b6267C4AA23',
+    ADMIN: '0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca'
   }
+};
+
+// Use environment variable or default to mainnet
+export const getCurrentContracts = () => {
+  const isMainnet = process.env.NODE_ENV === 'production' || process.env.NEXT_PUBLIC_USE_MAINNET === 'true';
+  return isMainnet ? CONTRACTS.MAINNET : CONTRACTS.MAINNET; // Always use mainnet for now
+};
+
+// Helper functions
+export const getContractAddress = () => getCurrentContracts().CONTRACT_ADDRESS;
+export const getVirtualTokenAddress = () => getCurrentContracts().VIRTUAL_TOKEN;
+export const getVertTokenAddress = () => getCurrentContracts().VERT_TOKEN;
+export const getTreasuryAddress = () => getCurrentContracts().TREASURY;
+export const getAdminAddress = () => getCurrentContracts().ADMIN;
+
+// Chain configuration
+export const CHAIN_CONFIG = {
+  chainId: 8453, // Base Mainnet
+  chainName: 'Base Mainnet',
+  rpcUrl: 'https://mainnet.base.org',
+  blockExplorer: 'https://basescan.org'
 };
 
 export const CONTRACT_FUNCTIONS = {

@@ -5,6 +5,7 @@ import { formatEther, decodeEventLog } from 'viem';
 import { usePublicClient } from 'wagmi';
 import { base } from 'wagmi/chains';
 import { VERTICAL_ABI } from '@/app/config/abis';
+import { getContractAddress } from '@/app/config/contracts';
 
 interface MintLeaderboardProps {
   maxEntries?: number;
@@ -21,7 +22,7 @@ interface MintEntry {
 export default function MintLeaderboard({ 
   maxEntries = 10, 
   title = "🏆 Mint Leaderboard",
-  contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0xB1E0fB284dE7cc242EBB95653845BDB18B045BF2'
+  contractAddress = getContractAddress()
 }: MintLeaderboardProps) {
   const [leaderboard, setLeaderboard] = useState<MintEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
