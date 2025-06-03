@@ -1,5 +1,5 @@
 import { id } from 'ethers';
-import VerticalABI from '../../abis/Vertical.json';
+import VerticalABI from '../../abis/VerticalWithManualSync.json';
 
 export const ERC20_ABI = [
   {
@@ -51,8 +51,8 @@ export const ERC20_ABI = [
   }
 ];
 
-// Use the complete ABI from the compiled contract
-export const VERTICAL_ABI = VerticalABI.abi;
+// Use the complete ABI from the compiled manual sync contract (it's directly an array)
+export const VERTICAL_ABI = VerticalABI;
 
 // Keccak256(topic0) for Transfer(address,address,uint256)
 export const TRANSFER_EVENT_TOPIC = id("Transfer(address,address,uint256)"); 
