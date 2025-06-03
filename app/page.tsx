@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import toast, { Toaster } from 'react-hot-toast';
 import { VERTICAL_ABI, TRANSFER_EVENT_TOPIC } from '@/app/config/abis';
-import { getContractAddress, getVirtualTokenAddress, getVertTokenAddress, getAdminAddress } from '@/app/config/contracts';
+import { getContractAddress, getVirtualTokenAddress, getVertTokenAddress, getAdminAddress, MINT_PRICES } from '@/app/config/contracts';
 import { Interface } from 'ethers';
 import RarityReveal from '@/app/components/RarityReveal';
 import { ERC20_ABI } from '@/app/config/abis';
@@ -491,10 +491,26 @@ export default function Home() {
         abi: VERTICAL_ABI,
         functionName: 'priceVert',
       }) as bigint;
-      setPriceVirtual(formatEther(vPrice));
-      setPriceVert(formatEther(vertPrice));
+      
+      const vPriceFormatted = formatEther(vPrice);
+      const vertPriceFormatted = formatEther(vertPrice);
+      
+      // Use fallback prices from config if contract returns 0 (might indicate contract issues)
+      setPriceVirtual(vPriceFormatted === '0' ? MINT_PRICES.virtual : vPriceFormatted);
+      setPriceVert(vertPriceFormatted === '0' ? MINT_PRICES.vert : vertPriceFormatted);
+      
+      // Log for debugging
+      debugLog.log('💰 Contract prices:', { 
+        virtual: vPriceFormatted, 
+        vert: vertPriceFormatted,
+        usingFallback: vPriceFormatted === '0' || vertPriceFormatted === '0'
+      });
+      
     } catch (error) {
-      // ignore
+      // Use fallback prices if contract read fails
+      setPriceVirtual(MINT_PRICES.virtual);
+      setPriceVert(MINT_PRICES.vert);
+      debugLog.warn('⚠️ Failed to fetch prices from contract, using fallback values');
     }
   };
 
