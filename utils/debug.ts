@@ -14,7 +14,8 @@ export const debugLog = {
   },
   
   error: (...args: any[]) => {
-    // Always show errors, even in production
+    // ALWAYS show errors in both development and production
+    // This ensures critical user-facing errors are never hidden
     console.error(...args);
   },
   
@@ -25,13 +26,25 @@ export const debugLog = {
   }
 };
 
-// For critical user-facing errors that should always show
+// For critical user-facing errors that should ALWAYS show in production
+// Use this for errors that users need to see to troubleshoot issues
 export const userLog = {
   error: (...args: any[]) => {
-    console.error(...args);
+    console.error('🚨 CRITICAL ERROR:', ...args);
   },
   
   warn: (...args: any[]) => {
-    console.warn(...args);
+    console.warn('⚠️ WARNING:', ...args);
+  }
+};
+
+// For network/connection errors that should always be visible
+export const networkLog = {
+  error: (...args: any[]) => {
+    console.error('🌐 NETWORK ERROR:', ...args);
+  },
+  
+  warn: (...args: any[]) => {
+    console.warn('🌐 NETWORK WARNING:', ...args);
   }
 }; 
