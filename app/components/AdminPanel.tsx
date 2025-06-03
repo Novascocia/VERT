@@ -41,7 +41,8 @@ export default function AdminPanel({ contractAddress, isVisible, onClose }: Admi
     
     setLoading(true);
     try {
-      const [prizePool, totalMinted, priceVirtual, priceVert, unaccountedBalance] = await Promise.all([
+      // Fetch basic contract data first (these should always work)
+      const [prizePool, totalMinted, priceVirtual, priceVert] = await Promise.all([
         publicClient.readContract({
           address: contractAddress as `0x${string}`,
           abi: VERTICAL_ABI,
@@ -61,13 +62,22 @@ export default function AdminPanel({ contractAddress, isVisible, onClose }: Admi
           address: contractAddress as `0x${string}`,
           abi: VERTICAL_ABI,
           functionName: 'priceVert',
-        }) as Promise<bigint>,
-        publicClient.readContract({
+        }) as Promise<bigint>
+      ]);
+
+      // Try to get unaccounted balance separately (may revert in Phase 1)
+      let unaccountedBalance = BigInt(0);
+      try {
+        unaccountedBalance = await publicClient.readContract({
           address: contractAddress as `0x${string}`,
           abi: VERTICAL_ABI,
           functionName: 'getUnaccountedBalance',
-        }) as Promise<bigint>
-      ]);
+        }) as bigint;
+      } catch (error) {
+        console.log('⚠️ getUnaccountedBalance reverted (expected in Phase 1 - VERT token is zero address)');
+        // Default to 0 for Phase 1
+        unaccountedBalance = BigInt(0);
+      }
 
       setAdminData({
         prizePool: formatEther(prizePool),
@@ -251,6 +261,13 @@ export default function AdminPanel({ contractAddress, isVisible, onClose }: Admi
                       {parseFloat(adminData.unaccountedBalance).toFixed(6)} VERT
                     </div>
                   </div>
+                  
+                  {parseFloat(adminData.unaccountedBalance) === 0 && (
+                    <div className="text-xs text-yellow-400 bg-yellow-900/20 border border-yellow-400/30 p-2 rounded">
+                      ℹ️ Phase 1: VERT token disabled, manual sync not needed
+                    </div>
+                  )}
+                  
                   <button
                     onClick={handleSyncPrizePool}
                     disabled={actionLoading || parseFloat(adminData.unaccountedBalance) === 0}
