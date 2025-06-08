@@ -29,6 +29,8 @@ import { formatEther, maxUint256, decodeEventLog, encodeFunctionData } from 'vie
 import MintLeaderboard from '@/app/components/MintLeaderboard';
 import PrizePoolTerminal from '@/app/components/PrizePoolTerminal';
 import StatsTerminal from '@/app/components/StatsTerminal';
+import TokenPhaseIndicator from '@/app/components/TokenPhaseIndicator';
+import PVertBalanceTerminal from '@/app/components/PVertBalanceTerminal';
 import { preventWalletAutoPopup } from '@/app/utils/walletUtils';
 import AdminPanel from '@/app/components/AdminPanel';
 
@@ -274,6 +276,7 @@ export default function Home() {
   const [networkStatus, setNetworkStatus] = useState<'healthy' | 'degraded' | 'unhealthy'>('healthy');
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [lastMintTime, setLastMintTime] = useState<number>(0);
+  const [mintTransactionLock, setMintTransactionLock] = useState<string | null>(null); // Prevents concurrent transactions
   
   // Admin panel state
   const [showAdminPanel, setShowAdminPanel] = useState(false);
@@ -508,12 +511,7 @@ export default function Home() {
       const vPriceFormatted = formatEther(vPrice);
       const vertPriceFormatted = formatEther(vertPrice);
       
-      debugLog.log('💰 Raw contract prices:', { 
-        virtualRaw: vPrice.toString(),
-        vertRaw: vertPrice.toString()
-      });
-      
-      debugLog.log('💰 Formatted contract prices:', { 
+      debugLog.log('💰 Contract prices:', { 
         virtual: vPriceFormatted, 
         vert: vertPriceFormatted
       });
@@ -682,17 +680,14 @@ export default function Home() {
       let toBlock = currentBlock;
       let queriesRun = 0;
       
-      debugLog.log(`📊 Querying in ${BLOCK_RANGE} block chunks, max ${MAX_QUERIES} queries`);
+      debugLog.log(`📊 Scanning recent blocks for prize events...`);
       
       while (queriesRun < MAX_QUERIES) {
         const fromBlock = toBlock - BigInt(BLOCK_RANGE) + BigInt(1);
         
         if (fromBlock < BigInt(0)) {
-          debugLog.log('📊 Reached genesis block, stopping');
           break;
         }
-        
-        debugLog.log(`📊 Query ${queriesRun + 1}: Blocks ${fromBlock.toString()} to ${toBlock.toString()}`);
         
         try {
           const prizeClaimedEvents = await publicClient.getLogs({
@@ -709,7 +704,10 @@ export default function Home() {
             toBlock: toBlock
           });
           
-          debugLog.log(`📄 Found ${prizeClaimedEvents.length} prize events in this range`);
+          // Only log if events found  
+          if (prizeClaimedEvents.length > 0) {
+            debugLog.log(`💰 Found ${prizeClaimedEvents.length} prize events in blocks ${fromBlock.toString()}-${toBlock.toString()}`);
+          }
           totalEvents += prizeClaimedEvents.length;
           
           // Sum all prize amounts from this chunk
@@ -755,6 +753,9 @@ export default function Home() {
   };
 
   const handleMintWithVert = async () => {
+    // Declare transactionId outside try block for scope access
+    const transactionId = `vert-${Date.now()}-${Math.random()}`;
+    
     try {
       // Explicit safeguard
       if (!walletClient?.account?.address) {
@@ -765,6 +766,13 @@ export default function Home() {
         toast.error("Please connect your wallet!");
         return;
       }
+
+      // Transaction lock to prevent concurrent mints
+      if (mintTransactionLock) {
+        throw new Error(`Another mint transaction is in progress (${mintTransactionLock.split('-')[0]}). Please wait for it to complete.`);
+      }
+      setMintTransactionLock(transactionId);
+      debugLog.log('🔒 Transaction locked:', transactionId);
 
       // Rate limiting - prevent rapid successive mints
       const now = Date.now();
@@ -1147,9 +1155,18 @@ export default function Home() {
       await fetchMintPrices();
       await fetchTotalPaidOut();
 
+      // Release transaction lock on success
+      debugLog.log('🔓 Transaction completed successfully, releasing lock:', transactionId);
+      setMintTransactionLock(null);
+
     } catch (error: any) {
       setIsWaitingForTx(false);
       setIsProcessing(false);
+      
+      // Release transaction lock on error
+      debugLog.log('🔓 Transaction failed, releasing lock:', transactionId);
+      setMintTransactionLock(null);
+      
       debugLog.error("❌ Minting failed:", error);
       
       // More detailed error logging
@@ -1192,6 +1209,9 @@ export default function Home() {
   };
 
   const handleMintWithVirtual = async () => {
+    // Declare transactionId outside try block for scope access
+    const transactionId = `virtual-${Date.now()}-${Math.random()}`;
+    
     try {
       // Explicit safeguard
       if (!walletClient?.account?.address) {
@@ -1202,6 +1222,13 @@ export default function Home() {
         toast.error('Connect your wallet first');
         return;
       }
+
+      // Transaction lock to prevent concurrent mints
+      if (mintTransactionLock) {
+        throw new Error(`Another mint transaction is in progress (${mintTransactionLock.split('-')[0]}). Please wait for it to complete.`);
+      }
+      setMintTransactionLock(transactionId);
+      debugLog.log('🔒 Transaction locked:', transactionId);
 
       // Rate limiting - prevent rapid successive mints
       const now = Date.now();
@@ -1231,6 +1258,14 @@ export default function Home() {
         functionName: 'priceVirtual',
       }) as bigint;
       
+      debugLog.log('🔍 VIRTUAL Mint Details:', {
+        price: price.toString(),
+        priceFormatted: formatEther(price) + ' VIRTUAL',
+        userAddress: walletClient.account.address,
+        contractAddress: contractAddress,
+        virtualTokenAddress: virtualTokenAddress
+      });
+      
       // 2. Check allowance
       const allowance = await publicClient.readContract({
         address: virtualTokenAddress as `0x${string}`,
@@ -1238,6 +1273,14 @@ export default function Home() {
         functionName: 'allowance',
         args: [walletClient.account.address, contractAddress as `0x${string}`],
       }) as bigint;
+      
+      debugLog.log('🔍 VIRTUAL Allowance Check:', {
+        allowance: allowance.toString(),
+        allowanceFormatted: formatEther(allowance) + ' VIRTUAL',
+        price: price.toString(),
+        priceFormatted: formatEther(price) + ' VIRTUAL',
+        needsApproval: allowance < price
+      });
       
       // 3. Approve if needed
       if (allowance < price) {
@@ -1273,9 +1316,72 @@ export default function Home() {
         // Refresh allowances to verify approval worked
         await checkAllowances();
         debugLog.log('🔄 Allowances refreshed after approval');
+        
+        // EXTENDED wait for blockchain state to propagate across all RPC nodes
+        debugLog.log('⏳ Waiting for approval to propagate across network...');
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Increased from 1s to 3s
+        
+        // Multiple verification attempts to ensure approval is recognized
+        let verificationAttempts = 0;
+        let verifyAllowance = BigInt(0);
+        const maxVerificationAttempts = 3;
+        
+        while (verificationAttempts < maxVerificationAttempts) {
+          verifyAllowance = await publicClient.readContract({
+            address: virtualTokenAddress as `0x${string}`,
+            abi: ERC20_ABI,
+            functionName: 'allowance',
+            args: [walletClient.account.address, contractAddress as `0x${string}`],
+          }) as bigint;
+          
+          debugLog.log(`🔍 Allowance verification attempt ${verificationAttempts + 1}:`, {
+            allowance: verifyAllowance.toString(),
+            sufficient: verifyAllowance >= price,
+            isMaxUint: verifyAllowance.toString() === MAX_UINT256.toString()
+          });
+          
+          if (verifyAllowance >= price) {
+            debugLog.log('✅ Allowance verification successful');
+            break;
+          }
+          
+          verificationAttempts++;
+          if (verificationAttempts < maxVerificationAttempts) {
+            debugLog.log(`⏳ Allowance not yet sufficient, waiting 2s before retry...`);
+            await new Promise(resolve => setTimeout(resolve, 2000));
+          }
+        }
+        
+        if (verifyAllowance < price) {
+          throw new Error(`Approval verification failed after ${maxVerificationAttempts} attempts. Please try again.`);
+        }
       }
+
+      // 4. pVERT approval is NOT needed - users receive prizes, they don't spend pVERT
+      debugLog.log('ℹ️ pVERT approval skipped - users receive prizes, no spending required');
       
-      // 4. Mint NFT
+      // Check if any pending transactions could affect allowance
+      const pendingNonce = await publicClient.getTransactionCount({
+        address: walletClient.account.address,
+        blockTag: 'pending'
+      });
+      const latestNonce = await publicClient.getTransactionCount({
+        address: walletClient.account.address,
+        blockTag: 'latest'
+      });
+      
+      if (pendingNonce > latestNonce) {
+        debugLog.log('⚠️ WARNING: Pending transactions detected!', {
+          pending: pendingNonce,
+          latest: latestNonce,
+          difference: pendingNonce - latestNonce
+        });
+        
+        // Add extra delay if transactions are pending to avoid nonce conflicts
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+
+      // 5. Mint NFT
       toast('Confirm transaction in wallet');
       
       // Debug gas estimation
@@ -1302,8 +1408,71 @@ export default function Home() {
         debugLog.log('💰 Estimated transaction cost:', formatEther(estimatedCost), 'ETH');
         debugLog.log('💰 Estimated transaction cost (USD ~$2500/ETH):', '$' + (Number(formatEther(estimatedCost)) * 2500).toFixed(4));
       } catch (gasError: any) {
-        debugLog.error('❌ Gas estimation failed - using fallback gas limit:', gasError);
+        // Handle specific pVERT restrictions during gas estimation
+        if (gasError.message?.includes('pVERT: transfers disabled between users')) {
+          debugLog.log('ℹ️ Gas estimation skipped due to pVERT restrictions (transaction will still work)');
+        } else {
+          debugLog.error('❌ Gas estimation failed - using fallback gas limit:', gasError);
+        }
         // gasWithBuffer already set to fallback value
+      }
+
+      // Final allowance check right before minting
+      const finalAllowance = await publicClient.readContract({
+        address: virtualTokenAddress as `0x${string}`,
+        abi: ERC20_ABI,
+        functionName: 'allowance',
+        args: [walletClient.account.address, contractAddress as `0x${string}`],
+      }) as bigint;
+      
+      // Also check user's VIRTUAL balance
+      const virtualBalance = await publicClient.readContract({
+        address: virtualTokenAddress as `0x${string}`,
+        abi: ERC20_ABI,
+        functionName: 'balanceOf',
+        args: [walletClient.account.address],
+      }) as bigint;
+
+      // Get nonce to track transaction ordering
+      const currentNonce = await publicClient.getTransactionCount({
+        address: walletClient.account.address,
+        blockTag: 'pending'
+      });
+      
+      debugLog.log('🔍 Final VIRTUAL allowance check before mint:', {
+        allowance: finalAllowance.toString(),
+        allowanceFormatted: formatEther(finalAllowance) + ' VIRTUAL',
+        price: price.toString(),
+        priceFormatted: formatEther(price) + ' VIRTUAL',
+        sufficient: finalAllowance >= price,
+        virtualBalance: formatEther(virtualBalance) + ' VIRTUAL',
+        balanceSufficient: virtualBalance >= price,
+        nonce: currentNonce,
+        transactionId: transactionId
+      });
+      
+      // If allowance suddenly became insufficient, re-approve
+      if (finalAllowance < price) {
+        debugLog.log('⚠️ Allowance became insufficient - re-approving...');
+        toast('Re-approving VIRTUAL tokens...');
+        
+        const emergencyApprovalTxHash = await writeContract(wagmiConfig, {
+          account: walletClient.account.address,
+          address: virtualTokenAddress as `0x${string}`,
+          abi: ERC20_ABI,
+          functionName: 'approve',
+          args: [contractAddress as `0x${string}`, MAX_UINT256],
+        });
+        
+        debugLog.log('🔄 Emergency approval transaction sent:', emergencyApprovalTxHash);
+        
+        const emergencyApprovalReceipt = await publicClient.waitForTransactionReceipt({
+          hash: emergencyApprovalTxHash,
+          confirmations: 1
+        });
+        
+        debugLog.log('✅ Emergency approval confirmed in block:', emergencyApprovalReceipt.blockNumber);
+        toast.success('VIRTUAL re-approved ✅');
       }
 
       let txHash;
@@ -1346,6 +1515,10 @@ export default function Home() {
 
       // Store the minted token ID
       setMintedTokenId(mintDetails.tokenId);
+      
+      // Refresh allowances after successful mint to prevent state issues on next mint
+      debugLog.log('🔄 Refreshing allowances after successful VIRTUAL mint...');
+      await checkAllowances();
 
       // Call backend to generate NFT with actual token ID
       const response = await fetch("/api/generateAndStoreNFT", {
@@ -1359,7 +1532,47 @@ export default function Home() {
       const data = await response.json();
       setGeneratedImage(data.imageUrl || data.image);
       setGeneratedMetadata(data.metadata);
-      setMintedNFTImageUrl(data.imageUrl || data.image);
+      
+      // Instead of using raw API response, fetch from contract metadata
+      debugLog.log('🔗 [VIRTUAL] Fetching final image URL from contract metadata...');
+      
+      let finalImageUrl = data.imageUrl || data.image; // Fallback to API response
+      
+      try {
+        // Get the metadata URI from contract 
+        const metadataUri = await publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: VERTICAL_ABI,
+          functionName: 'tokenURI',
+          args: [BigInt(mintDetails.tokenId)],
+        }) as string;
+        
+        debugLog.log('📄 [VIRTUAL] Contract metadata URI:', metadataUri);
+        
+        if (metadataUri && metadataUri !== 'ipfs://QmPlaceholder') {
+          // Fetch metadata from IPFS
+          const metadataHash = metadataUri.replace('ipfs://', '');
+          const metadataUrl = `https://ipfs.io/ipfs/${metadataHash}`;
+          
+          debugLog.log('🌐 [VIRTUAL] Fetching metadata from:', metadataUrl);
+          
+          const metadataResponse = await fetch(metadataUrl, {
+            signal: AbortSignal.timeout(15000) // 15 second timeout
+          });
+          
+          if (metadataResponse.ok) {
+            const metadata = await metadataResponse.json();
+            if (metadata.image) {
+              finalImageUrl = metadata.image;
+              debugLog.log('✅ [VIRTUAL] Got image URL from metadata:', finalImageUrl);
+            }
+          } else {
+            debugLog.warn('⚠️ [VIRTUAL] Metadata not yet available, using API fallback');
+          }
+        }
+      } catch (metadataError) {
+        debugLog.warn('⚠️ [VIRTUAL] Could not fetch metadata, using API fallback:', metadataError);
+      }
 
       // Use the actual rarity and prize from the blockchain events
       const rarity = mintDetails.rarity;
@@ -1367,7 +1580,7 @@ export default function Home() {
       
       // Set minted NFT data for reveal
       setMintedNFT({
-        imageUrl: data.imageUrl || data.image,
+        imageUrl: finalImageUrl,
         rarity: rarity,
         prizeWon: prizeWon,
       });
@@ -1376,7 +1589,62 @@ export default function Home() {
       setLastMintedRarity(rarity);
       setLastMintedPrize(prizeWon);
 
-      setIsProcessing(false);
+      // Test image availability before showing it and ending processing
+      const testImageAvailability = async (imageUrl: string): Promise<boolean> => {
+        const hash = imageUrl.replace('ipfs://', '');
+        const testSources = [
+          `/api/image-proxy/${hash}`,
+          `https://ipfs.io/ipfs/${hash}`,
+          `https://nftstorage.link/ipfs/${hash}`
+        ];
+        
+        for (const source of testSources) {
+          try {
+            const response = await fetch(source, { 
+              method: 'HEAD', 
+              signal: AbortSignal.timeout(5000) 
+            });
+            if (response.ok) {
+              debugLog.log(`✅ [VIRTUAL] Image confirmed available at: ${source}`);
+              return true;
+            }
+          } catch (error) {
+            // Try next source
+            continue;
+          }
+        }
+        return false;
+      };
+
+      // Wait for image to be ready before ending processing
+      const waitForImage = async () => {
+        let attempts = 0;
+        const maxAttempts = 10; // Try for up to 50 seconds (5s * 10)
+        
+        while (attempts < maxAttempts) {
+          const isAvailable = await testImageAvailability(finalImageUrl);
+          if (isAvailable) {
+            // Only end processing and show image when it's actually ready
+            setIsProcessing(false);
+            setMintedNFTImageUrl(finalImageUrl);
+            debugLog.log('✅ [VIRTUAL] Image confirmed ready and now displaying');
+            return;
+          }
+          
+          attempts++;
+          debugLog.log(`🔄 [VIRTUAL] Image not ready yet, attempt ${attempts}/${maxAttempts}, waiting 5s...`);
+          await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds between attempts
+        }
+        
+        // If still not available after all attempts, show it anyway (fallback)
+        debugLog.warn('⚠️ [VIRTUAL] Image still not ready after 50s, showing anyway');
+        setIsProcessing(false);
+        setMintedNFTImageUrl(finalImageUrl);
+      };
+      
+      // Start background image availability testing (keeps orange spinner until ready)
+      waitForImage();
+      
       toast.success("NFT minted successfully!");
       
       // Re-fetch stats after mint
@@ -1385,9 +1653,18 @@ export default function Home() {
       await fetchMintPrices();
       await fetchTotalPaidOut();
       
+      // Release transaction lock on success
+      debugLog.log('🔓 Transaction completed successfully, releasing lock:', transactionId);
+      setMintTransactionLock(null);
+      
     } catch (error: any) {
       setIsWaitingForTx(false);
       setIsProcessing(false);
+      
+      // Release transaction lock on error
+      debugLog.log('🔓 Transaction failed, releasing lock:', transactionId);
+      setMintTransactionLock(null);
+      
       debugLog.error('Minting failed:', error);
       // Remove error toasts - terminal handles error display
       // Re-throw so MintTerminal can handle it
@@ -1492,7 +1769,7 @@ export default function Home() {
     }
   };
 
-  const canMint = Boolean(mounted && isConnected && address && isOnBaseMainnet && !isLoading);
+  const canMint = Boolean(mounted && isConnected && address && isOnBaseMainnet && !isLoading && !mintTransactionLock);
 
   // Don't render anything until mounted to prevent hydration issues
   if (!mounted) {
@@ -1544,8 +1821,8 @@ export default function Home() {
             <nav className="flex gap-4 items-center">
               <a href="https://vertical-3.gitbook.io/vertical/" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm">VERT Litepaper</a>
               <a href="#" className="btn-header-green text-sm">VERT Token</a>
-              <a href="https://opensea.io/collection/vertical-by-virtuals" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
-                <img src="/opensea_logo.webp" alt="OpenSea" className="w-full h-full object-contain filter invert" />
+                              <a href="https://opensea.io/collection/vertical-project-nft?sortBy=rarity&sortDirection=desc" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+                  <img src="/opensea_logo.webp" alt="OpenSea" className="w-full h-full object-contain filter invert" />
               </a>
               <a href="https://x.com/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
                 <img src="/x_logo.webp" alt="X" className="w-full h-full object-contain filter invert" />
@@ -1590,6 +1867,9 @@ export default function Home() {
             MINT → WIN → PROFIT
           </div>
         </section>
+
+        {/* Token Phase Indicator */}
+        <TokenPhaseIndicator nftContractAddress={contractAddress} />
 
         {/* Terminal Stats Section - Side by Side */}
         <section className="max-w-6xl mx-auto mb-8">
@@ -1638,6 +1918,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* pVERT Balance Terminal */}
+        <PVertBalanceTerminal />
 
         {/* Rarity Odds Table, Live Mint Feed, How It Works (below main flow) */}
         <div className="mt-12">

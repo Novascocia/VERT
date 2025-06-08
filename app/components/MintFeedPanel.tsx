@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTypewriter } from '@/app/hooks/useTypewriter';
 import { debugLog } from '@/utils/debug';
+import NFTImage from './NFTImage';
 
 interface MintFeedPanelProps {
   isProcessing: boolean;
@@ -156,10 +157,12 @@ export default function MintFeedPanel({
                 
                 {/* NFT Display - constrained height */}
                 <div className="flex-1 flex flex-col items-center justify-center min-h-0">
-                  <img
-                    src={ipfsToHttp(mintedNFTImageUrl)}
+                  <NFTImage
+                    src={mintedNFTImageUrl}
                     alt="Minted NFT"
                     className="w-44 h-44 object-cover border-2 border-green-500 rounded cursor-pointer transition-all duration-300 ease-in-out hover:scale-150 hover:z-50 hover:shadow-2xl hover:shadow-green-500/50"
+                    onLoad={() => console.log('Minted NFT image loaded in feed')}
+                    onError={(error) => console.error('Minted NFT image failed in feed:', error)}
                   />
                 </div>
                 

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import NFTImage from './NFTImage';
 
 interface NFTRevealProps {
   isRevealing: boolean;
@@ -129,10 +130,12 @@ export default function NFTReveal({ isRevealing, imageUrl, rarity, prizeWon, rev
                     }}
                   >
                     <div className="text-center">
-                      <img
-                        src={ipfsToHttp(imageUrl)}
+                      <NFTImage
+                        src={imageUrl}
                         alt="Your NFT"
                         className="w-48 h-48 object-cover mb-4 border-2 border-black mx-auto"
+                        onLoad={() => console.log('NFT image loaded successfully')}
+                        onError={(error) => console.error('NFT image failed:', error)}
                       />
                       <h3 className="font-comic text-2xl mb-2">{rarity || 'Unknown Rarity'}</h3>
                       {prizeWon ? (
