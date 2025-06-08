@@ -5,6 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTypewriter } from '@/app/hooks/useTypewriter';
 import { debugLog } from '@/utils/debug';
 import NFTImage from './NFTImage';
+import useActiveToken from '../hooks/useActiveToken';
+
+const NFT_CONTRACT_ADDRESS = "0x1C1b7d15F73f4ab0E33bb95F280fC180B5fC9C2B";
+
+interface ActiveToken {
+  address: string;
+  symbol: string;
+  name: string;
+  isPlaceholder: boolean;
+}
 
 interface MintFeedPanelProps {
   isProcessing: boolean;
@@ -62,6 +72,12 @@ export default function MintFeedPanel({
   mintedNFTImageUrl,
   mintedTokenId
 }: MintFeedPanelProps) {
+  const { activeToken, isPvertPhase, loading: tokenLoading } = useActiveToken(NFT_CONTRACT_ADDRESS) as {
+    activeToken: ActiveToken | null;
+    isPvertPhase: boolean;
+    loading: boolean;
+  };
+  
   // Typewriter effect for processing messages
   const typewriterText = useTypewriter({
     messages: processingMessages,
@@ -163,6 +179,7 @@ export default function MintFeedPanel({
                     className="w-44 h-44 object-cover border-2 border-green-500 rounded cursor-pointer transition-all duration-300 ease-in-out hover:scale-150 hover:z-50 hover:shadow-2xl hover:shadow-green-500/50"
                     onLoad={() => console.log('Minted NFT image loaded in feed')}
                     onError={(error) => console.error('Minted NFT image failed in feed:', error)}
+                    showLoading={false}
                   />
                 </div>
                 
@@ -178,7 +195,13 @@ export default function MintFeedPanel({
                   <div className="text-center text-sm">
                     <span className="text-green-400">&gt; prize: </span>
                     <span className="text-green-300 font-bold">
-                      {lastMintedPrize ? `${lastMintedPrize} VERT` : '0 VERT'}
+                      {lastMintedPrize ? 
+                        (isPvertPhase ? 
+                          `${lastMintedPrize} pVERT → Redeemable for VERT` : 
+                          `${lastMintedPrize} VERT`
+                        ) : 
+                        (isPvertPhase ? '0 pVERT' : '0 VERT')
+                      }
                     </span>
                   </div>
                   
@@ -197,7 +220,8 @@ export default function MintFeedPanel({
                           debugLog.warn('⚠️ No token ID available for sharing, using fallback approach');
                           // Fallback to old approach if token ID is missing
                           const imageUrl = ipfsToTwitter(mintedNFTImageUrl);
-                          const baseText = `Just minted a ${lastMintedRarity || 'Vertical'} NFT on @VerticalOnBase! ${lastMintedPrize ? `Won ${lastMintedPrize} VERT! 🎉` : ''} #vertnft`;
+                          const tokenText = isPvertPhase ? 'pVERT (redeemable 1:1 for VERT)' : 'VERT';
+                          const baseText = `Just minted a ${lastMintedRarity || 'Vertical'} NFT on @VerticalOnBase! ${lastMintedPrize ? `Won ${lastMintedPrize} ${tokenText}! 🎉` : ''} #vertnft`;
                           const tweetText = `${baseText}\n\n🖼️ ${imageUrl}`;
                           const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
                           window.open(tweetUrl, '_blank');
@@ -205,7 +229,8 @@ export default function MintFeedPanel({
                         }
                         
                         const imageUrl = ipfsToTwitter(mintedNFTImageUrl);
-                        const baseText = `Just minted a ${lastMintedRarity || 'Vertical'} NFT on @VerticalOnBase! ${lastMintedPrize ? `Won ${lastMintedPrize} VERT! 🎉` : ''} #vertnft`;
+                        const tokenText = isPvertPhase ? 'pVERT (redeemable 1:1 for VERT)' : 'VERT';
+                        const baseText = `Just minted a ${lastMintedRarity || 'Vertical'} NFT on @VerticalOnBase! ${lastMintedPrize ? `Won ${lastMintedPrize} ${tokenText}! 🎉` : ''} #vertnft`;
                         
                         // Create share URL with proper Twitter Card meta tags
                         const shareUrl = `${window.location.origin}/api/share/${mintedTokenId}?image=${encodeURIComponent(imageUrl)}&rarity=${encodeURIComponent(lastMintedRarity || 'Vertical')}&prize=${encodeURIComponent(lastMintedPrize || '0')}`;

@@ -3,6 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
+// Hardcoded to pVERT phase - TODO: Remove when real VERT launches
+
 interface PrizePoolTerminalProps {
   prizePoolAmount: string;
 }
@@ -26,8 +29,19 @@ const BlinkingCursor = () => {
   );
 };
 
-// Prize pool hype messages that rotate
-const prizePoolMessages = [
+// Prize pool hype messages that rotate - pVERT phase
+const pvertMessages = [
+  "👀 someone's gonna hit pVERT. could be you.",
+  "💸 pVERT rewards flow here — claim your piece.",
+  "🔥 mint. reveal. earn pVERT.",
+  "🧪 odds loaded. pVERT pool armed.",
+  "🕶️ watching for Rare+... pVERT trigger primed.",
+  "🎯 pull a Rare or better to win pVERT from the pool.",
+  "⚡ pVERT rewards pay in real-time. no delays.",
+];
+
+// Prize pool hype messages that rotate - VERT phase
+const vertMessages = [
   "👀 someone's gonna hit. could be you.",
   "💸 VERT mints flow here — claim your piece.",
   "🔥 mint. reveal. drain the pool.",
@@ -40,6 +54,9 @@ const prizePoolMessages = [
 export default function PrizePoolTerminal({ prizePoolAmount }: PrizePoolTerminalProps) {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [mounted, setMounted] = useState(false);
+  
+  // Hardcoded to pVERT phase for now - TODO: Remove when real VERT launches
+  const currentMessages = pvertMessages;
 
   // Set mounted state to prevent hydration issues
   useEffect(() => {
@@ -51,7 +68,7 @@ export default function PrizePoolTerminal({ prizePoolAmount }: PrizePoolTerminal
     if (!mounted) return;
     
     const interval = setInterval(() => {
-      setCurrentMessageIndex((prev) => (prev + 1) % prizePoolMessages.length);
+      setCurrentMessageIndex((prev) => (prev + 1) % currentMessages.length);
     }, 5000);
 
     return () => clearInterval(interval);
@@ -80,7 +97,7 @@ export default function PrizePoolTerminal({ prizePoolAmount }: PrizePoolTerminal
           <div className="text-center">
             <div className="space-y-4">
               <div className="text-green-400 text-base">
-                VERT IN THE POOL:
+                pVERT IN THE POOL:
               </div>
               
               {/* Simple glowing prize amount display - no box */}
@@ -98,9 +115,9 @@ export default function PrizePoolTerminal({ prizePoolAmount }: PrizePoolTerminal
                               rounded-lg blur-xl animate-pulse pointer-events-none"></div>
               </div>
               
-              {/* Prize Pool launching soon note */}
+              {/* Prize Pool status note */}
               <div className="text-yellow-500/90 text-sm font-medium tracking-wide">
-                🚀 Prize Pool launching soon!
+                🎉 Prize Pool LIVE with pVERT rewards!
               </div>
             </div>
           </div>
@@ -116,7 +133,7 @@ export default function PrizePoolTerminal({ prizePoolAmount }: PrizePoolTerminal
                 transition={{ duration: 0.5 }}
                 className="text-green-400 text-base whitespace-nowrap overflow-hidden text-ellipsis"
               >
-                {prizePoolMessages[currentMessageIndex]}
+                {currentMessages[currentMessageIndex]}
               </motion.div>
             </AnimatePresence>
           </div>

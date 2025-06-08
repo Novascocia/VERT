@@ -13,43 +13,41 @@ import "@openzeppelin/contracts/interfaces/IERC165.sol";
 contract VerticalProjectNFT_WithManualSync_Fixed is ERC721, ERC721URIStorage, Ownable, ReentrancyGuard, Pausable, IERC2981 {
     enum Rarity { Common, Rare, Epic, Legendary, Mythical }
 
-    IERC20 public virtualToken;
     IERC20 public vertToken;
-    
-    uint256 public priceVirtual = 100000 * 10**18;
-    uint256 public priceVert = 10000 * 10**18;
-    
+    IERC20 public virtualToken;
+    address public treasury;
+    uint256 public priceVirtual = 10000000000000000; // 0.01 ETH in wei
+    uint256 public priceVert = 500 * 10**18; // 500 VERT tokens
     uint256 public nextTokenId = 1;
     uint256 public prizePool;
-    address public treasury;
 
     mapping(uint256 => Rarity) public tokenRarity;
     mapping(Rarity => uint256) public prizePercentByRarity;
 
-    event NFTMinted(address indexed user, uint256 indexed tokenId, Rarity rarity, string tokenURI);
+    event NFTMinted(address indexed user, uint256 indexed tokenId, Rarity rarity, string uri);
     event PrizeClaimed(address indexed user, uint256 indexed tokenId, Rarity rarity, uint256 amount);
-    event PrizePoolUpdated(uint256 newBalance);
-    event PrizePoolFunded(address indexed funder, uint256 amount);
-    event PrizePoolSynced(uint256 syncedAmount, uint256 newTotal);
-    event VertTokenUpdated(address indexed newToken);
-    event VirtualTokenUpdated(address indexed newToken);
-    event TreasuryUpdated(address indexed newTreasury);
+    event PrizePoolUpdated(uint256 newTotal);
+    event VertTokenUpdated(address newVertToken);
+    event VirtualTokenUpdated(address newVirtualToken);
+    event TreasuryUpdated(address newTreasury);
     event PricesUpdated(uint256 newVirtualPrice, uint256 newVertPrice);
     event PrizePercentUpdated(Rarity rarity, uint256 percent);
+    event PrizePoolFunded(address indexed funder, uint256 amount);
+    event PrizePoolSynced(uint256 syncedAmount, uint256 newTotal);
 
     constructor(
-        address _virtualToken,
         address _vertToken,
+        address _virtualToken,
         address _treasury
     ) ERC721("Vertical Project NFT", "VERT") {
-        virtualToken = IERC20(_virtualToken);
         vertToken = IERC20(_vertToken);
+        virtualToken = IERC20(_virtualToken);
         treasury = _treasury;
 
-        // CORRECTED: Prize percentages for when rare+ NFTs are claimed
+        // Set default prize percentages
         prizePercentByRarity[Rarity.Rare] = 5;       // 5% of prize pool
         prizePercentByRarity[Rarity.Epic] = 10;      // 10% of prize pool
-        prizePercentByRarity[Rarity.Legendary] = 25; // 25% of prize pool
+        prizePercentByRarity[Rarity.Legendary] = 20; // 20% of prize pool
         prizePercentByRarity[Rarity.Mythical] = 40;  // 40% of prize pool
     }
 
@@ -93,7 +91,8 @@ contract VerticalProjectNFT_WithManualSync_Fixed is ERC721, ERC721URIStorage, Ow
 
         emit NFTMinted(user, tokenId, rarity, _tokenURI);
 
-        if (rarity != Rarity.Common && addsToPrizePool && prizePool > 0) {
+        // FIXED: All rare+ NFTs get prizes, regardless of payment method
+        if (rarity != Rarity.Common && prizePool > 0) {
             uint256 prizePercent = prizePercentByRarity[rarity];
             if (prizePercent > 0) {
                 uint256 prizeAmount = (prizePool * prizePercent) / 100;

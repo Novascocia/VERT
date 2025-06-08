@@ -10,6 +10,16 @@ import {
   type StakingTier 
 } from '../config/staking';
 import { useStaking } from '../hooks/useStaking';
+import useActiveToken from '../hooks/useActiveToken';
+
+const NFT_CONTRACT_ADDRESS = "0x1C1b7d15F73f4ab0E33bb95F280fC180B5fC9C2B";
+
+interface ActiveToken {
+  address: string;
+  symbol: string;
+  name: string;
+  isPlaceholder: boolean;
+}
 
 const rarityColors: Record<string, string> = {
   Common: 'text-gray-300',
@@ -48,6 +58,11 @@ export default function RarityOddsTable() {
   const [selectedTier, setSelectedTier] = useState<StakingTier>(STAKING_TIERS[0]);
   const [showScrollingText, setShowScrollingText] = useState(false);
   const { isConnected } = useAccount();
+  const { activeToken, isPvertPhase, loading: tokenLoading } = useActiveToken(NFT_CONTRACT_ADDRESS) as {
+    activeToken: ActiveToken | null;
+    isPvertPhase: boolean;
+    loading: boolean;
+  };
   const {
     stakedAmount,
     currentTier,
@@ -216,6 +231,11 @@ export default function RarityOddsTable() {
                           <div className="text-white font-mono text-sm font-bold">
                             {prize}%
                           </div>
+                          {isPvertPhase && (
+                            <div className="text-yellow-400 text-xs mt-1">
+                              → pVERT redeemable for VERT
+                            </div>
+                          )}
                         </div>
                       </div>
 

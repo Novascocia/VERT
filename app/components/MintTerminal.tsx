@@ -78,10 +78,11 @@ export default function MintTerminal({
         { id: 'connect', text: '> please connect your wallet to continue', type: 'system' }
       ]);
     } else if (!canMint) {
+      // Show a more helpful message instead of assuming network issues
       setLines([
         { id: 'connected', text: '> wallet connected ✅', type: 'success' },
-        { id: 'networkIssue', text: '> network connectivity issues detected', type: 'error' },
-        { id: 'retry', text: '> please refresh page and try again', type: 'system' }
+        { id: 'loading', text: '> initializing mint protocol...', type: 'system' },
+        { id: 'wait', text: '> please wait a moment', type: 'system' }
       ]);
     } else {
       // Show working terminal
