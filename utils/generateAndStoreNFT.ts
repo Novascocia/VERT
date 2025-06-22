@@ -110,6 +110,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
         }
       );
       console.log(`⏱️ Replicate API call took: ${(Date.now() - apiCallStartTime) / 1000}s`);
+      console.log("🔍 Raw Replicate response:", JSON.stringify(result, null, 2));
       return result;
     });
 
