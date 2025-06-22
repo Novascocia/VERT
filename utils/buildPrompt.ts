@@ -86,12 +86,35 @@ export function buildPrompt(traits: SelectedTraits): PromptResult {
 // NFT-FOCUSED prompt building: Character-first, collectible-optimized
 function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   
-  // 1. FILTER OUT HUMAN CHARACTERS - Replace with non-human alternatives
-  let speciesName = traits.Species.name;
-  if (speciesName === "Human") {
-    const nonHumanAlternatives = ["Robot", "Cyborg", "Ghost", "Elemental", "Alien"];
-    speciesName = randomChoice(nonHumanAlternatives);
-  }
+  // 1. EXPANDED SPECIES POOL - 50+ unique non-human characters
+  const coolSpecies = [
+    // Robotic/Mechanical
+    "Robot", "Cyborg", "Android", "Mech Pilot", "Tech Warrior", "Circuit Being", "Data Entity", "Cyber Knight",
+    "Steel Guardian", "Digital Warrior", "Nano Being", "Chrome Sentinel", "Tech Shaman", "Binary Ghost",
+    
+    // Mystical/Supernatural  
+    "Ghost", "Spirit", "Phantom", "Shadow Being", "Wraith", "Specter", "Soul Walker", "Void Entity",
+    "Dark Mage", "Crystal Being", "Energy Form", "Astral Warrior", "Mystic Guardian", "Rune Keeper",
+    
+    // Elemental/Natural
+    "Fire Elemental", "Ice Elemental", "Storm Elemental", "Earth Elemental", "Lightning Being", "Flame Spirit",
+    "Frost Guardian", "Wind Walker", "Stone Warrior", "Plasma Entity", "Magma Being", "Crystal Elemental",
+    
+    // Cosmic/Dimensional
+    "Star Being", "Cosmic Entity", "Galaxy Guardian", "Void Walker", "Dimension Shifter", "Space Nomad",
+    "Nebula Spirit", "Quantum Being", "Time Guardian", "Reality Bender", "Portal Keeper", "Cosmic Warrior",
+    
+    // Alien/Exotic
+    "Alien Warrior", "Space Hunter", "Xenomorph", "Star Traveler", "Galactic Scout", "Void Hunter",
+    "Plasma Alien", "Crystal Alien", "Energy Alien", "Bio-Mechanical Alien", "Hive Mind", "Star Seed",
+    
+    // Unique/Special
+    "Hologram", "Digital Avatar", "Code Being", "Pixel Warrior", "Glitch Entity", "Data Ghost",
+    "Neon Spirit", "Synthwave Being", "Retro Bot", "Arcade Guardian", "Game Spirit", "Virtual Warrior"
+  ];
+  
+  // Always use a cool species (ignore original trait)
+  const speciesName = randomChoice(coolSpecies);
 
   // 2. NFT-FOCUSED STYLES - Collectible character aesthetics
   const nftStyles = [
@@ -119,39 +142,39 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   // Background is always subtle/minimal
   const backgroundHint = Math.random() > 0.7 ? `, ${traits.Background.name} background` : "";
 
-  // 4. COLLECTIBLE CHARACTER PROMPTS - Multiple focused structures
-  const promptStructures = [
-    // Pure character focus
-    () => {
-      const features = mainFeatures.map(t => t.name).join(', ');
-      return `cool ${speciesName} character, ${features}, ${chosenStyle}${backgroundHint}, VERT text`;
-    },
-    
-    // Detailed character
-    () => {
-      const primary = mainFeatures[0].name;
-      const secondary = mainFeatures.length > 1 ? `, ${mainFeatures[1].name}` : '';
-      return `${speciesName} NFT character with ${primary}${secondary}, ${chosenStyle}${backgroundHint}, VERT text`;
-    },
-    
-    // Collectible focus
-    () => {
-      const features = mainFeatures.map(t => t.name).join(', ');
-      return `collectible ${speciesName}, ${features}, ${chosenStyle}${backgroundHint}, VERT text`;
-    },
-    
-    // Minimal character
-    () => {
-      const key = mainFeatures[0].name;
-      return `${speciesName} character, ${key}, ${chosenStyle}${backgroundHint}, VERT text`;
-    }
-  ];
+     // 4. FULL CHARACTER PROMPTS - Ensure complete character generation
+   const promptStructures = [
+     // Full body character focus
+     () => {
+       const features = mainFeatures.map(t => t.name).join(', ');
+       return `full body ${speciesName} character, ${features}, ${chosenStyle}${backgroundHint}`;
+     },
+     
+     // Complete character design
+     () => {
+       const primary = mainFeatures[0].name;
+       const secondary = mainFeatures.length > 1 ? `, ${mainFeatures[1].name}` : '';
+       return `complete ${speciesName} character design with ${primary}${secondary}, ${chosenStyle}${backgroundHint}`;
+     },
+     
+     // Standing character
+     () => {
+       const features = mainFeatures.map(t => t.name).join(', ');
+       return `standing ${speciesName} character, ${features}, ${chosenStyle}${backgroundHint}`;
+     },
+     
+     // Character portrait (full upper body)
+     () => {
+       const key = mainFeatures[0].name;
+       return `${speciesName} character portrait, ${key}, full upper body, ${chosenStyle}${backgroundHint}`;
+     }
+   ];
 
   const promptBuilder = randomChoice(promptStructures);
   const prompt = promptBuilder();
 
-  // 5. STRONG ANTI-HUMAN NEGATIVE PROMPT
-  const negative_prompt = "human, human face, human skin, realistic person, real person, photorealistic human, human features, realistic skin, human anatomy, blurry, low quality, text other than VERT, logos, brands, multiple characters, deformed, ugly";
+     // 5. FULL CHARACTER NEGATIVE PROMPT - Prevent partial/cropped characters
+   const negative_prompt = "human, human face, human skin, realistic person, real person, photorealistic human, human features, realistic skin, human anatomy, cropped, partial body, head only, face only, close-up, zoomed in, cut off, incomplete character, missing body parts, blurry, low quality, text, logos, brands, multiple characters, deformed, ugly";
 
   console.log("\n--- NFT Character Prompt ---");
   console.log(`Species: ${speciesName} (original: ${traits.Species.name})`);
