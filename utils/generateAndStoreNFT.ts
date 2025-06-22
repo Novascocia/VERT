@@ -91,7 +91,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
-      const modelToUse = "cjwbw/animagine-xl-3.1:6afe2e6b27dad2d6f480b59195c221884b6acc589ff4d05ff0e5fc058690fbb9";
+      const modelToUse = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b";
       console.log("🎯 Model being used:", modelToUse);
       console.log("🔑 API Token (first 10 chars):", process.env.REPLICATE_API_TOKEN?.substring(0, 10));
       
@@ -102,8 +102,8 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
           input: {
             prompt,
             negative_prompt,
-            num_inference_steps: 25,
-            guidance_scale: 7,
+            num_inference_steps: 30,
+            guidance_scale: 7.5,
             width: 1024,
             height: 1024
           }
