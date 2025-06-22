@@ -83,7 +83,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
           input: {
             prompt,
             negative_prompt,
-            num_inference_steps: 8,
+            num_inference_steps: 4,
             guidance_scale: 0,
             width: 1024,
             height: 1024
