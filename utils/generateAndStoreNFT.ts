@@ -53,6 +53,7 @@ async function retryReplicate(
       return result;
     } catch (error: any) {
       lastError = error;
+      const attemptStartTime = Date.now();
       console.warn(`❌ Attempt ${i + 1} failed after ${(Date.now() - attemptStartTime) / 1000}s:`, error.message);
       
       // Check if it's an NSFW error
@@ -85,83 +86,40 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
   const imageStartTime = Date.now();
 
   try {
-    // Try the lightning model first with a timeout
-    console.log("⚡ Attempting lightning model...");
+    console.log("⚡ Using lightning model...");
     const lightningStartTime = Date.now();
     
-    const output = await Promise.race([
-      retryReplicate(async () => {
-        console.log("🔄 Calling Replicate API...");
-        const apiCallStartTime = Date.now();
-        const result = await replicate.run(
-          "lucataco/dreamshaper-xl-lightning:9ebea41ac69a3256f71d8b4f80efe6f0dc719f8be70888d6b481e06258a2ee96",
-          {
-            input: {
-              prompt,
-              negative_prompt,
-              num_inference_steps: 4,
-              guidance_scale: 0,
-              width: 1024,
-              height: 1024
-            }
+    const output = await retryReplicate(async () => {
+      console.log("🔄 Calling Replicate API...");
+      const apiCallStartTime = Date.now();
+      const result = await replicate.run(
+        "lucataco/dreamshaper-xl-lightning:9ebea41ac69a3256f71d8b4f80efe6f0dc719f8be70888d6b481e06258a2ee96",
+        {
+          input: {
+            prompt,
+            negative_prompt,
+            num_inference_steps: 4,
+            guidance_scale: 0,
+            width: 1024,
+            height: 1024
           }
-        );
-        console.log(`⏱️ Replicate API call took: ${(Date.now() - apiCallStartTime) / 1000}s`);
-        return result;
-      }),
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("Lightning model timeout - trying turbo")), 120000) // 2 minute timeout
-      )
-    ]);
+        }
+      );
+      console.log(`⏱️ Replicate API call took: ${(Date.now() - apiCallStartTime) / 1000}s`);
+      return result;
+    });
 
     if (!output || !output[0]) {
       throw new Error("No image URL in Replicate response");
     }
 
     console.log(`⏱️ Lightning model total time: ${(Date.now() - lightningStartTime) / 1000}s`);
-    console.log("🎨 Image generated successfully with lightning model:", output[0]);
+    console.log("🎨 Image generated successfully:", output[0]);
     return output[0];
   } catch (error) {
-    console.log(`⏱️ Lightning model failed after: ${(Date.now() - imageStartTime) / 1000}s`);
-    console.log("⚠️ Lightning model failed or timed out, trying turbo model...");
-    
-    try {
-      // Fallback to turbo model
-      console.log("🚀 Attempting turbo model...");
-      const turboStartTime = Date.now();
-      
-      const output = await retryReplicate(async () => {
-        console.log("🔄 Calling Replicate API (turbo)...");
-        const apiCallStartTime = Date.now();
-        const result = await replicate.run(
-          "lucataco/dreamshaper-xl-turbo:0a1710e0187b01a255302738ca0158ff02a22f4638679533e111082f9dd1b615",
-          {
-            input: {
-              prompt,
-              negative_prompt,
-              num_inference_steps: 8,
-              guidance_scale: 0,
-              width: 1024,
-              height: 1024
-            }
-          }
-        );
-        console.log(`⏱️ Replicate API call (turbo) took: ${(Date.now() - apiCallStartTime) / 1000}s`);
-        return result;
-      });
-
-      if (!output || !output[0]) {
-        throw new Error("No image URL in Replicate response");
-      }
-
-      console.log(`⏱️ Turbo model total time: ${(Date.now() - turboStartTime) / 1000}s`);
-      console.log("🎨 Image generated successfully with turbo model:", output[0]);
-      return output[0];
-    } catch (fallbackError) {
-      console.error(`⏱️ Both models failed after total time: ${(Date.now() - imageStartTime) / 1000}s`);
-      console.error("❌ Both lightning and turbo models failed:", fallbackError);
-      throw fallbackError;
-    }
+    console.error(`⏱️ Image generation failed after: ${(Date.now() - imageStartTime) / 1000}s`);
+    console.error("❌ Error generating image with Replicate:", error);
+    throw error;
   }
 }
 
