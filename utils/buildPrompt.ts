@@ -83,82 +83,84 @@ export function buildPrompt(traits: SelectedTraits): PromptResult {
 
 
 
-// Optimized prompt building with dynamic structure and focused generation
+// NFT-FOCUSED prompt building: Character-first, collectible-optimized
 function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
-  // 1. STYLE VARIATION - Random art styles instead of always "MFKZ-style"
-  const artStyles = [
-    "anime style",
-    "cartoon style", 
-    "digital art style",
-    "cel-shaded style",
-    "manga style",
-    "stylized illustration"
-  ];
-  const chosenStyle = randomChoice(artStyles);
-
-  // 2. FOCUSED GENERATION - Pick 1-2 main traits to emphasize
-  const allTraits = [
-    { type: 'species', name: traits.Species.name },
-    { type: 'head', name: traits.HeadType.name },
-    { type: 'eyes', name: traits.EyesFace.name },
-    { type: 'clothing', name: traits.ClothingTop.name },
-    { type: 'color', name: traits.CharacterColor.name },
-    { type: 'background', name: traits.Background.name }
-  ];
   
-  // Randomly pick 2-3 traits to emphasize
-  const shuffledTraits = allTraits.sort(() => Math.random() - 0.5);
-  const emphasizedTraits = shuffledTraits.slice(0, 2 + Math.floor(Math.random() * 2)); // 2-3 traits
-  const subtleTraits = shuffledTraits.slice(emphasizedTraits.length);
+  // 1. FILTER OUT HUMAN CHARACTERS - Replace with non-human alternatives
+  let speciesName = traits.Species.name;
+  if (speciesName === "Human") {
+    const nonHumanAlternatives = ["Robot", "Cyborg", "Ghost", "Elemental", "Alien"];
+    speciesName = randomChoice(nonHumanAlternatives);
+  }
 
-     // 3. DYNAMIC STRUCTURE - Randomize prompt order and format
-   const promptStructures = [
-     // Character-focused
-     () => {
-       const main = emphasizedTraits.map(t => t.name).join(', ');
-       const subtle = subtleTraits.length > 0 ? `, ${subtleTraits.map(t => t.name).join(', ')}` : '';
-       return `${traits.Species.name} character, ${main}${subtle}, ${chosenStyle}, VERT text`;
-     },
-     
-     // Background-focused  
-     () => {
-       const bg = traits.Background.name;
-       const char = emphasizedTraits.filter(t => t.type !== 'background').map(t => t.name).join(', ');
-       return `${traits.Species.name} character in ${bg} background, ${char}, ${chosenStyle}, VERT text`;
-     },
-     
-     // Balanced approach
-     () => {
-       const parts = [`${traits.Species.name} character`];
-       parts.push(...emphasizedTraits.map(t => t.name));
-       parts.push(chosenStyle);
-       parts.push('VERT text');
-       return parts.join(', ');
-     },
-     
-     // Minimal approach
-     () => {
-       const key = emphasizedTraits.slice(0, 2).map(t => t.name).join(', ');
-       return `${traits.Species.name} character, ${key}, ${chosenStyle}, VERT text`;
-     }
-   ];
+  // 2. NFT-FOCUSED STYLES - Collectible character aesthetics
+  const nftStyles = [
+    "NFT character art",
+    "collectible character design", 
+    "digital collectible art",
+    "anime NFT style",
+    "cartoon NFT character",
+    "stylized NFT avatar"
+  ];
+  const chosenStyle = randomChoice(nftStyles);
 
-  // 4. SIMPLIFIED PROMPTS - Use trait names instead of descriptions
+  // 3. CHARACTER-FIRST APPROACH - Always prioritize character over background
+  const characterTraits = [
+    { type: 'head', name: traits.HeadType.name, priority: 3 },
+    { type: 'eyes', name: traits.EyesFace.name, priority: 2 },
+    { type: 'clothing', name: traits.ClothingTop.name, priority: 2 },
+    { type: 'color', name: traits.CharacterColor.name, priority: 1 }
+  ];
+
+  // Pick 1-2 most important character features
+  const sortedTraits = characterTraits.sort((a, b) => b.priority - a.priority);
+  const mainFeatures = sortedTraits.slice(0, 1 + Math.floor(Math.random() * 2)); // 1-2 features
+  
+  // Background is always subtle/minimal
+  const backgroundHint = Math.random() > 0.7 ? `, ${traits.Background.name} background` : "";
+
+  // 4. COLLECTIBLE CHARACTER PROMPTS - Multiple focused structures
+  const promptStructures = [
+    // Pure character focus
+    () => {
+      const features = mainFeatures.map(t => t.name).join(', ');
+      return `cool ${speciesName} character, ${features}, ${chosenStyle}${backgroundHint}, VERT text`;
+    },
+    
+    // Detailed character
+    () => {
+      const primary = mainFeatures[0].name;
+      const secondary = mainFeatures.length > 1 ? `, ${mainFeatures[1].name}` : '';
+      return `${speciesName} NFT character with ${primary}${secondary}, ${chosenStyle}${backgroundHint}, VERT text`;
+    },
+    
+    // Collectible focus
+    () => {
+      const features = mainFeatures.map(t => t.name).join(', ');
+      return `collectible ${speciesName}, ${features}, ${chosenStyle}${backgroundHint}, VERT text`;
+    },
+    
+    // Minimal character
+    () => {
+      const key = mainFeatures[0].name;
+      return `${speciesName} character, ${key}, ${chosenStyle}${backgroundHint}, VERT text`;
+    }
+  ];
+
   const promptBuilder = randomChoice(promptStructures);
   const prompt = promptBuilder();
 
-  // 5. FOCUSED NEGATIVE PROMPT - Shorter, more targeted
-  const negative_prompt = "realistic, photorealistic, human face, human skin, blurry, low quality, text other than VERT, logos, brands, multiple characters, deformed";
+  // 5. STRONG ANTI-HUMAN NEGATIVE PROMPT
+  const negative_prompt = "human, human face, human skin, realistic person, real person, photorealistic human, human features, realistic skin, human anatomy, blurry, low quality, text other than VERT, logos, brands, multiple characters, deformed, ugly";
 
-  console.log("\n--- Optimized Prompt ---");
+  console.log("\n--- NFT Character Prompt ---");
+  console.log(`Species: ${speciesName} (original: ${traits.Species.name})`);
   console.log(`Style: ${chosenStyle}`);
-  console.log(`Emphasized: ${emphasizedTraits.map(t => `${t.type}:${t.name}`).join(', ')}`);
-  console.log(`Subtle: ${subtleTraits.map(t => `${t.type}:${t.name}`).join(', ')}`);
+  console.log(`Main Features: ${mainFeatures.map(t => `${t.type}:${t.name}`).join(', ')}`);
+  console.log(`Background: ${backgroundHint || 'minimal'}`);
   console.log(`Final: ${prompt}`);
-  console.log("\n--- Negative Prompt ---");
+  console.log("\n--- Anti-Human Negative ---");
   console.log(negative_prompt);
-  console.log("\n--- Traits ---");
-  console.log(JSON.stringify(traits, null, 2));
 
   return {
     prompt,
