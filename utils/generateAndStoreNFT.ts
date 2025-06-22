@@ -78,7 +78,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
   try {
     const output = await retryReplicate(async () => {
       return await replicate.run(
-        "lucataco/dreamshaper-xl-lightning:d3c5443552a46b539c3833b378044733e8f85f5436323c683b8a1c6463953f95",
+        "lucataco/dreamshaper-xl-lightning:9ebea41ac69a3256f71d8b4f80efe6f0dc719f8be70888d6b481e06258a2ee96",
         {
           input: {
             prompt,
