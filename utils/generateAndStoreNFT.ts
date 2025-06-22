@@ -91,9 +91,13 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
+      const modelToUse = "lucataco/dreamshaper-xl-lightning:601eea49d49003e6ea75a11527209c4f510a93e2112c969d548fbb45b9c4f19f";
+      console.log("🎯 Model being used:", modelToUse);
+      console.log("🔑 API Token (first 10 chars):", process.env.REPLICATE_API_TOKEN?.substring(0, 10));
+      
       const apiCallStartTime = Date.now();
       const result = await replicate.run(
-        "lucataco/dreamshaper-xl-lightning:601eea49d49003e6ea75a11527209c4f510a93e2112c969d548fbb45b9c4f19f",
+        modelToUse,
         {
           input: {
             prompt,
