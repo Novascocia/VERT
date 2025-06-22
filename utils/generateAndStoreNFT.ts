@@ -201,7 +201,8 @@ export async function generateAndStoreNFT(
   tokenId: string | number,
   traits: SelectedTraits
 ) {
-  console.log("\n🚀 Starting NFT generation for token:", tokenId);
+  console.log(`\n🚀 Starting NFT generation for token: ${tokenId}`);
+  const startTime = Date.now();
 
   try {
     const numericTokenId = typeof tokenId === 'string' ? parseInt(tokenId, 10) : tokenId;
@@ -220,11 +221,15 @@ export async function generateAndStoreNFT(
     console.log("✅ Prompt passed to Replicate:\n", prompt);
 
     // Generate image with Replicate
+    const replicateStartTime = Date.now();
     const rawImageUrl = await generateImage(prompt, negative_prompt);
+    console.log(`⏱️ Replicate image generation took: ${(Date.now() - replicateStartTime) / 1000}s`);
 
     // Upload to IPFS
+    const ipfsStartTime = Date.now();
     const ipfsImageUri = await uploadToPinata(rawImageUrl);
     const metadataUri = await uploadMetadataToPinata(numericTokenId, ipfsImageUri, traits);
+    console.log(`⏱️ IPFS upload took: ${(Date.now() - ipfsStartTime) / 1000}s`);
 
     // Set tokenURI on-chain using backend wallet with hardcoded fallbacks
     const rpcUrl = process.env.RPC_URL || process.env.MAINNET_RPC_URL || 'https://mainnet.base.org';
@@ -236,8 +241,10 @@ export async function generateAndStoreNFT(
     
     try {
       console.log(`🔗 Setting TokenURI for token ${numericTokenId}...`);
+      const txStartTime = Date.now();
       const tx = await contract.setTokenURI(numericTokenId, metadataUri);
       await tx.wait();
+      console.log(`⏱️ Blockchain transaction took: ${(Date.now() - txStartTime) / 1000}s`);
       console.log(`✅ TokenURI set for token ${numericTokenId}: ${metadataUri}`);
     } catch (error) {
       console.error(`❌ Failed to set TokenURI for token ${numericTokenId}:`, error);
@@ -245,7 +252,7 @@ export async function generateAndStoreNFT(
       console.log(`📄 Metadata still available via IPFS: ${metadataUri}`);
     }
 
-    console.log("\n✨ NFT generation completed successfully!");
+    console.log(`\n✨ NFT generation completed successfully! Total time: ${(Date.now() - startTime) / 1000}s`);
     console.log("📸 Image URI:", ipfsImageUri);
     console.log("📄 Metadata URI:", metadataUri);
 

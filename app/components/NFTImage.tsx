@@ -30,13 +30,13 @@ const getImageSources = (imageUrl: string): string[] => {
   const hash = imageUrl.replace(/^ipfs:\/\//, '');
   
   return [
-    // 1. Most reliable gateway first (consistently works in practice)
-    `https://nftstorage.link/ipfs/${hash}`, // Most reliable based on actual usage - always works
+    // 1. Prioritize Pinata's gateway as it's the most reliable for our assets
+    `https://gateway.pinata.cloud/ipfs/${hash}`,
     
-    // 2. Other fast public gateways  
-    `https://gateway.pinata.cloud/ipfs/${hash}`, // Fast and reliable alternative
-    `https://dweb.link/ipfs/${hash}`, // Good backup - 1422ms
-    `https://ipfs.io/ipfs/${hash}`, // Moved to backup position - often fails recently
+    // 2. Use other public gateways as backups
+    `https://dweb.link/ipfs/${hash}`,
+    `https://nftstorage.link/ipfs/${hash}`, // Lowered priority as it has been less reliable
+    `https://ipfs.io/ipfs/${hash}`,
     
     // 3. Local proxy last (as fallback)
     `/api/image-proxy/${hash}`,
