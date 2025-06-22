@@ -83,24 +83,77 @@ export function buildPrompt(traits: SelectedTraits): PromptResult {
 
 
 
-// Original prompt building
+// Optimized prompt building with dynamic structure and focused generation
 function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
-  // Place background at the start and make it explicit
-  let prompt = `Background: ${traits.Background.description}. `;
-  prompt += "Background must be visible and match this description. ";
-  prompt += `Create a MFKZ-style NFT character with a ${traits.Species.name} appearance. `;
-  prompt += `It has ${traits.EyesFace.name} and wears a ${traits.ClothingTop.name}. `;
-  if (traits.CharacterColor?.name && traits.Species.name !== "Gold Hybrid") {
-    prompt += `The character's theme includes the color ${traits.CharacterColor.name}. `;
-  }
-  prompt += "Cel-shaded bold cartoon style.";
-  prompt += `, wearing something that says '${traits.GraphicText?.name || "VERT"}'`;
+  // 1. STYLE VARIATION - Random art styles instead of always "MFKZ-style"
+  const artStyles = [
+    "anime style",
+    "cartoon style", 
+    "digital art style",
+    "cel-shaded style",
+    "manga style",
+    "stylized illustration"
+  ];
+  const chosenStyle = randomChoice(artStyles);
 
-  // Negative prompt (keep strong for now)
-  const negative_prompt = "human, child, realistic skin, realistic face, plain background, random logos, English words except VERT, photorealistic, default head, default face, default clothing, default background, realistic limbs, children, daft punk helmet, astronaut helmet, military helmet, bare skin, real person, shadow face, photoreal background, default head, realistic lighting, skin texture, hair, smooth face, depth of field, text, logos, brand names, realistic arms, fingers, helmets, motorcycle helmet, pilot helmet, round helmet, orb helmet, sunglasses, visors, reflections, leather texture, HDR, realistic shadows, photo, photograph, city photo, real buildings, windows, advertisements, brand logos, signs, tattoos, random words, foreign characters, visible numbers, random patches, realistic faces, empty background, gradient backdrop, gray backdrop, studio lighting, plain wall, photostudio, blank setting, plain t-shirt, generic shirt, studio portrait, dull eyes, simple head, blank head, blank eyes, photoreal background, people, motorcycles, empty photo studio, other text, unknown logos, English words other than 'VERT', cityscape, skyscraper, cars, crowds, generic urban, street scene, photo background, goggles, robot eyes, robot face";
+  // 2. FOCUSED GENERATION - Pick 1-2 main traits to emphasize
+  const allTraits = [
+    { type: 'species', name: traits.Species.name },
+    { type: 'head', name: traits.HeadType.name },
+    { type: 'eyes', name: traits.EyesFace.name },
+    { type: 'clothing', name: traits.ClothingTop.name },
+    { type: 'color', name: traits.CharacterColor.name },
+    { type: 'background', name: traits.Background.name }
+  ];
+  
+  // Randomly pick 2-3 traits to emphasize
+  const shuffledTraits = allTraits.sort(() => Math.random() - 0.5);
+  const emphasizedTraits = shuffledTraits.slice(0, 2 + Math.floor(Math.random() * 2)); // 2-3 traits
+  const subtleTraits = shuffledTraits.slice(emphasizedTraits.length);
 
-  console.log("\n--- Legacy Prompt ---");
-  console.log(prompt);
+  // 3. DYNAMIC STRUCTURE - Randomize prompt order and format
+  const promptStructures = [
+    // Character-focused
+    () => {
+      const main = emphasizedTraits.map(t => t.name).join(', ');
+      const subtle = subtleTraits.length > 0 ? `, ${subtleTraits.map(t => t.name).join(', ')}` : '';
+      return `${main}${subtle}, ${chosenStyle}, VERT text`;
+    },
+    
+    // Background-focused  
+    () => {
+      const bg = traits.Background.name;
+      const char = emphasizedTraits.filter(t => t.type !== 'background').map(t => t.name).join(', ');
+      return `${bg} background, ${char}, ${chosenStyle}, VERT text`;
+    },
+    
+    // Balanced approach
+    () => {
+      const parts = emphasizedTraits.map(t => t.name);
+      parts.push(chosenStyle);
+      parts.push('VERT text');
+      return parts.join(', ');
+    },
+    
+    // Minimal approach
+    () => {
+      const key = emphasizedTraits.slice(0, 2).map(t => t.name).join(', ');
+      return `${key}, ${chosenStyle}, VERT text`;
+    }
+  ];
+
+  // 4. SIMPLIFIED PROMPTS - Use trait names instead of descriptions
+  const promptBuilder = randomChoice(promptStructures);
+  const prompt = promptBuilder();
+
+  // 5. FOCUSED NEGATIVE PROMPT - Shorter, more targeted
+  const negative_prompt = "realistic, photorealistic, human face, human skin, blurry, low quality, text other than VERT, logos, brands, multiple characters, deformed";
+
+  console.log("\n--- Optimized Prompt ---");
+  console.log(`Style: ${chosenStyle}`);
+  console.log(`Emphasized: ${emphasizedTraits.map(t => `${t.type}:${t.name}`).join(', ')}`);
+  console.log(`Subtle: ${subtleTraits.map(t => `${t.type}:${t.name}`).join(', ')}`);
+  console.log(`Final: ${prompt}`);
   console.log("\n--- Negative Prompt ---");
   console.log(negative_prompt);
   console.log("\n--- Traits ---");
