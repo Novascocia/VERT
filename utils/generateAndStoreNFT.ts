@@ -86,14 +86,14 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
   const imageStartTime = Date.now();
 
   try {
-    console.log("⚡ Using turbo model...");
-    const turboStartTime = Date.now();
+    console.log("⚡ Using lightning model...");
+    const lightningStartTime = Date.now();
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
       const apiCallStartTime = Date.now();
       const result = await replicate.run(
-        "lucataco/dreamshaper-xl-turbo:0a1710e0187b01a255302738ca0158ff02a22f4638679533e111082f9dd1b615",
+        "lucataco/dreamshaper-xl-lightning:9ebea41ac69a3256f71d8b4f80efe6f0dc719f8be70888d6b481e06258a2ee96",
         {
           input: {
             prompt,
@@ -113,7 +113,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
       throw new Error("No image URL in Replicate response");
     }
 
-    console.log(`⏱️ Turbo model total time: ${(Date.now() - turboStartTime) / 1000}s`);
+    console.log(`⏱️ Lightning model total time: ${(Date.now() - lightningStartTime) / 1000}s`);
     console.log("🎨 Image generated successfully:", output[0]);
     return output[0];
   } catch (error) {
