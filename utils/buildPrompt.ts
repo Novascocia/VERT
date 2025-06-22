@@ -111,36 +111,37 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   const emphasizedTraits = shuffledTraits.slice(0, 2 + Math.floor(Math.random() * 2)); // 2-3 traits
   const subtleTraits = shuffledTraits.slice(emphasizedTraits.length);
 
-  // 3. DYNAMIC STRUCTURE - Randomize prompt order and format
-  const promptStructures = [
-    // Character-focused
-    () => {
-      const main = emphasizedTraits.map(t => t.name).join(', ');
-      const subtle = subtleTraits.length > 0 ? `, ${subtleTraits.map(t => t.name).join(', ')}` : '';
-      return `${main}${subtle}, ${chosenStyle}, VERT text`;
-    },
-    
-    // Background-focused  
-    () => {
-      const bg = traits.Background.name;
-      const char = emphasizedTraits.filter(t => t.type !== 'background').map(t => t.name).join(', ');
-      return `${bg} background, ${char}, ${chosenStyle}, VERT text`;
-    },
-    
-    // Balanced approach
-    () => {
-      const parts = emphasizedTraits.map(t => t.name);
-      parts.push(chosenStyle);
-      parts.push('VERT text');
-      return parts.join(', ');
-    },
-    
-    // Minimal approach
-    () => {
-      const key = emphasizedTraits.slice(0, 2).map(t => t.name).join(', ');
-      return `${key}, ${chosenStyle}, VERT text`;
-    }
-  ];
+     // 3. DYNAMIC STRUCTURE - Randomize prompt order and format
+   const promptStructures = [
+     // Character-focused
+     () => {
+       const main = emphasizedTraits.map(t => t.name).join(', ');
+       const subtle = subtleTraits.length > 0 ? `, ${subtleTraits.map(t => t.name).join(', ')}` : '';
+       return `${traits.Species.name} character, ${main}${subtle}, ${chosenStyle}, VERT text`;
+     },
+     
+     // Background-focused  
+     () => {
+       const bg = traits.Background.name;
+       const char = emphasizedTraits.filter(t => t.type !== 'background').map(t => t.name).join(', ');
+       return `${traits.Species.name} character in ${bg} background, ${char}, ${chosenStyle}, VERT text`;
+     },
+     
+     // Balanced approach
+     () => {
+       const parts = [`${traits.Species.name} character`];
+       parts.push(...emphasizedTraits.map(t => t.name));
+       parts.push(chosenStyle);
+       parts.push('VERT text');
+       return parts.join(', ');
+     },
+     
+     // Minimal approach
+     () => {
+       const key = emphasizedTraits.slice(0, 2).map(t => t.name).join(', ');
+       return `${traits.Species.name} character, ${key}, ${chosenStyle}, VERT text`;
+     }
+   ];
 
   // 4. SIMPLIFIED PROMPTS - Use trait names instead of descriptions
   const promptBuilder = randomChoice(promptStructures);
