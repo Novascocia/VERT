@@ -73,19 +73,18 @@ async function retryReplicate(
 // 1. Generate image with Replicate
 async function generateImage(prompt: string, negative_prompt: string): Promise<string> {
   console.log("🧠 Generating image with prompt:", prompt);
-  console.log("🚫 Using negative prompt:", negative_prompt);
-
+  // Note: Negative prompt is not used by sdxl-turbo, but we'll keep the param for compatibility
+  
   try {
     const output = await retryReplicate(async () => {
       return await replicate.run(
-        "lucataco/dreamshaper-xl-turbo:0a1710e0187b01a255302738ca0158ff02a22f4638679533e111082f9dd1b615",
+        "stability-ai/sdxl-turbo:3aa56ab8bfa82c81e8557362a7a4c57709545465e64821a81c3c9066601b0292",
         {
           input: {
             prompt,
-            negative_prompt,
-            num_inference_steps: 25,
-            guidance_scale: 10,
-            scheduler: "K_EULER_ANCESTRAL",
+            // sdxl-turbo uses a simpler, faster configuration
+            num_inference_steps: 4,
+            guidance_scale: 1,
             width: 1024,
             height: 1024
           }
