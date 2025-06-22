@@ -7,7 +7,7 @@ import { debugLog } from '@/utils/debug';
 import NFTImage from './NFTImage';
 import useActiveToken from '../hooks/useActiveToken';
 
-const NFT_CONTRACT_ADDRESS = "0x1C1b7d15F73f4ab0E33bb95F280fC180B5fC9C2B";
+const NFT_CONTRACT_ADDRESS = "0x414280a38d52eB30768275Eb95D16714c69d216A";
 
 interface ActiveToken {
   address: string;

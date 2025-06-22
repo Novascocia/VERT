@@ -2,7 +2,7 @@ const { ethers } = require('ethers');
 
 // Configuration 
 const RPC_URL = 'https://base-mainnet.g.alchemy.com/v2/YycLI71vlTFTXLNyIZcBGlJLnio_78hy';
-const CONTRACT_ADDRESS = '0x1C1b7d15F73f4ab0E33bb95F280fC180B5fC9C2B';
+const CONTRACT_ADDRESS = '0x414280a38d52eB30768275Eb95D16714c69d216A';
 const PVERT_TOKEN_ADDRESS = '0x62C250355F0Ac01F4413b7d9c483428bEEf3E7dA';
 
 // ERC20 ABI

@@ -6,7 +6,7 @@ async function checkRarityDistribution() {
   console.log('🔍 Checking Rarity Distribution on Fixed Contract');
   console.log('='.repeat(60));
   
-  const contractAddress = '0x1C1b7d15F73f4ab0E33bb95F280fC180B5fC9C2B';
+  const contractAddress = '0x414280a38d52eB30768275Eb95D16714c69d216A';
   const provider = new ethers.JsonRpcProvider(process.env.MAINNET_RPC_URL);
   
   const abi = [
