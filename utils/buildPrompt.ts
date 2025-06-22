@@ -1,6 +1,5 @@
 import { traits } from '../data/traits';
 import { Trait, SelectedTraits, PromptResult, ImageValidationData } from '../types/traits';
-import ArtRotationManager from './artRotationSystem';
 
 // Helper: flatten all rarity buckets into a single array
 function flattenTraitList(categoryObj: any): Trait[] {
@@ -12,69 +11,15 @@ function randomChoice<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// NEW: Get traits using current art period or fallback to legacy system
+// Get random traits
 export function getRandomTraits(): SelectedTraits {
-  const currentPeriod = ArtRotationManager.getCurrentPeriod();
-  
-  if (currentPeriod) {
-    console.log(`🎨 Using art period: ${currentPeriod.name}`);
-    return getRandomTraitsFromPeriod(currentPeriod);
-  } else {
-    console.log(`🎨 Using legacy trait system (no active period)`);
-    return getLegacyRandomTraits();
-  }
+  console.log(`🎨 Using legacy trait system (no active period)`);
+  return getLegacyRandomTraits();
 }
 
-// NEW: Generate traits from a specific art period
-function getRandomTraitsFromPeriod(period: any): SelectedTraits {
-  const selectedTraits: Partial<SelectedTraits> = {};
 
-  // Select from each category using weighted randomization
-  Object.keys(period.traitPools).forEach(category => {
-    const pool = period.traitPools[category];
-    const totalWeight = pool.reduce((sum: number, trait: any) => sum + trait.weight, 0);
-    const random = Math.random() * totalWeight;
-    
-    let currentWeight = 0;
-    for (const trait of pool) {
-      currentWeight += trait.weight;
-      if (random <= currentWeight) {
-        // Convert to legacy format
-        selectedTraits[category as keyof SelectedTraits] = {
-          name: trait.name,
-          description: trait.prompts[0] // Use first prompt as description
-        } as any;
-        break;
-      }
-    }
-  });
 
-  // Add GraphicText (always VERT for now)
-  selectedTraits.GraphicText = { 
-    name: "VERT", 
-    description: "VERT text in bold, simple font as a patch or tag" 
-  };
-
-  // Assign rarity (using contract percentages)
-  const rarityTiers = ['Common', 'Rare', 'Epic', 'Legendary', 'Mythical'];
-  const rarityWeights = [70, 18.75, 9, 1.875, 0.375];
-  const sum = rarityWeights.reduce((a, b) => a + b, 0);
-  let rand = Math.random() * sum;
-  let chosenRarity = rarityTiers[0];
-  for (let i = 0; i < rarityTiers.length; i++) {
-    if (rand < rarityWeights[i]) {
-      chosenRarity = rarityTiers[i];
-      break;
-    }
-    rand -= rarityWeights[i];
-  }
-  selectedTraits.rarity = chosenRarity;
-
-  console.log("🎲 Final Selected Traits (Period):", selectedTraits);
-  return selectedTraits as SelectedTraits;
-}
-
-// LEGACY: Original trait selection for backward compatibility
+// Original trait selection
 function getLegacyRandomTraits(): SelectedTraits {
   const selectedTraits: Partial<SelectedTraits> = {};
 
@@ -133,59 +78,12 @@ export function buildPrompt(traits: SelectedTraits): PromptResult {
     throw new Error("Incomplete trait set provided to buildPrompt");
   }
 
-  const currentPeriod = ArtRotationManager.getCurrentPeriod();
-  
-  if (currentPeriod) {
-    return buildPromptFromPeriod(currentPeriod, traits);
-  } else {
-    return buildLegacyPrompt(traits);
-  }
+  return buildLegacyPrompt(traits);
 }
 
-// NEW: Build prompt using art period configuration
-function buildPromptFromPeriod(period: any, traits: SelectedTraits): PromptResult {
-  // Start with period base prompts
-  const promptParts = [...period.basePrompts.positive];
-  
-  // Add trait-specific prompts
-  const traitCategories = ['Species', 'HeadType', 'EyesFace', 'ClothingTop', 'CharacterColor', 'Background'];
-  
-  traitCategories.forEach(category => {
-    const trait = traits[category as keyof SelectedTraits] as any;
-    if (trait) {
-      const periodTrait = period.traitPools[category]?.find((t: any) => t.name === trait.name);
-      if (periodTrait && periodTrait.prompts) {
-        // Use random prompt from the trait's prompt array for variation
-        const randomPrompt = periodTrait.prompts[Math.floor(Math.random() * periodTrait.prompts.length)];
-        promptParts.push(randomPrompt);
-      }
-    }
-  });
 
-  // Add style prompts
-  promptParts.push(...period.basePrompts.style);
-  
-  // Add VERT text requirement
-  promptParts.push(`wearing something that says '${traits.GraphicText?.name || "VERT"}'`);
 
-  const prompt = promptParts.join(', ');
-  const negative_prompt = period.basePrompts.negative.join(', ');
-
-  console.log(`\n--- ${period.name} Prompt ---`);
-  console.log(prompt);
-  console.log("\n--- Negative Prompt ---");
-  console.log(negative_prompt);
-  console.log("\n--- Traits ---");
-  console.log(JSON.stringify(traits, null, 2));
-
-  return {
-    prompt,
-    negative_prompt,
-    traits
-  };
-}
-
-// LEGACY: Original prompt building for backward compatibility
+// Original prompt building
 function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   // Place background at the start and make it explicit
   let prompt = `Background: ${traits.Background.description}. `;
