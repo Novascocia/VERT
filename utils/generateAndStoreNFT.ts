@@ -93,13 +93,13 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
       console.log("🔄 Calling Replicate API...");
       const apiCallStartTime = Date.now();
       const result = await replicate.run(
-        "lucataco/dreamshaper-xl-turbo:0a1710e0187b01a255302738ca0158ff02a22f4638679533e111082f9dd1b615",
+        "lucataco/dreamshaper-xl-lightning:601eea49d49003e6ea75a11527209c4f510a93e2112c969d548fbb45b9c4f19f",
         {
           input: {
             prompt,
             negative_prompt,
             num_inference_steps: 8,
-            guidance_scale: 0,
+            guidance_scale: 1,
             width: 1024,
             height: 1024
           }
