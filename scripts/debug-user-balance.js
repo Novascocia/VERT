@@ -7,7 +7,7 @@ async function debugUserBalance() {
   console.log('='.repeat(60));
   
   // Contract addresses
-  const contractAddress = '0x414280a38d52eB30768275Eb95D16714c69d216A'; // Prize-fixed contract
+  const contractAddress = '0x46aA53a47fB31E6A2FC80F405A94b3732BC05039'; // New fresh contract
   const virtualTokenAddress = '0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b';
   const vertTokenAddress = '0x0000000000000000000000000000000000000000'; // Phase 1
   

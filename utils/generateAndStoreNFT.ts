@@ -288,7 +288,7 @@ export async function generateAndStoreNFT(
 
     // Set tokenURI on-chain using backend wallet with hardcoded fallbacks
     const rpcUrl = process.env.RPC_URL || process.env.MAINNET_RPC_URL || 'https://mainnet.base.org';
-    const contractAddress = process.env.CONTRACT_ADDRESS || process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x414280a38d52eB30768275Eb95D16714c69d216A';
+    const contractAddress = process.env.CONTRACT_ADDRESS || process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '0x46aA53a47fB31E6A2FC80F405A94b3732BC05039';
     
     const provider = new ethers.JsonRpcProvider(rpcUrl);
     const signer = new ethers.Wallet(process.env.PRIVATE_KEY!, provider);

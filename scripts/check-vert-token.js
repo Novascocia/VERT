@@ -3,7 +3,7 @@ require('dotenv').config({ path: '.env.local' });
 const { ethers } = require('hardhat');
 
 async function main() {
-  const contractAddress = '0x414280a38d52eB30768275Eb95D16714c69d216A';
+  const contractAddress = '0x46aA53a47fB31E6A2FC80F405A94b3732BC05039';
   
   console.log('🔍 Checking VERT token configuration in deployed contract...');
   

@@ -4,7 +4,7 @@ require("dotenv").config();
 async function main() {
   console.log("🖼️  Viewing minted NFTs...");
   
-  const contractAddress = "0x414280a38d52eB30768275Eb95D16714c69d216A";
+  const contractAddress = "0x46aA53a47fB31E6A2FC80F405A94b3732BC05039";
   const provider = new ethers.JsonRpcProvider(process.env.MAINNET_RPC_URL);
   const contractABI = require("../abis/Vertical.json");
   const contract = new ethers.Contract(contractAddress, contractABI.abi, provider);

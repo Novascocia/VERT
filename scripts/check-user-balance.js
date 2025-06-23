@@ -5,7 +5,7 @@ async function main() {
   console.log("💰 Checking user balances and allowances...");
   
   const userAddress = "0xDF449DaF03a6D4503Cc98B16c44f92e501AaaAca";
-  const contractAddress = "0x414280a38d52eB30768275Eb95D16714c69d216A";
+  const contractAddress = "0x46aA53a47fB31E6A2FC80F405A94b3732BC05039";
   const virtualTokenAddress = "0x0b3e328455c4059EEb9e3f84b5543F74E24e7E1b";
   
   // Connect to Base Mainnet

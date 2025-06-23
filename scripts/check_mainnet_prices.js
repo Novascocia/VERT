@@ -4,7 +4,7 @@ const VerticalABI = require('../abis/Vertical.json').abi;
 async function checkMainnetPrices() {
   try {
     const provider = new ethers.JsonRpcProvider('https://mainnet.base.org');
-    const contractAddress = '0x414280a38d52eB30768275Eb95D16714c69d216A'; // Prize-fixed contract
+    const contractAddress = '0x46aA53a47fB31E6A2FC80F405A94b3732BC05039'; // New fresh contract
     const contract = new ethers.Contract(contractAddress, VerticalABI, provider);
     
     console.log('💰 Checking MAINNET mint prices...');

@@ -12,7 +12,7 @@ import {
 import { useStaking } from '../hooks/useStaking';
 import useActiveToken from '../hooks/useActiveToken';
 
-const NFT_CONTRACT_ADDRESS = "0x414280a38d52eB30768275Eb95D16714c69d216A";
+const NFT_CONTRACT_ADDRESS = "0x46aA53a47fB31E6A2FC80F405A94b3732BC05039";
 
 interface ActiveToken {
   address: string;

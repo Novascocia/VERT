@@ -66,7 +66,7 @@ export default function HowItWorks() {
               <div className="text-green-300 text-xs font-mono space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-400">nft_contract:</span>
-                  <span className="text-white">0x414280a38d52eB30768275Eb95D16714c69d216A</span>
+                  <span className="text-white">0x46aA53a47fB31E6A2FC80F405A94b3732BC05039</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">virtual_token:</span>

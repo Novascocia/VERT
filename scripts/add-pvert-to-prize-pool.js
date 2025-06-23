@@ -4,7 +4,7 @@ async function main() {
   console.log("💰 Adding 1,262,070 pVERT tokens to Prize Pool...\n");
 
   // Contract addresses - Base mainnet
-  const NFT_CONTRACT_ADDRESS = "0x414280a38d52eB30768275Eb95D16714c69d216A"; // NFT contract with addToPrizePool function
+  const NFT_CONTRACT_ADDRESS = "0x46aA53a47fB31E6A2FC80F405A94b3732BC05039"; // NFT contract with addToPrizePool function
   const PVERT_TOKEN_ADDRESS = "0x62C250355F0Ac01F4413b7d9c483428bEEf3E7dA"; // pVERT token contract
   
   // Amount to add: 1,262,070 pVERT tokens (18 decimals)

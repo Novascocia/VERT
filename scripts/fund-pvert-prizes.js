@@ -5,7 +5,7 @@ async function main() {
 
   // Contract addresses - Base mainnet
   const PVERT_ADDRESS = "0x62C250355F0Ac01F4413b7d9c483428bEEf3E7dA"; // Deployed pVERT contract
-  const NFT_CONTRACT = "0x414280a38d52eB30768275Eb95D16714c69d216A"; // NEW Fixed NFT contract
+  const NFT_CONTRACT = "0x46aA53a47fB31E6A2FC80F405A94b3732BC05039"; // New fresh NFT contract
   
   // Amount to fund (50 million pVERT for early rewards)
   const FUND_AMOUNT = hre.ethers.parseUnits("50000000", 18); // 50M pVERT
