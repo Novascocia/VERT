@@ -340,7 +340,10 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
     "balancing on a chess piece",
     "crawling through a donut hole",
     "riding a rubber duck",
-    "perched on a french fry"
+    "perched on a french fry",
+    "hatching from an egg",
+    "riding on a leaf",
+    "perched on a mushroom"
   ];
   
   const tinyEnvironments = [
@@ -360,7 +363,10 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
     "on a giant clock",
     "on a fruit slice",
     "on a giant hand",
-    "in a carnival scene"
+    "in a carnival scene",
+    "on the moon",
+    "on a cloud",
+    "in a starry void"
   ];
   
   const scenario = randomChoice(tinyScenarios);
