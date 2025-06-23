@@ -1,7 +1,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
-import MobileWarning from './components/MobileWarning'
+
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -23,7 +23,6 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          <MobileWarning />
           <div className="relative min-h-screen">
             <div className="fixed inset-0 bg-[url('/grunge-overlay.svg')] opacity-10 pointer-events-none" />
             <main className="relative z-10">

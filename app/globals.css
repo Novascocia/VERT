@@ -297,3 +297,333 @@ body::before {
     opacity: 1;
   }
 }
+
+/* ===== MOBILE OPTIMIZATIONS ===== */
+/* Only apply to mobile devices (max-width: 768px) */
+@media only screen and (max-width: 768px) {
+  
+  /* Body adjustments for mobile */
+  body {
+    background-size: cover;
+    background-position: center top;
+    font-size: 14px;
+  }
+
+  /* Main container padding reduction */
+  .min-h-screen {
+    padding: 1rem !important;
+  }
+
+  /* Header mobile optimization */
+  header {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    margin-bottom: 1.5rem !important;
+    align-items: stretch !important;
+  }
+
+  /* Navigation buttons mobile layout */
+  header nav {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Mobile navigation button sizing */
+  header nav .btn-header-green {
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+    min-height: 2.5rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Icon buttons mobile sizing */
+  header nav .w-10.h-10 {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    min-width: 2.5rem !important;
+  }
+
+  /* Connect wallet button mobile */
+  header .flex.gap-2 {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  /* ASCII art mobile scaling */
+  .ascii-container {
+    font-size: 0.4rem !important;
+    line-height: 0.5rem !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+  }
+
+  .ascii-container pre {
+    font-size: 0.4rem !important;
+  }
+
+  /* Hero section mobile */
+  section.text-center {
+    margin-bottom: 1rem !important;
+  }
+
+  .text-lg.md\\:text-xl {
+    font-size: 0.875rem !important;
+  }
+
+  /* Terminal sections mobile layout */
+  .max-w-6xl {
+    max-width: 100% !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .flex.flex-col.lg\\:flex-row {
+    gap: 1rem !important;
+  }
+
+  /* Terminal styling mobile */
+  .bg-black.border-2.border-green-500 {
+    padding: 1rem !important;
+    font-size: 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Terminal headers mobile */
+  .text-green-400.text-sm.font-bold {
+    font-size: 0.75rem !important;
+  }
+
+  /* Button sizing mobile */
+  .btn-vert-green,
+  .btn-vert-gold,
+  .connect-wallet-btn {
+    font-size: 0.875rem !important;
+    padding: 0.75rem 1rem !important;
+    min-height: 3rem !important;
+  }
+
+  /* Prize pool and stats mobile */
+  .text-4xl,
+  .text-5xl,
+  .text-6xl {
+    font-size: 1.5rem !important;
+  }
+
+  .text-2xl {
+    font-size: 1.25rem !important;
+  }
+
+  .text-xl {
+    font-size: 1rem !important;
+  }
+
+  .text-lg {
+    font-size: 0.875rem !important;
+  }
+
+  /* Grid layouts mobile */
+  .grid.grid-cols-4 {
+    grid-template-columns: 1fr 2fr 1fr 1fr !important;
+    gap: 0.5rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .grid.grid-cols-3 {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  .grid.grid-cols-2 {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Leaderboard mobile */
+  .grid.grid-cols-4.gap-2 {
+    font-size: 0.625rem !important;
+  }
+
+  /* Form inputs mobile */
+  input,
+  select,
+  textarea {
+    font-size: 1rem !important; /* Prevent zoom on iOS */
+    padding: 0.75rem !important;
+  }
+
+  /* Modal and overlay mobile */
+  .fixed.inset-0 {
+    padding: 1rem !important;
+  }
+
+  /* Token phase indicator mobile */
+  .bg-gradient-to-r {
+    padding: 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Spacing utilities mobile */
+  .mb-8 {
+    margin-bottom: 1rem !important;
+  }
+
+  .mb-6 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .mt-12 {
+    margin-top: 2rem !important;
+  }
+
+  .p-8 {
+    padding: 1rem !important;
+  }
+
+  .p-6 {
+    padding: 0.75rem !important;
+  }
+
+  .p-4 {
+    padding: 0.5rem !important;
+  }
+
+  /* Network status indicator mobile */
+  .text-xs.px-2.py-1 {
+    font-size: 0.625rem !important;
+    padding: 0.25rem 0.5rem !important;
+  }
+
+  /* Admin button mobile */
+  .fixed.bottom-6.right-6 {
+    bottom: 1rem !important;
+    right: 1rem !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Toast notifications mobile */
+  .toast {
+    max-width: 280px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Image containers mobile */
+  .w-32,
+  .h-32 {
+    width: 6rem !important;
+    height: 6rem !important;
+  }
+
+  .w-24,
+  .h-24 {
+    width: 4rem !important;
+    height: 4rem !important;
+  }
+
+  /* Mint terminal specific mobile adjustments */
+  .mint-terminal {
+    padding: 0.75rem !important;
+  }
+
+  .mint-button-container {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Rarity odds table mobile */
+  .rarity-table {
+    font-size: 0.625rem !important;
+    overflow-x: auto !important;
+  }
+
+  /* How it works section mobile */
+  .how-it-works {
+    padding: 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Code blocks mobile */
+  pre {
+    font-size: 0.625rem !important;
+    padding: 0.5rem !important;
+    overflow-x: auto !important;
+  }
+
+  /* Ensure text doesn't get too small */
+  .text-xs {
+    font-size: 0.625rem !important;
+  }
+
+  /* Ensure buttons remain tappable */
+  button,
+  a {
+    min-height: 44px !important; /* iOS recommended tap target */
+    min-width: 44px !important;
+  }
+
+  /* Fix for terminal text alignment */
+  .text-center {
+    text-align: center !important;
+  }
+
+  .text-left {
+    text-align: left !important;
+  }
+
+  /* Scrollable containers mobile */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Fix for flex layouts on mobile */
+  .flex-1 {
+    flex: 1 1 0% !important;
+  }
+
+  /* Mobile-specific utility classes */
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+
+  .mobile-center {
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .mobile-full-width {
+    width: 100% !important;
+  }
+
+  /* Ensure proper touch targets */
+  .btn-header-green,
+  .btn-vert-green,
+  .btn-vert-gold {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* Fix for iOS Safari viewport */
+  .min-h-screen {
+    min-height: -webkit-fill-available !important;
+  }
+
+  /* Prevent horizontal scroll */
+  body,
+  html {
+    overflow-x: hidden !important;
+  }
+
+  /* Container width constraints */
+  .container,
+  .max-w-6xl,
+  .max-w-4xl,
+  .max-w-2xl {
+    width: 100% !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
