@@ -340,41 +340,41 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
     else if (characterType.includes("eldritch") || characterType.includes("lovecraftian") || characterType.includes("horror") || characterType.includes("nightmare") || characterType.includes("glitch")) {
       return "with impossible geometry, too many eyes, tentacle appendages, reality-defying features, and cosmic horror characteristics";
     }
-    // Default for any other species
-    else {
-      return "with clearly non-human anatomy, fantastical features, otherworldly appearance, and completely inhuman characteristics";
-    }
+         // Default for any other species
+     else {
+       return "with clearly non-human anatomy, fantastical features, otherworldly appearance, completely inhuman characteristics, non-human facial structure, and alien-like traits";
+     }
   };
 
-  // 8. BUILD THE COMPLETE NON-HUMAN PROMPT
+  // 8. BUILD THE COMPLETE NON-HUMAN PROMPT - Force creature/being terminology
   const promptStructures = [
-    // Non-human focused structure
+    // Non-human creature structure
     () => {
       const features = getSpeciesFeatures();
       const bgPart = background ? `. Surrounded by ${background}` : "";
-      return `${chosenStyle} of a non-human ${characterType} ${features}, with ${hairColor} ${hairStyle}, wearing ${getOutfitDescription()}${bgPart}`;
+      return `${chosenStyle} of a non-human ${characterType} creature ${features}, with ${hairColor} ${hairStyle}, wearing ${getOutfitDescription()}${bgPart}. NOT human, fantastical being`;
     },
     
-    // Creature-focused structure
+    // Mythical being structure
     () => {
       const features = getSpeciesFeatures();
       const bgPart = background ? `, surrounded by ${background}` : "";
-      return `${chosenStyle} featuring a fantastical ${characterType} creature ${features}, with beautiful ${hairColor} ${hairStyle}, dressed in ${getOutfitDescription()}${bgPart}`;
+      return `${chosenStyle} featuring a mythical ${characterType} being ${features}, with beautiful ${hairColor} ${hairStyle}, dressed in ${getOutfitDescription()}${bgPart}. Fantastical creature, not human`;
     },
     
-    // Non-human portrait
+    // Non-human entity portrait
     () => {
       const features = getSpeciesFeatures();
       const bgPart = background ? ` with ${background} in the background` : "";
-      return `detailed ${chosenStyle} portrait of a non-human ${characterType} ${features}, with ${hairColor} ${hairStyle} and ${getOutfitDescription()}${bgPart}`;
+      return `detailed ${chosenStyle} portrait of a non-human ${characterType} entity ${features}, with ${hairColor} ${hairStyle} and ${getOutfitDescription()}${bgPart}. Otherworldly being, not a person`;
     }
   ];
 
   const promptBuilder = randomChoice(promptStructures);
   const prompt = promptBuilder();
 
-  // 9. STRONG ANTI-HUMAN NEGATIVE PROMPT
-  const negative_prompt = "human, human face, human skin, human features, human anatomy, realistic person, real person, photorealistic human, normal human, regular person, human-like, humanoid face, human nose, human mouth, human proportions, realistic skin, flesh tone, normal skin color, human ears, human eyes, low quality, blurry, pixelated, distorted, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutated hands and fingers, out of frame, too many fingers, fused hand, bad proportions, unnatural body, multiple characters, text, watermark, signature, username, logo, brand";
+  // 9. MAXIMUM ANTI-HUMAN NEGATIVE PROMPT
+  const negative_prompt = "human, human being, human person, human face, human skin, human features, human anatomy, human body, human head, human hair, human eyes, human nose, human mouth, human lips, human ears, human hands, human fingers, human arms, human legs, human feet, realistic person, real person, photorealistic human, normal human, regular person, ordinary person, typical person, average person, human-like, humanoid face, humanoid features, human proportions, realistic skin, flesh tone, normal skin color, caucasian, asian, african, european, american, man, woman, boy, girl, male, female, people, humans, persons, individuals, realistic human anatomy, natural human features, normal human body, human characteristics, human appearance, low quality, blurry, pixelated, distorted, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutated hands and fingers, out of frame, too many fingers, fused hand, bad proportions, unnatural body, multiple characters, text, watermark, signature, username, logo, brand";
 
   console.log("\n--- Species-Focused Prompt (SD 3.5) ---");
   console.log("🧬 Original Species:", traits.Species.name);

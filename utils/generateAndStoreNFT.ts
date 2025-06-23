@@ -102,10 +102,12 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
             input: {
               prompt,
               negative_prompt,
-              num_inference_steps: 28,
-              guidance_scale: 4.5,
-              width: 1024,
-              height: 1024,
+              cfg: 5,
+              steps: 40,
+              aspect_ratio: "1:1",
+              output_format: "webp",
+              output_quality: 90,
+              prompt_strength: 0.85,
               seed: Math.floor(Math.random() * 1000000)
             }
           }
