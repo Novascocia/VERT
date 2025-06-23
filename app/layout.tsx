@@ -19,6 +19,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.png" />
         <title>Vertical Project - Mint Unique NFTs</title>
         <meta name="description" content="Mint unique AI-generated Vertical NFTs with instant prize opportunities" />
+        <meta name="virtual-protocol-site-verification" content="23b3c08968c8f349a7ab28c0984cee4c" />
       </head>
       <body>
         <Providers>
