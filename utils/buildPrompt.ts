@@ -19,32 +19,76 @@ export function getRandomTraits(): SelectedTraits {
 
 
 
-// Original trait selection
+// Simplified trait selection - Species-focused
 function getLegacyRandomTraits(): SelectedTraits {
   const selectedTraits: Partial<SelectedTraits> = {};
 
-  // For each category, flatten all rarities and pick randomly
-  selectedTraits.HeadType = randomChoice(flattenTraitList(traits.HeadType));
-  selectedTraits.EyesFace = randomChoice(flattenTraitList(traits.EyesFace));
-  selectedTraits.ClothingTop = randomChoice(flattenTraitList(traits.ClothingTop));
-  selectedTraits.CharacterColor = randomChoice(flattenTraitList(traits.CharacterColor));
-  selectedTraits.Background = randomChoice(flattenTraitList(traits.Background));
+  // Only generate essential traits for compatibility, but focus on Species
+  selectedTraits.HeadType = { name: "Generated", description: "AI-generated head style" };
+  selectedTraits.EyesFace = { name: "Generated", description: "AI-generated eye style" };
+  selectedTraits.ClothingTop = { name: "Generated", description: "AI-generated clothing" };
+  selectedTraits.CharacterColor = { name: "Generated", description: "AI-generated colors" };
+  selectedTraits.Background = { name: "Generated", description: "AI-generated background" };
+  selectedTraits.GraphicText = { name: "None", description: "No text overlay" };
 
-  // GraphicText (optional)
-  if (traits.GraphicText && traits.GraphicText.length > 0) {
-    selectedTraits.GraphicText = randomChoice(traits.GraphicText);
-  } else {
-    selectedTraits.GraphicText = { name: "VERT", description: "VERT text in bold, simple font as a patch or tag" };
-  }
+  // Species: THIS IS THE IMPORTANT ONE - expand the species list
+  const expandedSpecies = [
+    // From original traits file
+    { name: "Robot", description: "Mechanical humanoid with visible joints and metallic surfaces" },
+    { name: "Cyborg", description: "Half-human, half-machine hybrid being" },
+    { name: "Ghost", description: "Ethereal spirit with translucent appearance" },
+    { name: "Alien", description: "Extraterrestrial being with unique features" },
+    
+    // NEW SPECIES - 50+ more options
+    { name: "Dragon", description: "Majestic draconic being with scales and power" },
+    { name: "Phoenix", description: "Fiery bird-like creature with rebirth abilities" },
+    { name: "Android", description: "Advanced artificial being with human-like appearance" },
+    { name: "Elemental", description: "Being made of pure elemental energy" },
+    { name: "Demon", description: "Dark supernatural entity with otherworldly powers" },
+    { name: "Angel", description: "Divine being with celestial features" },
+    { name: "Vampire", description: "Immortal blood-drinking creature of the night" },
+    { name: "Werewolf", description: "Shape-shifting wolf-human hybrid" },
+    { name: "Fairy", description: "Magical winged being with nature powers" },
+    { name: "Elf", description: "Graceful pointed-eared magical humanoid" },
+    { name: "Dwarf", description: "Sturdy underground-dwelling craftsperson" },
+    { name: "Orc", description: "Powerful warrior with tribal markings" },
+    { name: "Troll", description: "Large primitive being with regenerative abilities" },
+    { name: "Goblin", description: "Small mischievous creature with cunning intelligence" },
+    { name: "Wizard", description: "Arcane spellcaster with mystical knowledge" },
+    { name: "Witch", description: "Magic user with potion-brewing abilities" },
+    { name: "Necromancer", description: "Dark magic user who commands the undead" },
+    { name: "Shapeshifter", description: "Being capable of changing their physical form" },
+    { name: "Time Traveler", description: "Entity that exists across multiple timelines" },
+    { name: "Dimension Walker", description: "Being that can traverse between realities" },
+    { name: "Star Guardian", description: "Cosmic protector with stellar powers" },
+    { name: "Void Entity", description: "Creature from the empty spaces between worlds" },
+    { name: "Crystal Being", description: "Living entity made of crystalline structures" },
+    { name: "Shadow Assassin", description: "Stealth warrior who controls darkness" },
+    { name: "Lightning Mage", description: "Spellcaster who wields electrical storms" },
+    { name: "Ice Queen", description: "Regal being with dominion over winter" },
+    { name: "Fire Lord", description: "Powerful entity that commands flames" },
+    { name: "Earth Shaman", description: "Nature spirit connected to the ground" },
+    { name: "Wind Dancer", description: "Graceful being who moves with the air" },
+    { name: "Water Sage", description: "Wise entity with mastery over liquids" },
+    { name: "Space Pirate", description: "Cosmic outlaw with advanced technology" },
+    { name: "Quantum Scientist", description: "Researcher who manipulates reality itself" },
+    { name: "Bio-Engineer", description: "Creator of living technological hybrids" },
+    { name: "Hologram", description: "Projected consciousness with digital form" },
+    { name: "AI Construct", description: "Artificial intelligence given physical form" },
+    { name: "Nano Swarm", description: "Collective consciousness of microscopic machines" },
+    { name: "Energy Being", description: "Pure energy given sentient form" },
+    { name: "Plasma Entity", description: "Superheated matter with consciousness" },
+    { name: "Dark Matter", description: "Invisible force made manifest" },
+    { name: "Cosmic Horror", description: "Incomprehensible entity from beyond space" },
+    { name: "Dream Walker", description: "Being that exists in the realm of sleep" },
+    { name: "Memory Keeper", description: "Entity that stores and protects forgotten knowledge" },
+    { name: "Soul Collector", description: "Mysterious being that gathers spiritual essence" },
+    { name: "Reality Hacker", description: "Digital entity that rewrites existence" },
+    { name: "Probability Manipulator", description: "Being that controls chance and luck" },
+    { name: "Multiverse Guardian", description: "Protector of infinite parallel worlds" }
+  ];
 
-  // Species: flatten if object, or use as array
-  let speciesList: Trait[] = [];
-  if (Array.isArray(traits.Species)) {
-    speciesList = traits.Species as Trait[];
-  } else {
-    speciesList = flattenTraitList(traits.Species);
-  }
-  selectedTraits.Species = randomChoice(speciesList);
+  selectedTraits.Species = randomChoice(expandedSpecies);
 
   // Assign rarity (weighted random)
   const rarityTiers = ['Common', 'Rare', 'Epic', 'Legendary', 'Mythical'];
@@ -61,13 +105,7 @@ function getLegacyRandomTraits(): SelectedTraits {
   }
   selectedTraits.rarity = chosenRarity;
 
-  // Validate required traits
-  if (!selectedTraits.HeadType || !selectedTraits.EyesFace || !selectedTraits.ClothingTop ||
-      !selectedTraits.CharacterColor || !selectedTraits.Species || !selectedTraits.Background) {
-    throw new Error("Incomplete trait set generated");
-  }
-
-  console.log("🎲 Final Selected Traits (Legacy):", selectedTraits);
+  console.log("🎲 Generated Species:", selectedTraits.Species?.name, `(${selectedTraits.rarity})`);
   return selectedTraits as SelectedTraits;
 }
 
@@ -83,33 +121,56 @@ export function buildPrompt(traits: SelectedTraits): PromptResult {
 
 
 
-// ANIME-STYLE prompt building: Based on SD 3.5 and astronaut example
+// SPECIES-FOCUSED prompt building: Based on SD 3.5 and astronaut example
 function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   
-  // 1. ANIME CHARACTER TYPES - Professional, detailed character roles
-  const characterTypes = [
-    // Sci-Fi Characters (like the astronaut example)
-    "astronaut", "space explorer", "pilot", "engineer", "scientist", "researcher", "technician", "navigator",
-    "cosmic traveler", "starship captain", "space medic", "orbital worker", "station commander",
+  // 1. EXPANDED SPECIES TYPES - 100+ unique non-human species
+  const speciesTypes = [
+    // Robotic/Mechanical (20)
+    "robot", "cyborg", "android", "mech pilot", "tech warrior", "circuit being", "data entity", "cyber knight",
+    "steel guardian", "digital warrior", "nano being", "chrome sentinel", "tech shaman", "binary ghost",
+    "quantum robot", "plasma android", "neural cyborg", "bio-mech", "techno-spirit", "code construct",
     
-    // Fantasy/Mystical
-    "mage", "wizard", "sorceress", "enchanter", "alchemist", "scholar", "sage", "mystic",
-    "crystal keeper", "elemental guardian", "spirit walker", "dream weaver", "star reader",
+    // Mystical/Supernatural (20)
+    "ghost", "spirit", "phantom", "shadow being", "wraith", "specter", "soul walker", "void entity",
+    "dark mage", "crystal being", "energy form", "astral warrior", "mystic guardian", "rune keeper",
+    "dream weaver", "nightmare entity", "ethereal being", "psychic entity", "mind reader", "soul guardian",
     
-    // Adventure/Explorer
-    "explorer", "adventurer", "treasure hunter", "archaeologist", "botanist", "cartographer",
-    "wilderness guide", "mountain climber", "deep sea diver", "cave explorer", "sky sailor",
+    // Elemental/Natural (20)
+    "fire elemental", "ice elemental", "storm elemental", "earth elemental", "lightning being", "flame spirit",
+    "frost guardian", "wind walker", "stone warrior", "plasma entity", "magma being", "crystal elemental",
+    "water spirit", "nature guardian", "forest keeper", "mountain spirit", "ocean dweller", "sky dancer", "lava demon", "thunder god",
     
-    // Artistic/Creative
-    "artist", "musician", "dancer", "performer", "storyteller", "poet", "craftsperson",
-    "designer", "architect", "sculptor", "painter", "composer", "inventor",
+    // Cosmic/Dimensional (20)
+    "star being", "cosmic entity", "galaxy guardian", "void walker", "dimension shifter", "space nomad",
+    "nebula spirit", "quantum being", "time guardian", "reality bender", "portal keeper", "cosmic warrior",
+    "stellar traveler", "universe keeper", "black hole entity", "comet rider", "asteroid miner", "solar flare", "cosmic dust", "supernova",
     
-    // Futuristic/Cyberpunk
-    "cyber warrior", "data analyst", "network guardian", "digital architect", "code breaker",
-    "quantum engineer", "AI specialist", "hologram designer", "virtual reality creator"
+    // Alien/Exotic (20)
+    "alien warrior", "space hunter", "xenomorph", "star traveler", "galactic scout", "void hunter",
+    "plasma alien", "crystal alien", "energy alien", "bio-mechanical alien", "hive mind", "star seed",
+    "tentacle being", "multi-eyed creature", "shapeshifter", "phase alien", "gravity manipulator", "time alien", "psychic alien", "crystal harvester",
+    
+    // Fantasy Creatures (20)
+    "dragon", "phoenix", "griffin", "unicorn", "pegasus", "sphinx", "chimera", "basilisk",
+    "wyvern", "drake", "fairy", "pixie", "elf", "dwarf", "orc", "goblin", "troll", "ogre", "demon", "angel"
   ];
   
-  const characterType = randomChoice(characterTypes);
+  // Use the actual species from traits, but map it to our expanded list if it's "Robot" or similar
+  let characterType = traits.Species.name.toLowerCase();
+  
+  // If it's a basic species, enhance it with our expanded list
+  if (characterType === "robot") {
+    const robotTypes = speciesTypes.filter(s => s.includes("robot") || s.includes("android") || s.includes("cyborg") || s.includes("mech"));
+    characterType = randomChoice(robotTypes);
+  } else if (characterType === "human") {
+    // Replace human with random non-human species
+    characterType = randomChoice(speciesTypes);
+  } else {
+    // Try to find a matching enhanced version, or use a random one
+    const matching = speciesTypes.find(s => s.includes(characterType)) || randomChoice(speciesTypes);
+    characterType = matching;
+  }
 
   // 2. ANIME VISUAL STYLES - High quality descriptors for SD 3.5
   const visualStyles = [
@@ -138,23 +199,70 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   ];
   const hairColor = randomChoice(hairColors);
 
-  // 5. OUTFIT STYLES - Based on character type and traits
+  // 5. SPECIES-SPECIFIC OUTFIT STYLES
   const getOutfitDescription = () => {
-    if (characterType.includes("astronaut") || characterType.includes("space") || characterType.includes("pilot")) {
-      return "white spacesuit with detailed equipment and patches";
-    } else if (characterType.includes("mage") || characterType.includes("wizard") || characterType.includes("mystic")) {
-      return "flowing robes with magical accessories";
-    } else if (characterType.includes("cyber") || characterType.includes("digital") || characterType.includes("quantum")) {
-      return "futuristic tech outfit with glowing elements";
-    } else {
-      const outfits = [
-        "elegant uniform with intricate details",
-        "stylish outfit with unique accessories", 
-        "professional attire with special equipment",
-        "adventure gear with practical elements",
-        "artistic clothing with creative flair"
-      ];
-      return randomChoice(outfits);
+    // Robotic/Mechanical
+    if (characterType.includes("robot") || characterType.includes("android") || characterType.includes("cyborg") || characterType.includes("mech")) {
+      return randomChoice([
+        "metallic armor with glowing circuits",
+        "sleek tech suit with energy cores",
+        "industrial gear with mechanical parts",
+        "chrome plating with LED accents"
+      ]);
+    }
+    // Mystical/Supernatural
+    else if (characterType.includes("ghost") || characterType.includes("spirit") || characterType.includes("phantom") || characterType.includes("mage")) {
+      return randomChoice([
+        "flowing ethereal robes with magical auras",
+        "mystical garments with glowing runes",
+        "translucent clothing with energy wisps",
+        "ancient robes with arcane symbols"
+      ]);
+    }
+    // Elemental
+    else if (characterType.includes("elemental") || characterType.includes("fire") || characterType.includes("ice") || characterType.includes("storm")) {
+      return randomChoice([
+        "elemental armor that shifts with their power",
+        "natural clothing made of their element",
+        "energy-based garments that glow",
+        "crystalline outfit that reflects their nature"
+      ]);
+    }
+    // Cosmic/Space
+    else if (characterType.includes("cosmic") || characterType.includes("star") || characterType.includes("space") || characterType.includes("nebula")) {
+      return randomChoice([
+        "starlight-woven cosmic robes",
+        "space suit with nebula patterns",
+        "stellar armor with constellation designs",
+        "void-touched garments with galaxy swirls"
+      ]);
+    }
+    // Alien
+    else if (characterType.includes("alien") || characterType.includes("xenomorph") || characterType.includes("tentacle")) {
+      return randomChoice([
+        "bio-organic suit that adapts to their form",
+        "alien tech gear with unknown materials",
+        "living armor that pulses with life",
+        "exotic clothing from their homeworld"
+      ]);
+    }
+    // Fantasy Creatures
+    else if (characterType.includes("dragon") || characterType.includes("phoenix") || characterType.includes("griffin") || characterType.includes("fairy")) {
+      return randomChoice([
+        "magical attire befitting their legendary status",
+        "enchanted garments with mythical properties",
+        "regal clothing with fantasy elements",
+        "nature-inspired outfit with magical details"
+      ]);
+    }
+    // Default for other species
+    else {
+      return randomChoice([
+        "unique outfit that reflects their species",
+        "specialized gear suited to their nature",
+        "distinctive clothing with species-specific details",
+        "custom attire that enhances their abilities"
+      ]);
     }
   };
 
@@ -200,14 +308,13 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   // 8. REFINED NEGATIVE PROMPT - Optimized for SD 3.5 quality
   const negative_prompt = "low quality, blurry, pixelated, distorted, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutated hands and fingers, out of frame, too many fingers, fused hand, bad proportions, unnatural body, unnatural skin, multiple characters, text, watermark, signature, username, logo, brand";
 
-  console.log("\n--- Anime Character Prompt (SD 3.5) ---");
-  console.log("🎯 Character Type:", characterType);
+  console.log("\n--- Species-Focused Prompt (SD 3.5) ---");
+  console.log("🧬 Original Species:", traits.Species.name);
+  console.log("🎯 Enhanced Species:", characterType);
   console.log("💇 Hair:", `${hairColor} ${hairStyle}`);
   console.log("👔 Outfit:", getOutfitDescription());
   console.log("🌟 Background:", background || "minimal");
-  console.log("🎨 Style:", chosenStyle);
   console.log("📝 Final Prompt:", prompt);
-  console.log("🚫 Negative Prompt:", negative_prompt);
 
   return {
     prompt,

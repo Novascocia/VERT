@@ -93,7 +93,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
       console.log("🔄 Calling Replicate API...");
       const modelToUse = "stability-ai/stable-diffusion-3.5-medium";
       console.log("🎯 Model being used:", modelToUse);
-      console.log("🔑 API Token (first 10 chars):", process.env.REPLICATE_API_TOKEN?.substring(0, 10));
+              console.log("🔑 API Token configured:", process.env.REPLICATE_API_TOKEN ? "✅" : "❌");
       
       const apiCallStartTime = Date.now();
               const result = await replicate.run(
