@@ -91,7 +91,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
-      const modelToUse = "stability-ai/stable-diffusion-3.5-medium";
+      const modelToUse = "bytedance/sdxl-lightning-4step";
       console.log("🎯 Model being used:", modelToUse);
               console.log("🔑 API Token configured:", process.env.REPLICATE_API_TOKEN ? "✅" : "❌");
       
@@ -102,12 +102,11 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
             input: {
               prompt,
               negative_prompt,
-              cfg: 5,
-              steps: 40,
-              aspect_ratio: "1:1",
-              output_format: "webp",
-              output_quality: 90,
-              prompt_strength: 0.85,
+              width: 1024,
+              height: 1024,
+              num_inference_steps: 4,
+              guidance_scale: 0,
+              scheduler: "DPM++ 2M SDE Karras",
               seed: Math.floor(Math.random() * 1000000)
             }
           }

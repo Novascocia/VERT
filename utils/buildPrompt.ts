@@ -189,15 +189,20 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
     characterType = matching;
   }
 
-  // 2. ANIME VISUAL STYLES - High quality descriptors for SD 3.5
+  // 2. ANIME/CARTOON VISUAL STYLES - Optimized for SDXL-Lightning
   const visualStyles = [
-    "captivating anime-style illustration",
-    "beautiful anime art style", 
-    "detailed anime character design",
-    "high-quality anime illustration",
-    "stunning anime portrait",
-    "professional anime artwork",
-    "vibrant anime-style art"
+    "anime style",
+    "cartoon style", 
+    "anime art",
+    "cartoon art",
+    "anime illustration",
+    "cartoon illustration",
+    "anime character art",
+    "cartoon character art",
+    "stylized anime",
+    "stylized cartoon",
+    "cel-shaded anime",
+    "cel-shaded cartoon"
   ];
   const chosenStyle = randomChoice(visualStyles);
 
@@ -346,37 +351,37 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
      }
   };
 
-  // 8. BUILD THE COMPLETE NON-HUMAN PROMPT - Force creature/being terminology
+  // 8. ANIME/CARTOON NON-HUMAN PROMPTS - Optimized for SDXL-Lightning
   const promptStructures = [
-    // Non-human creature structure
+    // Anime creature structure
     () => {
       const features = getSpeciesFeatures();
-      const bgPart = background ? `. Surrounded by ${background}` : "";
-      return `${chosenStyle} of a non-human ${characterType} creature ${features}, with ${hairColor} ${hairStyle}, wearing ${getOutfitDescription()}${bgPart}. NOT human, fantastical being`;
+      const bgPart = background ? `, ${background}` : "";
+      return `${chosenStyle}, non-human ${characterType} creature ${features}, ${hairColor} ${hairStyle}, ${getOutfitDescription()}${bgPart}, cartoon aesthetic, anime aesthetic, NOT human`;
     },
     
-    // Mythical being structure
+    // Cartoon being structure  
     () => {
       const features = getSpeciesFeatures();
-      const bgPart = background ? `, surrounded by ${background}` : "";
-      return `${chosenStyle} featuring a mythical ${characterType} being ${features}, with beautiful ${hairColor} ${hairStyle}, dressed in ${getOutfitDescription()}${bgPart}. Fantastical creature, not human`;
+      const bgPart = background ? `, ${background}` : "";
+      return `${chosenStyle}, mythical ${characterType} being ${features}, ${hairColor} ${hairStyle}, ${getOutfitDescription()}${bgPart}, stylized art, cartoon style, fantastical creature`;
     },
     
-    // Non-human entity portrait
+    // Anime character portrait
     () => {
       const features = getSpeciesFeatures();
-      const bgPart = background ? ` with ${background} in the background` : "";
-      return `detailed ${chosenStyle} portrait of a non-human ${characterType} entity ${features}, with ${hairColor} ${hairStyle} and ${getOutfitDescription()}${bgPart}. Otherworldly being, not a person`;
+      const bgPart = background ? `, ${background}` : "";
+      return `${chosenStyle}, ${characterType} character ${features}, ${hairColor} ${hairStyle}, ${getOutfitDescription()}${bgPart}, anime character design, cartoon character, non-human being`;
     }
   ];
 
   const promptBuilder = randomChoice(promptStructures);
   const prompt = promptBuilder();
 
-  // 9. MAXIMUM ANTI-HUMAN NEGATIVE PROMPT
-  const negative_prompt = "human, human being, human person, human face, human skin, human features, human anatomy, human body, human head, human hair, human eyes, human nose, human mouth, human lips, human ears, human hands, human fingers, human arms, human legs, human feet, realistic person, real person, photorealistic human, normal human, regular person, ordinary person, typical person, average person, human-like, humanoid face, humanoid features, human proportions, realistic skin, flesh tone, normal skin color, caucasian, asian, african, european, american, man, woman, boy, girl, male, female, people, humans, persons, individuals, realistic human anatomy, natural human features, normal human body, human characteristics, human appearance, low quality, blurry, pixelated, distorted, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutated hands and fingers, out of frame, too many fingers, fused hand, bad proportions, unnatural body, multiple characters, text, watermark, signature, username, logo, brand";
+  // 9. ANTI-HUMAN + ANTI-REALISTIC NEGATIVE PROMPT - Optimized for SDXL-Lightning
+  const negative_prompt = "human, human face, human skin, realistic, photorealistic, real person, photography, photo, realistic skin, flesh tone, human anatomy, human features, man, woman, boy, girl, people, humans, realistic art, realistic style, photorealism, hyperrealistic, 3D render, CGI, low quality, blurry, bad anatomy, deformed, ugly, extra limbs, missing limbs, malformed hands, text, watermark, signature";
 
-  console.log("\n--- Species-Focused Prompt (SD 3.5) ---");
+  console.log("\n--- Anime/Cartoon Prompt (SDXL-Lightning) ---");
   console.log("🧬 Original Species:", traits.Species.name);
   console.log("🎯 Enhanced Species:", characterType);
   console.log("💇 Hair:", `${hairColor} ${hairStyle}`);
