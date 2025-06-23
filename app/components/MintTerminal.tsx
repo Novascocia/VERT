@@ -16,6 +16,8 @@ interface MintTerminalProps {
   priceVert: string;
   mintError?: string | null;
   mintedNFTImageUrl?: string | null;
+  isOnBaseMainnet?: boolean;
+  networkReady?: boolean;
 }
 
 interface TerminalLine {
@@ -47,7 +49,9 @@ export default function MintTerminal({
   priceVirtual,
   priceVert,
   mintError,
-  mintedNFTImageUrl
+  mintedNFTImageUrl,
+  isOnBaseMainnet = false,
+  networkReady = false
 }: MintTerminalProps) {
   const [lines, setLines] = useState<TerminalLine[]>([
     { id: 'boot', text: '> vertical mint protocol online ✅', type: 'success' },
@@ -70,7 +74,7 @@ export default function MintTerminal({
 
   // Track terminal state for UI coordination
   useEffect(() => {
-    debugLog.log('🎯 Terminal initializing with:', { isConnected, canMint, chain });
+    debugLog.log('🎯 Terminal initializing with:', { isConnected, canMint, chain, isOnBaseMainnet, networkReady });
     
     if (!isConnected) {
       setLines([
@@ -78,20 +82,31 @@ export default function MintTerminal({
         { id: 'connect', text: '> please connect your wallet to continue', type: 'system' }
       ]);
     } else if (isConnected && chain && chain.id !== 8453) {
-      // Wrong network - show clear error
+      // Wrong network - show clear error with specific guidance
       setLines([
         { id: 'connected', text: '> wallet connected ✅', type: 'success' },
         { id: 'wrongNetwork', text: '> WRONG NETWORK DETECTED ❌', type: 'error' },
-        { id: 'currentNetwork', text: `> current: ${chain.name} (${chain.id})`, type: 'error' },
+        { id: 'currentNetwork', text: `> current: ${chain.name || 'Unknown'} (${chain.id})`, type: 'error' },
         { id: 'requiredNetwork', text: '> required: Base Mainnet (8453)', type: 'system' },
-        { id: 'switchNetwork', text: '> click "Wrong network" button above to switch', type: 'system' }
+        { id: 'switchNetwork', text: '> click "WRONG NETWORK" button in top-right corner', type: 'system' },
+        { id: 'switchInstructions', text: '> then select "Base" from the network list', type: 'system' }
+      ]);
+    } else if (isConnected && !isOnBaseMainnet && !networkReady) {
+      // Network detection issues - more specific guidance
+      setLines([
+        { id: 'connected', text: '> wallet connected ✅', type: 'success' },
+        { id: 'networkIssue', text: '> network detection issue ⚠️', type: 'error' },
+        { id: 'chainInfo', text: `> detected chain: ${chain?.name || 'Unknown'} (${chain?.id || 'Unknown'})`, type: 'system' },
+        { id: 'refreshAdvice', text: '> try refreshing page or switching networks', type: 'system' },
+        { id: 'switchNetworkAdvice', text: '> click "WRONG NETWORK" button → select "Base"', type: 'system' }
       ]);
     } else if (!canMint) {
-      // Show a more helpful message instead of assuming network issues
+      // Show a more helpful message for other initialization issues
       setLines([
         { id: 'connected', text: '> wallet connected ✅', type: 'success' },
         { id: 'loading', text: '> initializing mint protocol...', type: 'system' },
-        { id: 'wait', text: '> please wait a moment', type: 'system' }
+        { id: 'wait', text: '> please wait a moment', type: 'system' },
+        { id: 'networkHint', text: '> if stuck, try refreshing or switching networks', type: 'system' }
       ]);
     } else {
       // Show working terminal
@@ -103,7 +118,7 @@ export default function MintTerminal({
         { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
       ]);
     }
-  }, [isConnected, canMint, chain]);
+  }, [isConnected, canMint, chain, isOnBaseMainnet, networkReady, priceVirtual, priceVert]);
 
   // Log state changes for debugging
   useEffect(() => {

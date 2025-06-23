@@ -1934,6 +1934,8 @@ export default function Home() {
                 priceVert={priceVert}
                 mintError={mintError}
                 mintedNFTImageUrl={mintedNFTImageUrl}
+                isOnBaseMainnet={isOnBaseMainnet}
+                networkReady={networkReady}
               />
             </div>
             
