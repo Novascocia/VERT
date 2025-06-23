@@ -107,6 +107,9 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
               num_inference_steps: 4,
               guidance_scale: 0,
               scheduler: "DPM++2MSDE",
+              num_outputs: 1,
+              output_format: "png",
+              output_quality: 100,
               seed: Math.floor(Math.random() * 1000000)
             }
           }
