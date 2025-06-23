@@ -281,16 +281,33 @@ export default function Home() {
   // Admin panel state
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const chainId = useChainId();
-  const isOnBaseMainnet = chainId === 8453;
+  const [mounted, setMounted] = useState(false);
+  
+  // Enhanced network detection with multiple checks
+  const isOnBaseMainnet = chainId === 8453 && chain?.id === 8453;
+  const networkReady = mounted && isConnected && chainId === 8453 && chain && chain.id === 8453;
+  
   const { data: walletClient } = useWalletClient({ chainId: base.id });
   const publicClient = usePublicClient({ chainId: base.id });
-  const [mounted, setMounted] = useState(false);
   const { disconnect } = useDisconnect();
 
   // Check if current user is admin
   const isAdmin = address && address.toLowerCase() === ADMIN_WALLET_ADDRESS.toLowerCase();
+
+  // Enhanced canMint logic with robust network detection
+  const canMint = Boolean(
+    mounted && 
+    isConnected && 
+    address && 
+    networkReady && 
+    isOnBaseMainnet && 
+    !isLoading && 
+    !mintTransactionLock &&
+    publicClient &&
+    walletClient
+  );
 
   // Log mounted state changes for debugging
   useEffect(() => {
@@ -300,22 +317,30 @@ export default function Home() {
     }
   }, [mounted]);
 
-  // Debug network connection
+  // Enhanced network debugging
   useEffect(() => {
     if (mounted && isConnected) {
-      debugLog.log('🔍 Network Debug Info:');
+      debugLog.log('🔍 Enhanced Network Debug Info:');
       debugLog.log('Current Chain ID:', chainId);
+      debugLog.log('Chain object:', chain);
+      debugLog.log('Chain ID from chain object:', chain?.id);
       debugLog.log('Expected Chain ID (Base Mainnet):', 8453);
-      debugLog.log('Is on Base Mainnet:', chainId === 8453);
+      debugLog.log('chainId === 8453:', chainId === 8453);
+      debugLog.log('chain?.id === 8453:', chain?.id === 8453);
+      debugLog.log('isOnBaseMainnet:', isOnBaseMainnet);
+      debugLog.log('networkReady:', networkReady);
+      debugLog.log('canMint:', canMint);
       debugLog.log('Contract Address:', contractAddress);
       
       if (chainId !== 8453) {
         debugLog.warn('⚠️ WARNING: You are not connected to Base Mainnet!');
         debugLog.warn('Current network chain ID:', chainId);
         debugLog.warn('Please switch to Base Mainnet (chain ID: 8453) for Phase 1 launch');
+      } else {
+        debugLog.log('✅ Connected to Base Mainnet successfully');
       }
     }
-  }, [mounted, isConnected, chainId]);
+  }, [mounted, isConnected, chainId, chain, isOnBaseMainnet, networkReady, canMint]);
 
   // Verify contract and its interface
   useEffect(() => {
@@ -765,6 +790,11 @@ export default function Home() {
       if (!publicClient) {
         toast.error("Please connect your wallet!");
         return;
+      }
+
+      // Network validation
+      if (!networkReady || !isOnBaseMainnet) {
+        throw new Error('Please switch to Base Mainnet (8453) to mint NFTs');
       }
 
       // Transaction lock to prevent concurrent mints
@@ -1221,6 +1251,11 @@ export default function Home() {
       if (!publicClient) {
         toast.error('Connect your wallet first');
         return;
+      }
+
+      // Network validation
+      if (!networkReady || !isOnBaseMainnet) {
+        throw new Error('Please switch to Base Mainnet (8453) to mint NFTs');
       }
 
       // Transaction lock to prevent concurrent mints
@@ -1768,8 +1803,6 @@ export default function Home() {
       debugLog.error('❌ Debug failed:', error);
     }
   };
-
-  const canMint = Boolean(mounted && isConnected && address && isOnBaseMainnet && !isLoading && !mintTransactionLock);
 
   // Don't render anything until mounted to prevent hydration issues
   if (!mounted) {

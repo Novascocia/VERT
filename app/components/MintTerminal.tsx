@@ -58,7 +58,7 @@ export default function MintTerminal({
   ]);
   const [showCursor, setShowCursor] = useState(true);
   const [hasInitialized, setHasInitialized] = useState(false);
-  const { isConnected } = useAccount();
+  const { isConnected, chain } = useAccount();
 
   // Accumulative typewriter effect for marketing messages during processing
   const { completedMessages, currentMessage, isComplete } = useAccumulativeTypewriter({
@@ -70,12 +70,21 @@ export default function MintTerminal({
 
   // Track terminal state for UI coordination
   useEffect(() => {
-    debugLog.log('🎯 Terminal initializing with:', { isConnected, canMint });
+    debugLog.log('🎯 Terminal initializing with:', { isConnected, canMint, chain });
     
     if (!isConnected) {
       setLines([
         { id: 'noWallet', text: '> wallet not connected', type: 'error' },
         { id: 'connect', text: '> please connect your wallet to continue', type: 'system' }
+      ]);
+    } else if (isConnected && chain && chain.id !== 8453) {
+      // Wrong network - show clear error
+      setLines([
+        { id: 'connected', text: '> wallet connected ✅', type: 'success' },
+        { id: 'wrongNetwork', text: '> WRONG NETWORK DETECTED ❌', type: 'error' },
+        { id: 'currentNetwork', text: `> current: ${chain.name} (${chain.id})`, type: 'error' },
+        { id: 'requiredNetwork', text: '> required: Base Mainnet (8453)', type: 'system' },
+        { id: 'switchNetwork', text: '> click "Wrong network" button above to switch', type: 'system' }
       ]);
     } else if (!canMint) {
       // Show a more helpful message instead of assuming network issues
@@ -94,7 +103,7 @@ export default function MintTerminal({
         { id: 'vert-note', text: '      ↳ mint with vert coming soon! 🚀', type: 'system' }
       ]);
     }
-  }, [isConnected, canMint]);
+  }, [isConnected, canMint, chain]);
 
   // Log state changes for debugging
   useEffect(() => {
