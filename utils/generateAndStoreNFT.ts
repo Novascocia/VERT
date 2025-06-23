@@ -91,7 +91,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
-      const modelToUse = "stability-ai/sdxl";
+      const modelToUse = "nvidia/sana-sprint-1.6b";
       console.log("🎯 Model being used:", modelToUse);
               console.log("🔑 API Token configured:", process.env.REPLICATE_API_TOKEN ? "✅" : "❌");
       
@@ -101,13 +101,10 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
           {
             input: {
               prompt,
-              negative_prompt,
               width: 1024,
               height: 1024,
-              num_inference_steps: 30,
-              guidance_scale: 7.5,
-              num_outputs: 1,
-              scheduler: "DPMSolverMultistep",
+              num_inference_steps: 1,
+              guidance_scale: 5.0,
               seed: Math.floor(Math.random() * 1000000)
             }
           }
