@@ -91,7 +91,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
-      const modelToUse = "bytedance/sdxl-lightning-4step:5599ed30703defd1d160a25a63321b4dec97101d98b4674bcc56e41f62f35637";
+      const modelToUse = "nvidia/sana-sprint-1.6b";
       console.log("🎯 Model being used:", modelToUse);
               console.log("🔑 API Token configured:", process.env.REPLICATE_API_TOKEN ? "✅" : "❌");
       
@@ -101,13 +101,11 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
           {
             input: {
               prompt,
-              negative_prompt,
               width: 1024,
               height: 1024,
-              num_inference_steps: 4,
-              guidance_scale: 0,
-              scheduler: "DPM++2MSDE",
-              num_outputs: 1,
+              inference_steps: 2,
+              intermediate_timesteps: 1.3,
+              guidance_scale: 4.5,
               output_format: "png",
               output_quality: 100,
               seed: Math.floor(Math.random() * 1000000)

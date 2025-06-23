@@ -350,44 +350,67 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
      }
   };
 
-  // 8. CLEAN & SIMPLE PROMPTS - Better composition
+  // 8. TINY CHARACTER PROMPTS - Consistent "tiny" aesthetic like the astronaut
+  const tinyScenarios = [
+    "hatching from an egg",
+    "sitting in a teacup", 
+    "emerging from a flower",
+    "riding on a leaf",
+    "climbing out of a shell",
+    "perched on a mushroom",
+    "nestled in a crystal",
+    "floating in a bubble",
+    "curled up in a nest",
+    "peeking from a pocket"
+  ];
+  
+  const tinyEnvironments = [
+    "on the moon",
+    "in a magical forest", 
+    "on a floating island",
+    "in a starry void",
+    "on a crystal surface",
+    "in a cosmic garden",
+    "on an alien planet",
+    "in a mystical realm",
+    "on a cloud",
+    "in a dreamscape"
+  ];
+  
+  const scenario = randomChoice(tinyScenarios);
+  const environment = randomChoice(tinyEnvironments);
+  
   const promptStructures = [
-    // Simple character focus
+    // Tiny character scenarios (like the astronaut example)
     () => {
-      const features = getSpeciesFeatures();
-      return `${chosenStyle} ${characterType} ${features}, ${hairColor} ${hairStyle}, clean design, simple background`;
+      return `a tiny ${characterType} ${scenario} ${environment}`;
     },
     
-    // Character portrait
+    // Alternative tiny format
     () => {
-      const features = getSpeciesFeatures();
-      return `${chosenStyle} portrait of ${characterType} ${features}, ${hairColor} ${hairStyle}, minimalist style`;
+      return `tiny ${characterType} with ${hairColor} ${hairStyle} ${scenario} ${environment}`;
     },
     
-    // Full character
+    // Simple tiny character
     () => {
-      const features = getSpeciesFeatures();
-      return `${chosenStyle} full body ${characterType} ${features}, ${hairColor} ${hairStyle}, solid background, character focus`;
+      return `a tiny cute ${characterType} ${environment}`;
     }
   ];
 
   const promptBuilder = randomChoice(promptStructures);
   const prompt = promptBuilder();
 
-  // 9. FOCUSED NEGATIVE PROMPT - Clean results
-  const negative_prompt = "human, realistic, photorealistic, blurry, low quality, bad anatomy, deformed, ugly, cluttered, messy, chaotic, multiple characters, text, watermark";
-
-  console.log("\n--- Anime/Cartoon Prompt (SDXL-Lightning) ---");
+  console.log("\n--- Tiny Character Prompt (SANA) ---");
   console.log("🧬 Original Species:", traits.Species.name);
-  console.log("🎯 Enhanced Species:", characterType);
+  console.log("🎯 Tiny Character:", characterType);
   console.log("💇 Hair:", `${hairColor} ${hairStyle}`);
-  console.log("👔 Outfit:", getOutfitDescription());
-  console.log("🌟 Background:", background || "minimal");
+  console.log("🎬 Scenario:", scenario);
+  console.log("🌍 Environment:", environment);
   console.log("📝 Final Prompt:", prompt);
 
   return {
     prompt,
-    negative_prompt,
+    negative_prompt: "", // SANA doesn't use negative prompts
     traits
   };
 }
