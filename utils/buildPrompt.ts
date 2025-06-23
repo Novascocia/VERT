@@ -31,78 +31,45 @@ function getLegacyRandomTraits(): SelectedTraits {
   selectedTraits.Background = { name: "Generated", description: "AI-generated background" };
   selectedTraits.GraphicText = { name: "None", description: "No text overlay" };
 
-  // Species: CLEARLY NON-HUMAN CREATURES ONLY
+  // Species: User-selected mix of creatures, monsters, and character archetypes
   const expandedSpecies = [
-    // Mechanical/Robotic - Obviously non-human
-    { name: "Robot", description: "Mechanical being with visible joints and metallic surfaces" },
-    { name: "Cyborg", description: "Machine-organic hybrid with visible tech implants" },
-    { name: "Android", description: "Artificial being with clearly mechanical features" },
-    { name: "AI Construct", description: "Digital consciousness with holographic form" },
-    { name: "Nano Swarm", description: "Collective of microscopic machines forming a being" },
-    
-    // Mythical Creatures - Clearly fantastical
-    { name: "Dragon", description: "Scaled reptilian being with horns and draconic features" },
-    { name: "Phoenix", description: "Fiery bird-like creature with flame wings" },
-    { name: "Griffin", description: "Eagle-lion hybrid with wings and beak" },
-    { name: "Unicorn", description: "Horse-like being with horn and magical features" },
-    { name: "Pegasus", description: "Winged horse creature with feathered wings" },
-    { name: "Sphinx", description: "Lion-bodied creature with otherworldly wisdom" },
-    { name: "Chimera", description: "Multi-animal hybrid with mixed creature features" },
-    
-    // Supernatural Entities - Clearly otherworldly
+    // 👻 Creatures & Monsters
     { name: "Ghost", description: "Translucent spirit with ethereal glow" },
-    { name: "Phantom", description: "Spectral being with wispy form" },
-    { name: "Wraith", description: "Dark spirit with shadowy tendrils" },
-    { name: "Banshee", description: "Wailing spirit with ghostly appearance" },
-    { name: "Poltergeist", description: "Energy being that manipulates objects" },
-    
-    // Elemental Beings - Made of pure elements
-    { name: "Fire Elemental", description: "Being made of living flames and ember" },
-    { name: "Ice Elemental", description: "Crystalline being of frozen water and frost" },
-    { name: "Storm Elemental", description: "Creature of lightning and swirling winds" },
-    { name: "Earth Elemental", description: "Rocky being of stone and mineral" },
-    { name: "Water Elemental", description: "Flowing liquid being with wave-like form" },
-    { name: "Shadow Elemental", description: "Dark entity made of living shadows" },
-    { name: "Light Elemental", description: "Radiant being of pure energy and photons" },
-    
-    // Alien Species - Clearly extraterrestrial
-    { name: "Crystalline Alien", description: "Silicon-based being with crystal formations" },
-    { name: "Tentacle Being", description: "Cephalopod-like creature with multiple appendages" },
-    { name: "Insectoid Alien", description: "Bug-like being with compound eyes and chitin" },
-    { name: "Gaseous Entity", description: "Cloud-like being of swirling gases" },
-    { name: "Plasma Life", description: "Energy creature of superheated matter" },
-    { name: "Void Creature", description: "Dark entity from empty space" },
-    { name: "Geometric Being", description: "Mathematical entity with impossible angles" },
-    
-    // Demonic/Infernal - Clearly supernatural
+    { name: "Alien", description: "Extraterrestrial being with otherworldly features" },
     { name: "Demon", description: "Horned infernal being with claws and fangs" },
-    { name: "Imp", description: "Small mischievous creature with pointed features" },
-    { name: "Succubus", description: "Winged demonic entity with otherworldly beauty" },
-    { name: "Hellhound", description: "Fiery canine creature with glowing eyes" },
-    { name: "Gargoyle", description: "Stone-like creature with wings and claws" },
+    { name: "Dragon", description: "Scaled reptilian being with horns and draconic features" },
+    { name: "Angel", description: "Celestial being with wings and divine radiance" },
+    { name: "Phantom", description: "Spectral being with wispy form" },
+    { name: "Zombie", description: "Undead creature with decaying features" },
+    { name: "Vampire", description: "Pale immortal being with fangs and dark elegance" },
+    { name: "Werewolf", description: "Wolf-human hybrid with lupine features" },
+    { name: "Golem", description: "Animated stone or clay creature" },
+    { name: "Cyclops", description: "Giant humanoid with single large eye" },
+    { name: "Slime", description: "Gelatinous blob creature with fluid form" },
+    { name: "Goblin", description: "Small green-skinned creature with pointed ears" },
+    { name: "Beast", description: "Wild creature with animal-like features" },
+    { name: "Mushroom", description: "Fungal creature with cap and spores" },
     
-    // Cosmic Entities - Beyond mortal comprehension
-    { name: "Star Being", description: "Celestial entity made of stellar matter" },
-    { name: "Nebula Spirit", description: "Cosmic gas cloud with consciousness" },
-    { name: "Black Hole Entity", description: "Gravitational being that bends space-time" },
-    { name: "Quantum Ghost", description: "Probability-based being existing in multiple states" },
-    { name: "Time Wraith", description: "Temporal entity that exists across timelines" },
-    { name: "Dimension Stalker", description: "Being that phases between realities" },
+    // 🤖 Non-Human Entities
+    { name: "Robot", description: "Mechanical being with visible joints and metallic surfaces" },
+    { name: "Astronaut", description: "Space explorer in protective suit and helmet" },
     
-    // Nature Spirits - Clearly non-human
-    { name: "Tree Ent", description: "Living tree creature with bark skin and branch limbs" },
-    { name: "Mushroom Being", description: "Fungal creature with spore-based abilities" },
-    { name: "Coral Entity", description: "Aquatic being with reef-like growths" },
-    { name: "Crystal Golem", description: "Animated gemstone creature" },
-    { name: "Metal Golem", description: "Living statue of pure metal" },
-    { name: "Sand Djinn", description: "Desert spirit made of swirling sand" },
-    
-    // Aberrant Creatures - Clearly unnatural
-    { name: "Eldritch Horror", description: "Incomprehensible being with too many eyes" },
-    { name: "Lovecraftian Entity", description: "Cosmic horror with impossible geometry" },
-    { name: "Void Walker", description: "Being that exists in the spaces between worlds" },
-    { name: "Reality Glitch", description: "Digital error given consciousness and form" },
-    { name: "Nightmare Fuel", description: "Living embodiment of fears and terror" }
+    // 🧍‍♂️ Human-like Roles (Classes / Archetypes)
+    { name: "Samurai", description: "Japanese warrior in traditional armor" },
+    { name: "Ninja", description: "Stealthy warrior in dark clothing and mask" },
+    { name: "Knight", description: "Armored medieval warrior with sword and shield" },
+    { name: "Wizard", description: "Magical practitioner with robes and staff" },
+    { name: "Witch", description: "Magical being with pointed hat and mystical powers" },
+    { name: "Pirate", description: "Seafaring adventurer with tricorn hat and cutlass" },
+    { name: "Viking", description: "Norse warrior with horned helmet and axe" },
+    { name: "Mage", description: "Spellcaster with arcane knowledge and magical attire" },
+    { name: "Shaman", description: "Spiritual guide with tribal clothing and totems" },
+    { name: "King", description: "Royal ruler with crown and regal robes" },
+    { name: "Queen", description: "Royal monarch with crown and elegant dress" },
+    { name: "Jester", description: "Court entertainer with colorful outfit and bells" },
+    { name: "Clown", description: "Performer with painted face and bright costume" },
+    { name: "Plague Doctor", description: "Medieval physician with bird-like mask" },
+    { name: "Gladiator", description: "Arena fighter with armor and combat weapons" }
   ];
 
   selectedTraits.Species = randomChoice(expandedSpecies);
@@ -350,31 +317,50 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
      }
   };
 
-  // 8. TINY CHARACTER PROMPTS - Consistent "tiny" aesthetic like the astronaut
+  // 8. TINY CHARACTER PROMPTS - User-selected fun and relatable scenarios
   const tinyScenarios = [
-    "hatching from an egg",
-    "sitting in a teacup", 
-    "emerging from a flower",
-    "riding on a leaf",
-    "climbing out of a shell",
-    "perched on a mushroom",
-    "nestled in a crystal",
-    "floating in a bubble",
-    "curled up in a nest",
-    "peeking from a pocket"
+    "floating on a leaf boat",
+    "popping out of a gift box",
+    "crawling out of a book",
+    "jumping on a jellybean",
+    "floating in a soda bottle",
+    "holding onto a balloon string",
+    "inside a snow globe",
+    "standing on a cupcake",
+    "resting in a seashell",
+    "sitting on a dice cube",
+    "riding a paper airplane",
+    "tucked in a sandwich",
+    "hiding in a popcorn bucket",
+    "playing on a button",
+    "resting on a toothbrush",
+    "standing on a CD/DVD",
+    "riding a paper boat",
+    "inside a fortune cookie",
+    "balancing on a chess piece",
+    "crawling through a donut hole",
+    "riding a rubber duck",
+    "perched on a french fry"
   ];
   
   const tinyEnvironments = [
-    "on the moon",
-    "in a magical forest", 
-    "on a floating island",
-    "in a starry void",
-    "on a crystal surface",
-    "in a cosmic garden",
-    "on an alien planet",
-    "in a mystical realm",
-    "on a cloud",
-    "in a dreamscape"
+    "in a candy world",
+    "inside a terrarium",
+    "on a lily pad in a pond",
+    "inside a bottle at sea",
+    "on top of a record player",
+    "on a chessboard",
+    "on a tree stump",
+    "among tall grass",
+    "in a kitchen sink",
+    "on a paper map",
+    "in a desert with giant pebbles",
+    "on a cracked sidewalk",
+    "floating through space junk",
+    "on a giant clock",
+    "on a fruit slice",
+    "on a giant hand",
+    "in a carnival scene"
   ];
   
   const scenario = randomChoice(tinyScenarios);
