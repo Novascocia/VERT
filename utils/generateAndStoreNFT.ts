@@ -91,24 +91,25 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
-      const modelToUse = "stability-ai/sdxl:39ed52f2a78e934b3ba6e2a89f5b1c712de7dfea535525255b1aa35c5565e08b";
+      const modelToUse = "stability-ai/stable-diffusion-3.5-medium";
       console.log("🎯 Model being used:", modelToUse);
       console.log("🔑 API Token (first 10 chars):", process.env.REPLICATE_API_TOKEN?.substring(0, 10));
       
       const apiCallStartTime = Date.now();
-      const result = await replicate.run(
-        modelToUse,
-        {
-          input: {
-            prompt,
-            negative_prompt,
-            num_inference_steps: 30,
-            guidance_scale: 7.5,
-            width: 1024,
-            height: 1024
+              const result = await replicate.run(
+          modelToUse,
+          {
+            input: {
+              prompt,
+              negative_prompt,
+              num_inference_steps: 28,
+              guidance_scale: 4.5,
+              width: 1024,
+              height: 1024,
+              seed: Math.floor(Math.random() * 1000000)
+            }
           }
-        }
-      );
+        );
       console.log(`⏱️ Replicate API call took: ${(Date.now() - apiCallStartTime) / 1000}s`);
       console.log("🔍 Raw Replicate response:", JSON.stringify(result, null, 2));
       return result;

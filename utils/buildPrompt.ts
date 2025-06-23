@@ -83,107 +83,131 @@ export function buildPrompt(traits: SelectedTraits): PromptResult {
 
 
 
-// NFT-FOCUSED prompt building: Character-first, collectible-optimized
+// ANIME-STYLE prompt building: Based on SD 3.5 and astronaut example
 function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   
-  // 1. EXPANDED SPECIES POOL - 50+ unique non-human characters
-  const coolSpecies = [
-    // Robotic/Mechanical
-    "Robot", "Cyborg", "Android", "Mech Pilot", "Tech Warrior", "Circuit Being", "Data Entity", "Cyber Knight",
-    "Steel Guardian", "Digital Warrior", "Nano Being", "Chrome Sentinel", "Tech Shaman", "Binary Ghost",
+  // 1. ANIME CHARACTER TYPES - Professional, detailed character roles
+  const characterTypes = [
+    // Sci-Fi Characters (like the astronaut example)
+    "astronaut", "space explorer", "pilot", "engineer", "scientist", "researcher", "technician", "navigator",
+    "cosmic traveler", "starship captain", "space medic", "orbital worker", "station commander",
     
-    // Mystical/Supernatural  
-    "Ghost", "Spirit", "Phantom", "Shadow Being", "Wraith", "Specter", "Soul Walker", "Void Entity",
-    "Dark Mage", "Crystal Being", "Energy Form", "Astral Warrior", "Mystic Guardian", "Rune Keeper",
+    // Fantasy/Mystical
+    "mage", "wizard", "sorceress", "enchanter", "alchemist", "scholar", "sage", "mystic",
+    "crystal keeper", "elemental guardian", "spirit walker", "dream weaver", "star reader",
     
-    // Elemental/Natural
-    "Fire Elemental", "Ice Elemental", "Storm Elemental", "Earth Elemental", "Lightning Being", "Flame Spirit",
-    "Frost Guardian", "Wind Walker", "Stone Warrior", "Plasma Entity", "Magma Being", "Crystal Elemental",
+    // Adventure/Explorer
+    "explorer", "adventurer", "treasure hunter", "archaeologist", "botanist", "cartographer",
+    "wilderness guide", "mountain climber", "deep sea diver", "cave explorer", "sky sailor",
     
-    // Cosmic/Dimensional
-    "Star Being", "Cosmic Entity", "Galaxy Guardian", "Void Walker", "Dimension Shifter", "Space Nomad",
-    "Nebula Spirit", "Quantum Being", "Time Guardian", "Reality Bender", "Portal Keeper", "Cosmic Warrior",
+    // Artistic/Creative
+    "artist", "musician", "dancer", "performer", "storyteller", "poet", "craftsperson",
+    "designer", "architect", "sculptor", "painter", "composer", "inventor",
     
-    // Alien/Exotic
-    "Alien Warrior", "Space Hunter", "Xenomorph", "Star Traveler", "Galactic Scout", "Void Hunter",
-    "Plasma Alien", "Crystal Alien", "Energy Alien", "Bio-Mechanical Alien", "Hive Mind", "Star Seed",
-    
-    // Unique/Special
-    "Hologram", "Digital Avatar", "Code Being", "Pixel Warrior", "Glitch Entity", "Data Ghost",
-    "Neon Spirit", "Synthwave Being", "Retro Bot", "Arcade Guardian", "Game Spirit", "Virtual Warrior"
+    // Futuristic/Cyberpunk
+    "cyber warrior", "data analyst", "network guardian", "digital architect", "code breaker",
+    "quantum engineer", "AI specialist", "hologram designer", "virtual reality creator"
   ];
   
-  // Always use a cool species (ignore original trait)
-  const speciesName = randomChoice(coolSpecies);
+  const characterType = randomChoice(characterTypes);
 
-  // 2. NFT-FOCUSED STYLES - Collectible character aesthetics
-  const nftStyles = [
-    "NFT character art",
-    "collectible character design", 
-    "digital collectible art",
-    "anime NFT style",
-    "cartoon NFT character",
-    "stylized NFT avatar"
+  // 2. ANIME VISUAL STYLES - High quality descriptors for SD 3.5
+  const visualStyles = [
+    "captivating anime-style illustration",
+    "beautiful anime art style", 
+    "detailed anime character design",
+    "high-quality anime illustration",
+    "stunning anime portrait",
+    "professional anime artwork",
+    "vibrant anime-style art"
   ];
-  const chosenStyle = randomChoice(nftStyles);
+  const chosenStyle = randomChoice(visualStyles);
 
-  // 3. CHARACTER-FIRST APPROACH - Always prioritize character over background
-  const characterTraits = [
-    { type: 'head', name: traits.HeadType.name, priority: 3 },
-    { type: 'eyes', name: traits.EyesFace.name, priority: 2 },
-    { type: 'clothing', name: traits.ClothingTop.name, priority: 2 },
-    { type: 'color', name: traits.CharacterColor.name, priority: 1 }
+  // 3. HAIR STYLES - More anime-appropriate descriptions
+  const hairStyles = [
+    "long flowing hair", "short wavy hair", "curly hair", "straight hair", "braided hair",
+    "twin tails", "ponytail", "messy hair", "spiky hair", "layered hair", "bangs",
+    "shoulder-length hair", "wavy locks", "silky hair", "windswept hair"
   ];
+  const hairStyle = randomChoice(hairStyles);
 
-  // Pick 1-2 most important character features
-  const sortedTraits = characterTraits.sort((a, b) => b.priority - a.priority);
-  const mainFeatures = sortedTraits.slice(0, 1 + Math.floor(Math.random() * 2)); // 1-2 features
-  
-  // Background is always subtle/minimal
-  const backgroundHint = Math.random() > 0.7 ? `, ${traits.Background.name} background` : "";
+  // 4. HAIR COLORS - Vibrant anime colors
+  const hairColors = [
+    "dark", "black", "brown", "blonde", "silver", "white", "blue", "purple", 
+    "pink", "red", "green", "orange", "platinum", "golden", "violet", "teal"
+  ];
+  const hairColor = randomChoice(hairColors);
 
-     // 4. FULL CHARACTER PROMPTS - Ensure complete character generation
-   const promptStructures = [
-     // Full body character focus
-     () => {
-       const features = mainFeatures.map(t => t.name).join(', ');
-       return `full body ${speciesName} character, ${features}, ${chosenStyle}${backgroundHint}`;
-     },
-     
-     // Complete character design
-     () => {
-       const primary = mainFeatures[0].name;
-       const secondary = mainFeatures.length > 1 ? `, ${mainFeatures[1].name}` : '';
-       return `complete ${speciesName} character design with ${primary}${secondary}, ${chosenStyle}${backgroundHint}`;
-     },
-     
-     // Standing character
-     () => {
-       const features = mainFeatures.map(t => t.name).join(', ');
-       return `standing ${speciesName} character, ${features}, ${chosenStyle}${backgroundHint}`;
-     },
-     
-     // Character portrait (full upper body)
-     () => {
-       const key = mainFeatures[0].name;
-       return `${speciesName} character portrait, ${key}, full upper body, ${chosenStyle}${backgroundHint}`;
-     }
-   ];
+  // 5. OUTFIT STYLES - Based on character type and traits
+  const getOutfitDescription = () => {
+    if (characterType.includes("astronaut") || characterType.includes("space") || characterType.includes("pilot")) {
+      return "white spacesuit with detailed equipment and patches";
+    } else if (characterType.includes("mage") || characterType.includes("wizard") || characterType.includes("mystic")) {
+      return "flowing robes with magical accessories";
+    } else if (characterType.includes("cyber") || characterType.includes("digital") || characterType.includes("quantum")) {
+      return "futuristic tech outfit with glowing elements";
+    } else {
+      const outfits = [
+        "elegant uniform with intricate details",
+        "stylish outfit with unique accessories", 
+        "professional attire with special equipment",
+        "adventure gear with practical elements",
+        "artistic clothing with creative flair"
+      ];
+      return randomChoice(outfits);
+    }
+  };
+
+  // 6. BACKGROUND ELEMENTS - Inspired by the flower/space example
+  const backgrounds = [
+    "vibrant flowers with detailed petals surrounding the character",
+    "mesmerizing night sky filled with countless stars",
+    "floating magical elements and sparkles",
+    "technological interfaces and holographic displays",
+    "crystal formations with ethereal lighting",
+    "swirling energy patterns and light effects",
+    "floating islands with mystical atmosphere",
+    "underwater scene with bioluminescent creatures",
+    "forest setting with glowing plants",
+    "cosmic nebula with brilliant colors"
+  ];
+  const background = Math.random() > 0.3 ? randomChoice(backgrounds) : "";
+
+  // 7. BUILD THE COMPLETE PROMPT - Following the astronaut example structure
+  const promptStructures = [
+    // Main structure based on the example: "captivating anime-style illustration of a woman in a white astronaut suit..."
+    () => {
+      const bgPart = background ? `. Surrounding the ${characterType} are ${background}. The background features ${background}` : "";
+      return `${chosenStyle} of a ${characterType} with ${hairColor} ${hairStyle}. The character is wearing ${getOutfitDescription()}${bgPart}`;
+    },
+    
+    // Alternative structure
+    () => {
+      const bgPart = background ? `, surrounded by ${background}` : "";
+      return `${chosenStyle} featuring a ${characterType} character with beautiful ${hairColor} ${hairStyle}, dressed in ${getOutfitDescription()}${bgPart}`;
+    },
+    
+    // Portrait focus
+    () => {
+      const bgPart = background ? ` with ${background} in the background` : "";
+      return `detailed ${chosenStyle} portrait of a ${characterType} with ${hairColor} ${hairStyle} and ${getOutfitDescription()}${bgPart}`;
+    }
+  ];
 
   const promptBuilder = randomChoice(promptStructures);
   const prompt = promptBuilder();
 
-     // 5. FULL CHARACTER NEGATIVE PROMPT - Prevent partial/cropped characters
-   const negative_prompt = "human, human face, human skin, realistic person, real person, photorealistic human, human features, realistic skin, human anatomy, cropped, partial body, head only, face only, close-up, zoomed in, cut off, incomplete character, missing body parts, blurry, low quality, text, logos, brands, multiple characters, deformed, ugly";
+  // 8. REFINED NEGATIVE PROMPT - Optimized for SD 3.5 quality
+  const negative_prompt = "low quality, blurry, pixelated, distorted, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutated hands and fingers, out of frame, too many fingers, fused hand, bad proportions, unnatural body, unnatural skin, multiple characters, text, watermark, signature, username, logo, brand";
 
-  console.log("\n--- NFT Character Prompt ---");
-  console.log(`Species: ${speciesName} (original: ${traits.Species.name})`);
-  console.log(`Style: ${chosenStyle}`);
-  console.log(`Main Features: ${mainFeatures.map(t => `${t.type}:${t.name}`).join(', ')}`);
-  console.log(`Background: ${backgroundHint || 'minimal'}`);
-  console.log(`Final: ${prompt}`);
-  console.log("\n--- Anti-Human Negative ---");
-  console.log(negative_prompt);
+  console.log("\n--- Anime Character Prompt (SD 3.5) ---");
+  console.log("🎯 Character Type:", characterType);
+  console.log("💇 Hair:", `${hairColor} ${hairStyle}`);
+  console.log("👔 Outfit:", getOutfitDescription());
+  console.log("🌟 Background:", background || "minimal");
+  console.log("🎨 Style:", chosenStyle);
+  console.log("📝 Final Prompt:", prompt);
+  console.log("🚫 Negative Prompt:", negative_prompt);
 
   return {
     prompt,
