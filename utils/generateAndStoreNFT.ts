@@ -96,34 +96,63 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
               console.log("🔑 API Token configured:", process.env.REPLICATE_API_TOKEN ? "✅" : "❌");
       
       const apiCallStartTime = Date.now();
-              const result = await replicate.run(
-          modelToUse,
-          {
-            input: {
-              prompt,
-              width: 1024,
-              height: 1024,
-              inference_steps: 2,
-              intermediate_timesteps: 1.3,
-              guidance_scale: 4.5,
-              output_format: "png",
-              output_quality: 100,
-              seed: Math.floor(Math.random() * 1000000)
-            }
-          }
-        );
+              // Try using predictions.create instead of run for better control
+              const prediction = await replicate.predictions.create({
+                version: "6ed1ce77cdc8db65550e76d5ab82556d0cb31ac8ab3c4947b168a0bda7b962e4",
+                input: {
+                  prompt,
+                  width: 1024,
+                  height: 1024,
+                  inference_steps: 2,
+                  intermediate_timesteps: 1.3,
+                  guidance_scale: 4.5,
+                  output_format: "png",
+                  output_quality: 100,
+                  seed: Math.floor(Math.random() * 1000000)
+                }
+              });
+              
+              console.log("🔍 Initial prediction:", JSON.stringify(prediction, null, 2));
+              
+              // Wait for completion
+              const result = await replicate.wait(prediction);
+              console.log("🔍 Final prediction result:", JSON.stringify(result, null, 2));
       console.log(`⏱️ Replicate API call took: ${(Date.now() - apiCallStartTime) / 1000}s`);
       console.log("🔍 Raw Replicate response:", JSON.stringify(result, null, 2));
+      console.log("🔍 Response type:", typeof result);
+      console.log("🔍 Is array:", Array.isArray(result));
+      console.log("🔍 Object keys:", result && typeof result === 'object' ? Object.keys(result) : 'N/A');
       return result;
     });
 
-    if (!output || !output[0]) {
+    // Handle different response formats
+    let imageUrl: string;
+    
+    // First check if output is a prediction object with output property
+    const actualOutput = output.output || output;
+    
+    if (Array.isArray(actualOutput) && actualOutput.length > 0) {
+      // Array format (most models)
+      imageUrl = actualOutput[0];
+    } else if (typeof actualOutput === 'string') {
+      // Direct string format (SANA-Sprint)
+      imageUrl = actualOutput;
+    } else if (actualOutput && typeof actualOutput === 'object' && actualOutput.url) {
+      // Object with url property
+      imageUrl = actualOutput.url;
+    } else {
+      console.error("❌ Unexpected response format:", output);
+      console.error("❌ Actual output:", actualOutput);
       throw new Error("No image URL in Replicate response");
     }
 
+    if (!imageUrl) {
+      throw new Error("Empty image URL in Replicate response");
+    }
+
     console.log(`⏱️ Turbo model total time: ${(Date.now() - turboStartTime) / 1000}s`);
-    console.log("🎨 Image generated successfully:", output[0]);
-    return output[0];
+    console.log("🎨 Image generated successfully:", imageUrl);
+    return imageUrl;
   } catch (error) {
     console.error(`⏱️ Image generation failed after: ${(Date.now() - imageStartTime) / 1000}s`);
     console.error("❌ Error generating image with Replicate:", error);
