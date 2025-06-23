@@ -106,7 +106,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
               height: 1024,
               num_inference_steps: 4,
               guidance_scale: 0,
-              scheduler: "DPM++ 2M SDE Karras",
+              scheduler: "DPM++2MSDE",
               seed: Math.floor(Math.random() * 1000000)
             }
           }

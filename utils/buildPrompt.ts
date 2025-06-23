@@ -173,21 +173,16 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
     "wyvern", "drake", "fairy", "pixie", "elf", "dwarf", "orc", "goblin", "troll", "ogre", "demon", "angel"
   ];
   
-  // Use the actual species from traits, but map it to our expanded list if it's "Robot" or similar
+  // Use the actual species from traits directly (no random mapping)
   let characterType = traits.Species.name.toLowerCase();
   
-  // If it's a basic species, enhance it with our expanded list
-  if (characterType === "robot") {
-    const robotTypes = speciesTypes.filter(s => s.includes("robot") || s.includes("android") || s.includes("cyborg") || s.includes("mech"));
-    characterType = randomChoice(robotTypes);
-  } else if (characterType === "human") {
-    // Replace human with random non-human species
+  // Only replace if it's human
+  if (characterType === "human") {
     characterType = randomChoice(speciesTypes);
-  } else {
-    // Try to find a matching enhanced version, or use a random one
-    const matching = speciesTypes.find(s => s.includes(characterType)) || randomChoice(speciesTypes);
-    characterType = matching;
   }
+  
+  // Keep the original species name for consistency
+  // This ensures "Plasma Life" stays as "plasma life", not random mapping
 
   // 2. ANIME/CARTOON VISUAL STYLES - Optimized for SDXL-Lightning
   const visualStyles = [
@@ -325,10 +320,14 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
     else if (characterType.includes("elemental") || characterType.includes("fire") || characterType.includes("ice") || characterType.includes("storm") || characterType.includes("earth") || characterType.includes("water") || characterType.includes("shadow") || characterType.includes("light")) {
       return "with elemental energy emanating from their form, non-solid matter composition, and elemental manifestation";
     }
-    // Alien Species
-    else if (characterType.includes("alien") || characterType.includes("tentacle") || characterType.includes("insectoid") || characterType.includes("crystalline") || characterType.includes("gaseous") || characterType.includes("plasma")) {
-      return "with completely alien anatomy, non-human facial structure, extraterrestrial features, and otherworldly characteristics";
-    }
+         // Alien Species
+     else if (characterType.includes("alien") || characterType.includes("tentacle") || characterType.includes("insectoid") || characterType.includes("crystalline") || characterType.includes("gaseous")) {
+       return "with completely alien anatomy, non-human facial structure, extraterrestrial features, and otherworldly characteristics";
+     }
+     // Plasma/Energy Beings
+     else if (characterType.includes("plasma") || characterType.includes("energy")) {
+       return "with plasma energy form, glowing energy body, crackling electrical aura, and pure energy manifestation";
+     }
     // Demonic/Infernal
     else if (characterType.includes("demon") || characterType.includes("imp") || characterType.includes("succubus") || characterType.includes("hellhound") || characterType.includes("gargoyle")) {
       return "with demonic horns, clawed hands, fanged teeth, otherworldly features, and infernal characteristics";
