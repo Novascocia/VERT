@@ -91,7 +91,7 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
     
     const output = await retryReplicate(async () => {
       console.log("🔄 Calling Replicate API...");
-      const modelToUse = "nvidia/sana";
+      const modelToUse = "nvidia/sana-sprint-1.6b:6ed1ce77cdc8db65550e76d5ab82556d0cb31ac8ab3c4947b168a0bda7b962e4";
       console.log("🎯 Model being used:", modelToUse);
               console.log("🔑 API Token configured:", process.env.REPLICATE_API_TOKEN ? "✅" : "❌");
       
@@ -103,9 +103,11 @@ async function generateImage(prompt: string, negative_prompt: string): Promise<s
               prompt,
               width: 1024,
               height: 1024,
-              num_inference_steps: 20,
-              guidance_scale: 5.0,
-              pag_guidance_scale: 2.0,
+              inference_steps: 2,
+              intermediate_timesteps: 1.3,
+              guidance_scale: 4.5,
+              output_format: "png",
+              output_quality: 100,
               seed: Math.floor(Math.random() * 1000000)
             }
           }
