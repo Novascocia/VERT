@@ -372,20 +372,35 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   const scenario = randomChoice(tinyScenarios);
   const environment = randomChoice(tinyEnvironments);
   
+  // Force cartoon/anime style in all prompts
+  const cartoonStyles = [
+    "cartoon style",
+    "anime style", 
+    "cute cartoon",
+    "kawaii anime",
+    "chibi style",
+    "stylized cartoon",
+    "anime character",
+    "cartoon character",
+    "cel-shaded",
+    "animated style"
+  ];
+  const chosenCartoonStyle = randomChoice(cartoonStyles);
+
   const promptStructures = [
-    // Tiny character scenarios (like the astronaut example)
+    // Tiny character scenarios with forced cartoon style
     () => {
-      return `a tiny ${characterType} ${scenario} ${environment}`;
+      return `${chosenCartoonStyle} tiny ${characterType} ${scenario} ${environment}`;
     },
     
-    // Alternative tiny format
+    // Alternative tiny format with cartoon style
     () => {
-      return `tiny ${characterType} with ${hairColor} ${hairStyle} ${scenario} ${environment}`;
+      return `${chosenCartoonStyle} tiny ${characterType} with ${hairColor} ${hairStyle} ${scenario} ${environment}`;
     },
     
-    // Simple tiny character
+    // Simple tiny character with cartoon style
     () => {
-      return `a tiny cute ${characterType} ${environment}`;
+      return `${chosenCartoonStyle} tiny cute ${characterType} ${environment}`;
     }
   ];
 
@@ -395,6 +410,7 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   console.log("\n--- Tiny Character Prompt (SANA) ---");
   console.log("🧬 Original Species:", traits.Species.name);
   console.log("🎯 Tiny Character:", characterType);
+  console.log("🎨 Art Style:", chosenCartoonStyle);
   console.log("💇 Hair:", `${hairColor} ${hairStyle}`);
   console.log("🎬 Scenario:", scenario);
   console.log("🌍 Environment:", environment);
