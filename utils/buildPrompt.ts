@@ -31,61 +31,78 @@ function getLegacyRandomTraits(): SelectedTraits {
   selectedTraits.Background = { name: "Generated", description: "AI-generated background" };
   selectedTraits.GraphicText = { name: "None", description: "No text overlay" };
 
-  // Species: THIS IS THE IMPORTANT ONE - expand the species list
+  // Species: CLEARLY NON-HUMAN CREATURES ONLY
   const expandedSpecies = [
-    // From original traits file
-    { name: "Robot", description: "Mechanical humanoid with visible joints and metallic surfaces" },
-    { name: "Cyborg", description: "Half-human, half-machine hybrid being" },
-    { name: "Ghost", description: "Ethereal spirit with translucent appearance" },
-    { name: "Alien", description: "Extraterrestrial being with unique features" },
+    // Mechanical/Robotic - Obviously non-human
+    { name: "Robot", description: "Mechanical being with visible joints and metallic surfaces" },
+    { name: "Cyborg", description: "Machine-organic hybrid with visible tech implants" },
+    { name: "Android", description: "Artificial being with clearly mechanical features" },
+    { name: "AI Construct", description: "Digital consciousness with holographic form" },
+    { name: "Nano Swarm", description: "Collective of microscopic machines forming a being" },
     
-    // NEW SPECIES - 50+ more options
-    { name: "Dragon", description: "Majestic draconic being with scales and power" },
-    { name: "Phoenix", description: "Fiery bird-like creature with rebirth abilities" },
-    { name: "Android", description: "Advanced artificial being with human-like appearance" },
-    { name: "Elemental", description: "Being made of pure elemental energy" },
-    { name: "Demon", description: "Dark supernatural entity with otherworldly powers" },
-    { name: "Angel", description: "Divine being with celestial features" },
-    { name: "Vampire", description: "Immortal blood-drinking creature of the night" },
-    { name: "Werewolf", description: "Shape-shifting wolf-human hybrid" },
-    { name: "Fairy", description: "Magical winged being with nature powers" },
-    { name: "Elf", description: "Graceful pointed-eared magical humanoid" },
-    { name: "Dwarf", description: "Sturdy underground-dwelling craftsperson" },
-    { name: "Orc", description: "Powerful warrior with tribal markings" },
-    { name: "Troll", description: "Large primitive being with regenerative abilities" },
-    { name: "Goblin", description: "Small mischievous creature with cunning intelligence" },
-    { name: "Wizard", description: "Arcane spellcaster with mystical knowledge" },
-    { name: "Witch", description: "Magic user with potion-brewing abilities" },
-    { name: "Necromancer", description: "Dark magic user who commands the undead" },
-    { name: "Shapeshifter", description: "Being capable of changing their physical form" },
-    { name: "Time Traveler", description: "Entity that exists across multiple timelines" },
-    { name: "Dimension Walker", description: "Being that can traverse between realities" },
-    { name: "Star Guardian", description: "Cosmic protector with stellar powers" },
-    { name: "Void Entity", description: "Creature from the empty spaces between worlds" },
-    { name: "Crystal Being", description: "Living entity made of crystalline structures" },
-    { name: "Shadow Assassin", description: "Stealth warrior who controls darkness" },
-    { name: "Lightning Mage", description: "Spellcaster who wields electrical storms" },
-    { name: "Ice Queen", description: "Regal being with dominion over winter" },
-    { name: "Fire Lord", description: "Powerful entity that commands flames" },
-    { name: "Earth Shaman", description: "Nature spirit connected to the ground" },
-    { name: "Wind Dancer", description: "Graceful being who moves with the air" },
-    { name: "Water Sage", description: "Wise entity with mastery over liquids" },
-    { name: "Space Pirate", description: "Cosmic outlaw with advanced technology" },
-    { name: "Quantum Scientist", description: "Researcher who manipulates reality itself" },
-    { name: "Bio-Engineer", description: "Creator of living technological hybrids" },
-    { name: "Hologram", description: "Projected consciousness with digital form" },
-    { name: "AI Construct", description: "Artificial intelligence given physical form" },
-    { name: "Nano Swarm", description: "Collective consciousness of microscopic machines" },
-    { name: "Energy Being", description: "Pure energy given sentient form" },
-    { name: "Plasma Entity", description: "Superheated matter with consciousness" },
-    { name: "Dark Matter", description: "Invisible force made manifest" },
-    { name: "Cosmic Horror", description: "Incomprehensible entity from beyond space" },
-    { name: "Dream Walker", description: "Being that exists in the realm of sleep" },
-    { name: "Memory Keeper", description: "Entity that stores and protects forgotten knowledge" },
-    { name: "Soul Collector", description: "Mysterious being that gathers spiritual essence" },
-    { name: "Reality Hacker", description: "Digital entity that rewrites existence" },
-    { name: "Probability Manipulator", description: "Being that controls chance and luck" },
-    { name: "Multiverse Guardian", description: "Protector of infinite parallel worlds" }
+    // Mythical Creatures - Clearly fantastical
+    { name: "Dragon", description: "Scaled reptilian being with horns and draconic features" },
+    { name: "Phoenix", description: "Fiery bird-like creature with flame wings" },
+    { name: "Griffin", description: "Eagle-lion hybrid with wings and beak" },
+    { name: "Unicorn", description: "Horse-like being with horn and magical features" },
+    { name: "Pegasus", description: "Winged horse creature with feathered wings" },
+    { name: "Sphinx", description: "Lion-bodied creature with otherworldly wisdom" },
+    { name: "Chimera", description: "Multi-animal hybrid with mixed creature features" },
+    
+    // Supernatural Entities - Clearly otherworldly
+    { name: "Ghost", description: "Translucent spirit with ethereal glow" },
+    { name: "Phantom", description: "Spectral being with wispy form" },
+    { name: "Wraith", description: "Dark spirit with shadowy tendrils" },
+    { name: "Banshee", description: "Wailing spirit with ghostly appearance" },
+    { name: "Poltergeist", description: "Energy being that manipulates objects" },
+    
+    // Elemental Beings - Made of pure elements
+    { name: "Fire Elemental", description: "Being made of living flames and ember" },
+    { name: "Ice Elemental", description: "Crystalline being of frozen water and frost" },
+    { name: "Storm Elemental", description: "Creature of lightning and swirling winds" },
+    { name: "Earth Elemental", description: "Rocky being of stone and mineral" },
+    { name: "Water Elemental", description: "Flowing liquid being with wave-like form" },
+    { name: "Shadow Elemental", description: "Dark entity made of living shadows" },
+    { name: "Light Elemental", description: "Radiant being of pure energy and photons" },
+    
+    // Alien Species - Clearly extraterrestrial
+    { name: "Crystalline Alien", description: "Silicon-based being with crystal formations" },
+    { name: "Tentacle Being", description: "Cephalopod-like creature with multiple appendages" },
+    { name: "Insectoid Alien", description: "Bug-like being with compound eyes and chitin" },
+    { name: "Gaseous Entity", description: "Cloud-like being of swirling gases" },
+    { name: "Plasma Life", description: "Energy creature of superheated matter" },
+    { name: "Void Creature", description: "Dark entity from empty space" },
+    { name: "Geometric Being", description: "Mathematical entity with impossible angles" },
+    
+    // Demonic/Infernal - Clearly supernatural
+    { name: "Demon", description: "Horned infernal being with claws and fangs" },
+    { name: "Imp", description: "Small mischievous creature with pointed features" },
+    { name: "Succubus", description: "Winged demonic entity with otherworldly beauty" },
+    { name: "Hellhound", description: "Fiery canine creature with glowing eyes" },
+    { name: "Gargoyle", description: "Stone-like creature with wings and claws" },
+    
+    // Cosmic Entities - Beyond mortal comprehension
+    { name: "Star Being", description: "Celestial entity made of stellar matter" },
+    { name: "Nebula Spirit", description: "Cosmic gas cloud with consciousness" },
+    { name: "Black Hole Entity", description: "Gravitational being that bends space-time" },
+    { name: "Quantum Ghost", description: "Probability-based being existing in multiple states" },
+    { name: "Time Wraith", description: "Temporal entity that exists across timelines" },
+    { name: "Dimension Stalker", description: "Being that phases between realities" },
+    
+    // Nature Spirits - Clearly non-human
+    { name: "Tree Ent", description: "Living tree creature with bark skin and branch limbs" },
+    { name: "Mushroom Being", description: "Fungal creature with spore-based abilities" },
+    { name: "Coral Entity", description: "Aquatic being with reef-like growths" },
+    { name: "Crystal Golem", description: "Animated gemstone creature" },
+    { name: "Metal Golem", description: "Living statue of pure metal" },
+    { name: "Sand Djinn", description: "Desert spirit made of swirling sand" },
+    
+    // Aberrant Creatures - Clearly unnatural
+    { name: "Eldritch Horror", description: "Incomprehensible being with too many eyes" },
+    { name: "Lovecraftian Entity", description: "Cosmic horror with impossible geometry" },
+    { name: "Void Walker", description: "Being that exists in the spaces between worlds" },
+    { name: "Reality Glitch", description: "Digital error given consciousness and form" },
+    { name: "Nightmare Fuel", description: "Living embodiment of fears and terror" }
   ];
 
   selectedTraits.Species = randomChoice(expandedSpecies);
@@ -281,32 +298,83 @@ function buildLegacyPrompt(traits: SelectedTraits): PromptResult {
   ];
   const background = Math.random() > 0.3 ? randomChoice(backgrounds) : "";
 
-  // 7. BUILD THE COMPLETE PROMPT - Following the astronaut example structure
+  // 7. SPECIES-SPECIFIC NON-HUMAN FEATURES - Force non-human appearance
+  const getSpeciesFeatures = () => {
+    // Mechanical/Robotic
+    if (characterType.includes("robot") || characterType.includes("android") || characterType.includes("cyborg") || characterType.includes("ai construct") || characterType.includes("nano swarm")) {
+      return "with visible mechanical parts, glowing LED eyes, metallic skin patches, circuit patterns, and robotic joints";
+    }
+    // Mythical Creatures
+    else if (characterType.includes("dragon")) {
+      return "with reptilian scales, draconic horns, slitted eyes, clawed hands, and dragon-like features";
+    } else if (characterType.includes("phoenix")) {
+      return "with fiery feathers, flame-like hair, burning eyes, and bird-like features";
+    } else if (characterType.includes("griffin") || characterType.includes("pegasus") || characterType.includes("unicorn")) {
+      return "with animal features, non-human anatomy, and mythical creature characteristics";
+    }
+    // Supernatural Entities
+    else if (characterType.includes("ghost") || characterType.includes("phantom") || characterType.includes("wraith") || characterType.includes("banshee")) {
+      return "with translucent ethereal form, glowing spectral aura, wispy appearance, and ghostly features";
+    }
+    // Elemental Beings
+    else if (characterType.includes("elemental") || characterType.includes("fire") || characterType.includes("ice") || characterType.includes("storm") || characterType.includes("earth") || characterType.includes("water") || characterType.includes("shadow") || characterType.includes("light")) {
+      return "with elemental energy emanating from their form, non-solid matter composition, and elemental manifestation";
+    }
+    // Alien Species
+    else if (characterType.includes("alien") || characterType.includes("tentacle") || characterType.includes("insectoid") || characterType.includes("crystalline") || characterType.includes("gaseous") || characterType.includes("plasma")) {
+      return "with completely alien anatomy, non-human facial structure, extraterrestrial features, and otherworldly characteristics";
+    }
+    // Demonic/Infernal
+    else if (characterType.includes("demon") || characterType.includes("imp") || characterType.includes("succubus") || characterType.includes("hellhound") || characterType.includes("gargoyle")) {
+      return "with demonic horns, clawed hands, fanged teeth, otherworldly features, and infernal characteristics";
+    }
+    // Cosmic Entities
+    else if (characterType.includes("star") || characterType.includes("nebula") || characterType.includes("quantum") || characterType.includes("void") || characterType.includes("dimension") || characterType.includes("black hole")) {
+      return "with cosmic energy patterns, stellar matter composition, reality-bending features, and incomprehensible form";
+    }
+    // Nature Spirits
+    else if (characterType.includes("ent") || characterType.includes("golem") || characterType.includes("djinn") || characterType.includes("mushroom") || characterType.includes("coral") || characterType.includes("crystal")) {
+      return "with natural material composition, plant-like or mineral features, non-flesh anatomy, and nature spirit characteristics";
+    }
+    // Aberrant/Eldritch
+    else if (characterType.includes("eldritch") || characterType.includes("lovecraftian") || characterType.includes("horror") || characterType.includes("nightmare") || characterType.includes("glitch")) {
+      return "with impossible geometry, too many eyes, tentacle appendages, reality-defying features, and cosmic horror characteristics";
+    }
+    // Default for any other species
+    else {
+      return "with clearly non-human anatomy, fantastical features, otherworldly appearance, and completely inhuman characteristics";
+    }
+  };
+
+  // 8. BUILD THE COMPLETE NON-HUMAN PROMPT
   const promptStructures = [
-    // Main structure based on the example: "captivating anime-style illustration of a woman in a white astronaut suit..."
+    // Non-human focused structure
     () => {
-      const bgPart = background ? `. Surrounding the ${characterType} are ${background}. The background features ${background}` : "";
-      return `${chosenStyle} of a ${characterType} with ${hairColor} ${hairStyle}. The character is wearing ${getOutfitDescription()}${bgPart}`;
+      const features = getSpeciesFeatures();
+      const bgPart = background ? `. Surrounded by ${background}` : "";
+      return `${chosenStyle} of a non-human ${characterType} ${features}, with ${hairColor} ${hairStyle}, wearing ${getOutfitDescription()}${bgPart}`;
     },
     
-    // Alternative structure
+    // Creature-focused structure
     () => {
+      const features = getSpeciesFeatures();
       const bgPart = background ? `, surrounded by ${background}` : "";
-      return `${chosenStyle} featuring a ${characterType} character with beautiful ${hairColor} ${hairStyle}, dressed in ${getOutfitDescription()}${bgPart}`;
+      return `${chosenStyle} featuring a fantastical ${characterType} creature ${features}, with beautiful ${hairColor} ${hairStyle}, dressed in ${getOutfitDescription()}${bgPart}`;
     },
     
-    // Portrait focus
+    // Non-human portrait
     () => {
+      const features = getSpeciesFeatures();
       const bgPart = background ? ` with ${background} in the background` : "";
-      return `detailed ${chosenStyle} portrait of a ${characterType} with ${hairColor} ${hairStyle} and ${getOutfitDescription()}${bgPart}`;
+      return `detailed ${chosenStyle} portrait of a non-human ${characterType} ${features}, with ${hairColor} ${hairStyle} and ${getOutfitDescription()}${bgPart}`;
     }
   ];
 
   const promptBuilder = randomChoice(promptStructures);
   const prompt = promptBuilder();
 
-  // 8. REFINED NEGATIVE PROMPT - Optimized for SD 3.5 quality
-  const negative_prompt = "low quality, blurry, pixelated, distorted, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutated hands and fingers, out of frame, too many fingers, fused hand, bad proportions, unnatural body, unnatural skin, multiple characters, text, watermark, signature, username, logo, brand";
+  // 9. STRONG ANTI-HUMAN NEGATIVE PROMPT
+  const negative_prompt = "human, human face, human skin, human features, human anatomy, realistic person, real person, photorealistic human, normal human, regular person, human-like, humanoid face, human nose, human mouth, human proportions, realistic skin, flesh tone, normal skin color, human ears, human eyes, low quality, blurry, pixelated, distorted, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, blur, out of focus, long neck, long body, mutated hands and fingers, out of frame, too many fingers, fused hand, bad proportions, unnatural body, multiple characters, text, watermark, signature, username, logo, brand";
 
   console.log("\n--- Species-Focused Prompt (SD 3.5) ---");
   console.log("🧬 Original Species:", traits.Species.name);
