@@ -347,12 +347,16 @@ body::before {
 
   /* Icon buttons side by side on second row */
   header nav a:nth-child(3),
-  header nav a:nth-child(4),
-  header nav a:nth-child(5) {
+  header nav a:nth-child(4) {
     flex: 0 0 auto !important;
     width: 2.5rem !important;
     height: 2.5rem !important;
     min-width: 2.5rem !important;
+  }
+
+  /* Hide Telegram button on mobile */
+  header nav a:nth-child(5) {
+    display: none !important;
   }
 
   /* Mobile navigation button sizing - normal font not Bangers */
@@ -489,11 +493,18 @@ body::before {
 
   /* Specific fixes for text wrapping in key areas */
   
-  /* Early Launch Phase box text */
+  /* Early Launch Phase box text - make smaller to fit */
   .bg-gradient-to-r {
-    font-size: 0.65rem !important;
-    line-height: 1.2 !important;
+    font-size: 0.55rem !important;
+    line-height: 1.1 !important;
     padding: 0.5rem !important;
+  }
+
+  /* Make the yellow text even smaller */
+  .bg-gradient-to-r .text-yellow-400,
+  .bg-gradient-to-r .text-yellow-500 {
+    font-size: 0.5rem !important;
+    line-height: 1 !important;
   }
 
   /* Prize pool rotating messages */
