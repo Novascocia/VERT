@@ -666,6 +666,71 @@ body::before {
     padding: 0.5rem 0 !important;
   }
 
+  /* Mobile wallet connection modal styling */
+  [data-rk] {
+    font-size: 0.875rem !important;
+  }
+
+  /* Wallet modal container */
+  [data-rk] div[role="dialog"] {
+    max-width: 90vw !important;
+    margin: 1rem !important;
+    border-radius: 1rem !important;
+  }
+
+  /* Wallet modal header */
+  [data-rk] h1 {
+    font-size: 1.25rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Wallet option buttons */
+  [data-rk] button[data-testid] {
+    padding: 0.75rem !important;
+    margin: 0.25rem 0 !important;
+    border-radius: 0.75rem !important;
+    font-size: 0.875rem !important;
+    min-height: 60px !important;
+  }
+
+  /* Wallet icons */
+  [data-rk] img {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  /* Close button */
+  [data-rk] button[aria-label="Close"] {
+    top: 1rem !important;
+    right: 1rem !important;
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+
+  /* "What is a Wallet?" section */
+  [data-rk] div:has(h2) {
+    padding: 1rem !important;
+    margin-top: 1rem !important;
+  }
+
+  [data-rk] h2 {
+    font-size: 1.125rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  [data-rk] p {
+    font-size: 0.875rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Bottom action buttons */
+  [data-rk] div:has(button):last-child button {
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 0.75rem !important;
+    font-size: 0.875rem !important;
+    margin: 0.25rem !important;
+  }
+
   /* Grid layouts mobile */
   .grid.grid-cols-4 {
     grid-template-columns: 1fr 2fr 1fr 1fr !important;
