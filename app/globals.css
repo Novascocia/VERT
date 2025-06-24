@@ -507,18 +507,15 @@ body::before {
     line-height: 1 !important;
   }
 
-  /* Prize pool rotating messages - make smaller to prevent wrapping */
+  /* Hide prize pool rotating messages on mobile */
   .text-green-400.text-base {
-    font-size: 0.55rem !important;
-    line-height: 1.1 !important;
+    display: none !important;
   }
 
-  /* Target the specific yellow prize pool message */
+  /* Hide the specific yellow prize pool message on mobile */
   .text-yellow-500\/90.text-sm,
   .text-yellow-400.text-base {
-    font-size: 0.5rem !important;
-    line-height: 1 !important;
-    white-space: nowrap !important;
+    display: none !important;
   }
 
   /* Mint terminal messages */
@@ -529,12 +526,10 @@ body::before {
     word-wrap: break-word !important;
   }
 
-  /* Make text even smaller for specific long phrases */
+  /* Hide yellow prize pool status text on mobile */
   .text-yellow-500\/90,
   .text-yellow-400 {
-    font-size: 0.5rem !important;
-    line-height: 1 !important;
-    white-space: nowrap !important;
+    display: none !important;
   }
 
   /* Compact spacing for mobile terminals */
