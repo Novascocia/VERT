@@ -1850,27 +1850,20 @@ export default function Home() {
         {/* Header */}
         <div className="z-50 relative">
           <header className="relative flex justify-between items-center mb-8">
-            {/* Navigation organized as requested */}
+            {/* Navigation Buttons on Left - Original Desktop Layout */}
             <nav className="flex gap-4 items-center">
-              {/* Top row: VERT Litepaper and VERT Token side by side centered */}
-              <div className="text-buttons">
-                <a href="https://vertical-3.gitbook.io/vertical/" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm">VERT Litepaper</a>
-                <a href="#" className="btn-header-green text-sm">VERT Token</a>
-              </div>
-              
-              {/* Middle row: 3 icon buttons centered */}
-              <div className="icon-buttons">
-                <a href="https://opensea.io/collection/vertical-project-nft" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
-                    <img src="/opensea_logo.webp" alt="OpenSea" className="w-full h-full object-contain filter invert" />
-                </a>
-                <a href="https://x.com/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
-                  <img src="/x_logo.webp" alt="X" className="w-full h-full object-contain filter invert" />
-                </a>
-                {/* Telegram Group: Vertical By Virtuals */}
-                <a href="https://t.me/+BzqPgp2oxe0wNGI5" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
-                  <img src="/telegram_logo.webp" alt="Telegram" className="w-full h-full object-contain filter invert" />
-                </a>
-              </div>
+              <a href="https://vertical-3.gitbook.io/vertical/" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm">VERT Litepaper</a>
+              <a href="#" className="btn-header-green text-sm">VERT Token</a>
+              <a href="https://opensea.io/collection/vertical-project-nft" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+                  <img src="/opensea_logo.webp" alt="OpenSea" className="w-full h-full object-contain filter invert" />
+              </a>
+              <a href="https://x.com/VerticalOnBase" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+                <img src="/x_logo.webp" alt="X" className="w-full h-full object-contain filter invert" />
+              </a>
+              {/* Telegram Group: Vertical By Virtuals */}
+              <a href="https://t.me/+BzqPgp2oxe0wNGI5" target="_blank" rel="noopener noreferrer" className="btn-header-green text-sm flex items-center justify-center w-10 h-10 p-2">
+                <img src="/telegram_logo.webp" alt="Telegram" className="w-full h-full object-contain filter invert" />
+              </a>
             </nav>
             {/* Connect Button on Right */}
             <div className="flex gap-2 items-center">
