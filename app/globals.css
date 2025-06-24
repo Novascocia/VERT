@@ -322,7 +322,7 @@ body::before {
     align-items: center !important;
   }
 
-  /* Navigation buttons mobile layout - reorganize into rows */
+  /* Navigation buttons mobile layout - simple row organization */
   header nav {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -332,24 +332,27 @@ body::before {
     width: 100% !important;
   }
 
-  /* First row: Text buttons - force to top and center */
-  header nav a:nth-child(1),
-  header nav a:nth-child(2) {
-    flex-basis: auto !important;
+  /* First row: Text buttons - keep together */
+  header nav a:nth-child(1) {
     order: 1 !important;
   }
 
-  /* Force line break after second button */
   header nav a:nth-child(2) {
-    margin-right: 100% !important;
+    order: 2 !important;
   }
 
-  /* Second row: Icon buttons */
-  header nav a:nth-child(3),
+  /* Force break after text buttons */
+  header nav a:nth-child(3) {
+    order: 3 !important;
+    flex-basis: 100% !important;
+    text-align: center !important;
+    margin-top: 0.5rem !important;
+  }
+
+  /* Icon buttons on second row */
   header nav a:nth-child(4),
   header nav a:nth-child(5) {
-    flex-basis: auto !important;
-    order: 2 !important;
+    order: 4 !important;
   }
 
   /* Mobile navigation button sizing - normal font not Bangers */
@@ -407,15 +410,15 @@ body::before {
     transition: all 0.2s !important;
   }
 
-  /* ASCII art mobile scaling - fit within screen properly */
+  /* ASCII art mobile scaling - make it readable and properly sized */
   .ascii-container {
-    font-size: 0.22rem !important;
-    line-height: 0.26rem !important;
+    font-size: 0.3rem !important;
+    line-height: 0.35rem !important;
     overflow-x: auto !important;
     white-space: nowrap !important;
-    padding: 0.25rem !important;
+    padding: 0.5rem 0.25rem !important;
     text-align: center !important;
-    transform: scale(0.9) !important;
+    transform: scale(1) !important;
     transform-origin: center center !important;
     width: 100% !important;
     display: block !important;
@@ -424,9 +427,9 @@ body::before {
   }
 
   .ascii-container pre {
-    font-size: 0.22rem !important;
+    font-size: 0.3rem !important;
     margin: 0 !important;
-    letter-spacing: -0.05em !important;
+    letter-spacing: -0.02em !important;
     font-family: 'Courier New', monospace !important;
     white-space: pre !important;
     text-align: center !important;
