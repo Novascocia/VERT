@@ -507,15 +507,10 @@ body::before {
     line-height: 1 !important;
   }
 
-  /* Hide prize pool rotating messages on mobile */
+  /* Prize pool rotating messages - restore normal sizing */
   .text-green-400.text-base {
-    display: none !important;
-  }
-
-  /* Hide the specific yellow prize pool message on mobile */
-  .text-yellow-500\/90.text-sm,
-  .text-yellow-400.text-base {
-    display: none !important;
+    font-size: 0.55rem !important;
+    line-height: 1.1 !important;
   }
 
   /* Mint terminal messages */
@@ -526,10 +521,17 @@ body::before {
     word-wrap: break-word !important;
   }
 
-  /* Hide yellow prize pool status text on mobile */
+  /* Only hide the specific "Prize Pool LIVE with pVERT rewards!" message */
+  .text-yellow-500\/90.text-sm.font-medium.tracking-wide {
+    display: none !important;
+  }
+
+  /* Keep other yellow text but make it smaller */
   .text-yellow-500\/90,
   .text-yellow-400 {
-    display: none !important;
+    font-size: 0.5rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
   }
 
   /* Compact spacing for mobile terminals */
