@@ -314,11 +314,11 @@ body::before {
     padding: 1rem !important;
   }
 
-  /* Header mobile optimization */
+  /* Header mobile optimization - more compact */
   header {
     flex-direction: column !important;
-    gap: 0.75rem !important;
-    margin-bottom: 1.5rem !important;
+    gap: 0.5rem !important;
+    margin-bottom: 1rem !important;
     align-items: center !important;
   }
 
@@ -402,30 +402,31 @@ body::before {
     transition: all 0.2s !important;
   }
 
-  /* ASCII art mobile scaling - fix positioning and scaling */
+  /* ASCII art mobile scaling - fit within screen properly */
   .ascii-container {
-    font-size: 0.3rem !important;
-    line-height: 0.35rem !important;
+    font-size: 0.22rem !important;
+    line-height: 0.26rem !important;
     overflow-x: auto !important;
     white-space: nowrap !important;
     padding: 0.25rem !important;
     text-align: center !important;
-    transform: scale(0.6) !important;
-    transform-origin: center top !important;
+    transform: scale(0.9) !important;
+    transform-origin: center center !important;
     width: 100% !important;
-    display: flex !important;
-    justify-content: center !important;
-    margin: 0 auto !important;
+    display: block !important;
+    margin: 0.5rem auto !important;
+    max-width: 100vw !important;
   }
 
   .ascii-container pre {
-    font-size: 0.3rem !important;
+    font-size: 0.22rem !important;
     margin: 0 !important;
-    letter-spacing: -0.12em !important;
+    letter-spacing: -0.05em !important;
     font-family: 'Courier New', monospace !important;
     white-space: pre !important;
     text-align: center !important;
-    width: fit-content !important;
+    width: 100% !important;
+    display: block !important;
   }
 
   /* Each ASCII line should be on its own line and centered */
@@ -435,10 +436,11 @@ body::before {
     text-align: center !important;
   }
 
-  /* Ensure the hero section containing ASCII doesn't get cut off */
+  /* Give the hero section more room and prevent cutoff */
   section.text-center {
-    margin-bottom: 1.5rem !important;
-    padding: 0 0.5rem !important;
+    margin-bottom: 1rem !important;
+    padding: 0.5rem !important;
+    min-height: 100px !important;
   }
 
   /* Hero section mobile */
@@ -460,11 +462,12 @@ body::before {
     gap: 1rem !important;
   }
 
-  /* Terminal styling mobile */
+  /* Terminal styling mobile - smaller text to fit better */
   .bg-black.border-2.border-green-500 {
-    padding: 0.75rem !important;
-    font-size: 0.75rem !important;
+    padding: 0.5rem !important;
+    font-size: 0.65rem !important;
     margin-bottom: 0.75rem !important;
+    line-height: 1.2 !important;
   }
 
   /* Remove green terminal decorative lines on mobile - they look weird */
@@ -505,25 +508,15 @@ body::before {
     border-bottom: 1px solid rgba(34, 197, 94, 0.2) !important;
   }
 
-  /* Simply hide decorative box characters by making them invisible */
+  /* Keep terminal headers visible but make text smaller to fit */
   .text-green-400.text-sm.font-bold.tracking-wider {
-    font-size: 0.75rem !important;
+    font-size: 0.6rem !important;
     text-align: center !important;
-    /* Make box drawing characters invisible */
-    color: transparent !important;
-    position: relative !important;
-  }
-
-  /* Show clean titles instead */
-  .text-green-400.text-sm.font-bold.tracking-wider::before {
-    content: "TERMINAL" !important;
-    color: #4ade80 !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    font-size: 0.75rem !important;
+    padding: 0.25rem 0 !important;
     white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1 !important;
   }
 
   /* Hide animated border elements */
@@ -614,17 +607,17 @@ body::before {
     font-size: 0.75rem !important;
   }
 
-  /* Spacing utilities mobile */
+  /* Spacing utilities mobile - more compact */
   .mb-8 {
-    margin-bottom: 1rem !important;
-  }
-
-  .mb-6 {
     margin-bottom: 0.75rem !important;
   }
 
-  .mb-4 {
+  .mb-6 {
     margin-bottom: 0.5rem !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 0.25rem !important;
   }
 
   .mt-12 {
