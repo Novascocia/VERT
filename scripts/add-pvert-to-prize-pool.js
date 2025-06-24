@@ -1,14 +1,14 @@
 const hre = require("hardhat");
 
 async function main() {
-  console.log("💰 Adding 1,262,070 pVERT tokens to Prize Pool...\n");
+  console.log("💰 Adding 10,500,000 pVERT tokens to Prize Pool...\n");
 
   // Contract addresses - Base mainnet
   const NFT_CONTRACT_ADDRESS = "0x46aA53a47fB31E6A2FC80F405A94b3732BC05039"; // NFT contract with addToPrizePool function
   const PVERT_TOKEN_ADDRESS = "0x62C250355F0Ac01F4413b7d9c483428bEEf3E7dA"; // pVERT token contract
   
-  // Amount to add: 1,262,070 pVERT tokens (18 decimals)
-  const AMOUNT_TO_ADD = hre.ethers.parseUnits("1262070", 18);
+  // Amount to add: 10,500,000 pVERT tokens (18 decimals)
+  const AMOUNT_TO_ADD = hre.ethers.parseUnits("10500000", 18);
 
   console.log(`📊 Configuration:`);
   console.log(`NFT Contract: ${NFT_CONTRACT_ADDRESS}`);

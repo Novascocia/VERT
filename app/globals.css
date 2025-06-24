@@ -256,6 +256,41 @@ body::before {
   box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
 }
 
+/* RainbowKit Wallet Modal Styling - Remove black boxes */
+[data-rk] [data-testid="rk-wallet-option"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 1rem !important;
+  border-radius: 0.75rem !important;
+}
+
+[data-rk] [data-testid="rk-wallet-option"]:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Style wallet option content */
+[data-rk] [data-testid="rk-wallet-option"] > div {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove borders from wallet icons */
+[data-rk] [data-testid="rk-wallet-option"] img {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Clean up wallet option text */
+[data-rk] [data-testid="rk-wallet-option"] span {
+  color: inherit !important;
+}
+
 /* Subtle ASCII Art Effects */
 .ascii-container {
   position: relative;
@@ -669,6 +704,34 @@ body::before {
   /* Simple wallet modal styling for mobile */
   [data-rk] button {
     font-size: 0.875rem !important;
+  }
+
+  /* Remove black boxes around wallet icons in connect modal */
+  [data-rk] [data-testid="rk-wallet-option"] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 1rem !important;
+  }
+
+  [data-rk] [data-testid="rk-wallet-option"]:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Style wallet option content */
+  [data-rk] [data-testid="rk-wallet-option"] > div {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove borders from wallet icons */
+  [data-rk] [data-testid="rk-wallet-option"] img {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
   }
 
   /* Grid layouts mobile */

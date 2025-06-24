@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
+import { Analytics } from '@vercel/analytics/next'
 
 
 const inter = Inter({ 
@@ -30,6 +31,7 @@ export default function RootLayout({
             </main>
           </div>
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
