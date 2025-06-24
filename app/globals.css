@@ -653,30 +653,9 @@ body::before {
     word-break: break-all !important;
   }
 
-  /* Prize pool terminal specific styling */
-  .bg-black.border-2.border-green-500 {
-    min-height: 200px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-  }
-
-  /* Prize pool content centering */
-  .bg-black.border-2.border-green-500 .space-y-6 {
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: center !important;
-    align-items: center !important;
-    flex-grow: 1 !important;
-    margin: 0 !important;
-    padding: 1rem 0 !important;
-  }
-
-  /* Make "pVERT IN THE POOL:" text larger and more prominent */
-  .bg-black.border-2.border-green-500 .text-green-400 {
-    font-size: 0.85rem !important;
-    font-weight: bold !important;
-    margin-bottom: 1rem !important;
+  /* Only target the prize pool content text - not headers */
+  .text-center .text-green-400.text-base {
+    font-size: 0.8rem !important;
   }
 
   /* Grid layouts mobile */
