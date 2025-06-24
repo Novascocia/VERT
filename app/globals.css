@@ -658,6 +658,17 @@ body::before {
     font-size: 0.8rem !important;
   }
 
+  /* Center prize pool content by targeting the content wrapper */
+  .space-y-6 .text-center {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 120px !important;
+    margin: 0 !important;
+    padding: 0.5rem 0 !important;
+  }
+
   /* Grid layouts mobile */
   .grid.grid-cols-4 {
     grid-template-columns: 1fr 2fr 1fr 1fr !important;
