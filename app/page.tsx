@@ -722,6 +722,8 @@ export default function Home() {
               name: 'PrizeClaimed',
               inputs: [
                 { type: 'address', name: 'user', indexed: true },
+                { type: 'uint256', name: 'tokenId', indexed: true },
+                { type: 'uint8', name: 'rarity', indexed: false },
                 { type: 'uint256', name: 'amount', indexed: false }
               ]
             },
@@ -747,7 +749,7 @@ export default function Home() {
               if (decoded.eventName === 'PrizeClaimed' && decoded.args) {
                 const args = decoded.args as any;
                 totalPaid += args.amount;
-                debugLog.log(`💰 Prize claim: ${formatEther(args.amount)} VERT to ${args.user}`);
+                debugLog.log(`💰 Prize claim: ${formatEther(args.amount)} VERT to ${args.user} for token ${args.tokenId} (${args.rarity})`);
               }
             } catch (e) {
               debugLog.warn('⚠️ Could not decode prize event:', e);
