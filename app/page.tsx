@@ -676,104 +676,36 @@ export default function Home() {
     }
   }, [mounted, publicClient, address]);
 
-  // Fetch total VERT paid out from prize claims
+  // Calculate total pVERT paid out using simple math (much more efficient than event scanning)
   const fetchTotalPaidOut = async () => {
     try {
       if (!publicClient) return;
       
-      debugLog.log('🔍 Fetching total VERT paid out from prize claims...');
+      debugLog.log('🔍 Calculating total pVERT paid out...');
       
-      // Get current block number
-      let currentBlock: bigint;
-      try {
-        currentBlock = await publicClient.getBlockNumber();
-        debugLog.log(`📊 Current block: ${currentBlock.toString()}`);
-      } catch (e) {
-        debugLog.warn('Could not get current block, setting total paid out to 0');
-        setTotalPaidOut('0');
-        return;
-      }
+      // Get current prize pool balance
+      const currentPrizePool = await publicClient.readContract({
+        address: contractAddress as `0x${string}`,
+        abi: VERTICAL_ABI,
+        functionName: 'getPrizePoolBalance',
+      }) as bigint;
       
-      // Alchemy allows max 500 blocks per query, so we'll use 400 to be safe
-      const BLOCK_RANGE = 400;
-      const MAX_QUERIES = 30; // Increased to capture more history (~12k blocks)
+      // Total pVERT injected into the system
+      const TOTAL_INJECTED = 10_500_000; // 10.5M pVERT injected
       
-      let totalPaid = BigInt(0);
-      let totalEvents = 0;
+      // Calculate total paid out: Injected - Current Pool = Paid Out
+      const currentPoolEther = parseFloat(formatEther(currentPrizePool));
+      const totalPaidOut = TOTAL_INJECTED - currentPoolEther;
       
-      // Start from recent blocks and work backwards
-      let toBlock = currentBlock;
-      let queriesRun = 0;
+      debugLog.log(`💰 Prize pool calculation:`);
+      debugLog.log(`   Total injected: ${TOTAL_INJECTED.toLocaleString()} pVERT`);
+      debugLog.log(`   Current pool: ${currentPoolEther.toLocaleString()} pVERT`);
+      debugLog.log(`   Total paid out: ${totalPaidOut.toLocaleString()} pVERT`);
       
-      debugLog.log(`📊 Scanning recent blocks for prize events...`);
-      
-      while (queriesRun < MAX_QUERIES) {
-        const fromBlock = toBlock - BigInt(BLOCK_RANGE) + BigInt(1);
-        
-        if (fromBlock < BigInt(0)) {
-          break;
-        }
-        
-        try {
-          const prizeClaimedEvents = await publicClient.getLogs({
-            address: contractAddress as `0x${string}`,
-            event: {
-              type: 'event',
-              name: 'PrizeClaimed',
-              inputs: [
-                { type: 'address', name: 'user', indexed: true },
-                { type: 'uint256', name: 'tokenId', indexed: true },
-                { type: 'uint8', name: 'rarity', indexed: false },
-                { type: 'uint256', name: 'amount', indexed: false }
-              ]
-            },
-            fromBlock: fromBlock,
-            toBlock: toBlock
-          });
-          
-          // Only log if events found  
-          if (prizeClaimedEvents.length > 0) {
-            debugLog.log(`💰 Found ${prizeClaimedEvents.length} prize events in blocks ${fromBlock.toString()}-${toBlock.toString()}`);
-          }
-          totalEvents += prizeClaimedEvents.length;
-          
-          // Sum all prize amounts from this chunk
-          for (const event of prizeClaimedEvents) {
-            try {
-              const decoded = decodeEventLog({
-                abi: VERTICAL_ABI,
-                data: event.data,
-                topics: event.topics,
-              });
-              
-              if (decoded.eventName === 'PrizeClaimed' && decoded.args) {
-                const args = decoded.args as any;
-                totalPaid += args.amount;
-                debugLog.log(`💰 Prize claim: ${formatEther(args.amount)} VERT to ${args.user} for token ${args.tokenId} (${args.rarity})`);
-              }
-            } catch (e) {
-              debugLog.warn('⚠️ Could not decode prize event:', e);
-            }
-          }
-          
-        } catch (queryError: any) {
-          // Don't log the full error which contains the API key in the URL
-          const sanitizedMessage = queryError.message?.replace(/\/v2\/[^\/\s]+/g, '/v2/[HIDDEN]') || 'Unknown error';
-          debugLog.warn(`⚠️ Query failed for blocks ${fromBlock.toString()}-${toBlock.toString()}:`, sanitizedMessage);
-          // Continue with next range instead of failing completely
-        }
-        
-        // Move to next range
-        toBlock = fromBlock - BigInt(1);
-        queriesRun++;
-      }
-      
-      const totalPaidFormatted = formatEther(totalPaid);
-      debugLog.log(`✅ Total VERT paid out: ${totalPaidFormatted} VERT (from ${totalEvents} events across ${queriesRun} queries)`);
-      setTotalPaidOut(totalPaidFormatted);
+      setTotalPaidOut(totalPaidOut.toString());
       
     } catch (error) {
-      debugLog.error('❌ Error fetching total paid out:', error);
+      debugLog.error('❌ Error calculating total paid out:', error);
       // Fallback: set to 0 instead of crashing
       setTotalPaidOut('0');
     }
