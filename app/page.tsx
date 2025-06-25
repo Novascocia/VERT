@@ -696,7 +696,7 @@ export default function Home() {
       
       // Alchemy allows max 500 blocks per query, so we'll use 400 to be safe
       const BLOCK_RANGE = 400;
-      const MAX_QUERIES = 10; // Limit to prevent excessive API calls
+      const MAX_QUERIES = 30; // Increased to capture more history (~12k blocks)
       
       let totalPaid = BigInt(0);
       let totalEvents = 0;
