@@ -288,14 +288,11 @@ export default function Home() {
   // Emergency fallback to force mounting if component gets stuck
   useEffect(() => {
     const emergencyTimeout = setTimeout(() => {
-      if (!mounted) {
-        debugLog.error('🚨 EMERGENCY: Component stuck in loading! Force mounting...');
-        setMounted(true);
-      }
+      setMounted(true);
     }, 5000); // 5 second emergency timeout
     
     return () => clearTimeout(emergencyTimeout);
-  }, [mounted]);
+  }, []); // Empty dependency array to run only once
   
   // Enhanced network detection with multiple checks
   const isOnBaseMainnet = chainId === 8453 && chain?.id === 8453;
@@ -323,9 +320,8 @@ export default function Home() {
 
   // Log mounted state changes for debugging
   useEffect(() => {
-    debugLog.log('✅ Component mounted state changed:', mounted);
     if (mounted) {
-      debugLog.log('🎯 UI should now render!');
+      debugLog.log('✅ Component mounted successfully');
     }
   }, [mounted]);
 
@@ -415,33 +411,21 @@ export default function Home() {
     }
   }, [mounted, publicClient]);
 
-  // Clear any stale WalletConnect sessions on mount
+  // Mount component with simple, reliable logic
   useEffect(() => {
-    debugLog.log('🚀 Component mounting...');
-    
-    // Simple, robust mounting with error handling
+    // Simple mounting with single timeout
     const mountTimeout = setTimeout(() => {
-      debugLog.log('✅ Setting mounted to true');
       setMounted(true);
     }, 100); // Small delay to avoid hydration race conditions
-    
-    // Fallback timeout to ensure UI renders even if something goes wrong
-    const fallbackTimeout = setTimeout(() => {
-      debugLog.log('🚨 Fallback: Force setting mounted to true');
-      setMounted(true);
-    }, 3000); // 3 second fallback
     
     // Try to prevent wallet auto-popup but don't let it block mounting
     try {
       preventWalletAutoPopup();
     } catch (error) {
-      debugLog.warn('⚠️ preventWalletAutoPopup failed:', error);
+      // Ignore errors silently
     }
     
-    return () => {
-      clearTimeout(mountTimeout);
-      clearTimeout(fallbackTimeout);
-    };
+    return () => clearTimeout(mountTimeout);
   }, []);
 
   // Check RPC network health
@@ -473,17 +457,11 @@ export default function Home() {
   // Check network health periodically
   useEffect(() => {
     if (mounted && publicClient) {
-      // Make network health check non-blocking
-      checkNetworkHealth().catch(err => {
-        debugLog.warn('Initial network health check failed:', err);
-        setNetworkStatus('degraded');
-      });
+      checkNetworkHealth().catch(() => setNetworkStatus('degraded'));
       
       const interval = setInterval(() => {
-        checkNetworkHealth().catch(err => {
-          debugLog.warn('Periodic network health check failed:', err);
-        });
-      }, 30000); // Check every 30 seconds
+        checkNetworkHealth().catch(() => {});
+      }, 60000); // Check every 60 seconds (less frequent)
       return () => clearInterval(interval);
     }
   }, [mounted, publicClient]);
@@ -631,29 +609,20 @@ export default function Home() {
   // Initial data loading
   useEffect(() => {
     if (mounted && publicClient) {
-      debugLog.log('🔄 Initial data loading started...');
       setIsLoadingStats(true);
       
-      // Add overall timeout for all stats loading
+      // Simplified loading with timeout
       const loadingTimeout = setTimeout(() => {
-        debugLog.warn('⚠️ Stats loading timeout - proceeding anyway');
         setIsLoadingStats(false);
-      }, 15000); // 15 second max timeout
+      }, 10000); // 10 second max timeout
       
       Promise.all([
-        checkNetworkHealth().catch(err => debugLog.warn('Failed network health check:', err)),
-        fetchContractData().catch(err => debugLog.warn('Failed to fetch contract data:', err)),
-        fetchPrizePool().catch(err => debugLog.warn('Failed to fetch prize pool:', err)),
-        fetchTotalMinted().catch(err => debugLog.warn('Failed to fetch total minted:', err)),
-        fetchMintPrices().catch(err => debugLog.warn('Failed to fetch mint prices:', err)),
-        fetchTotalPaidOut().catch(err => debugLog.warn('Failed to fetch total paid out:', err))
-      ]).then(() => {
+        fetchPrizePool().catch(() => {}),
+        fetchTotalMinted().catch(() => {}),
+        fetchMintPrices().catch(() => {}),
+        fetchTotalPaidOut().catch(() => {})
+      ]).finally(() => {
         clearTimeout(loadingTimeout);
-        setIsLoadingStats(false);
-        debugLog.log('✅ All stats loaded successfully');
-      }).catch(err => {
-        clearTimeout(loadingTimeout);
-        debugLog.error('❌ Error during initial data loading:', err);
         setIsLoadingStats(false);
       });
     }
@@ -1775,23 +1744,15 @@ export default function Home() {
 
   // Don't render anything until mounted to prevent hydration issues
   if (!mounted) {
-    // Add timestamp to help debug if this is the issue
-    const loadingTime = Date.now();
-    debugLog.log('⏳ Still in initial loading state at:', new Date(loadingTime).toISOString());
-    
     return (
       <div className="min-h-screen p-4 md:p-8 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p>Loading... (mounting: {mounted ? 'true' : 'false'})</p>
-          <p className="text-sm text-gray-500 mt-2">If stuck, check console for errors</p>
+          <p>Loading...</p>
         </div>
       </div>
     );
   }
-
-  // Add debug info when mounted
-  debugLog.log('🎯 Component successfully mounted, rendering main UI');
 
   return (
     <>
