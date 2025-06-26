@@ -612,7 +612,7 @@ export default function Home() {
     }
   }, [mounted, publicClient, address]);
 
-  // Calculate total pVERT paid out using simple math (much more efficient than event scanning)
+    // Calculate total pVERT paid out using simple math (much more efficient than event scanning)
   const fetchTotalPaidOut = async () => {
     try {
       if (!publicClient) {
@@ -623,22 +623,17 @@ export default function Home() {
       
       debugLog.log('🔍 Calculating total pVERT paid out...');
       
-      // Add timeout to prevent hanging
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Timeout')), 10000); // 10 second timeout
-      });
-      
-      const contractPromise = publicClient.readContract({
+      // Get current prize pool balance
+      const currentPrizePool = await publicClient.readContract({
         address: contractAddress as `0x${string}`,
         abi: VERTICAL_ABI,
         functionName: 'getPrizePoolBalance',
-      });
+      }) as bigint;
       
-      // Race between contract call and timeout
-      const currentPrizePool = await Promise.race([contractPromise, timeoutPromise]) as bigint;
-      
-      // Total pVERT injected into the system
-      const TOTAL_INJECTED = 10_500_000; // 10.5M pVERT injected
+      // Total pVERT injected: Two rounds of 10.5M each = 21M total
+      // First round: 10.5M (users won ~10M, ~397K remained)
+      // Second round: 10.5M (just injected)
+      const TOTAL_INJECTED = 21_000_000; // 21M pVERT total injected across both rounds
       
       // Calculate total paid out: Injected - Current Pool = Paid Out
       const currentPoolEther = parseFloat(formatEther(currentPrizePool));
