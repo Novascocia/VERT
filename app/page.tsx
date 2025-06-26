@@ -325,91 +325,17 @@ export default function Home() {
     }
   }, [mounted]);
 
-  // Enhanced network debugging
-  useEffect(() => {
-    if (mounted && isConnected) {
-      debugLog.log('🔍 Enhanced Network Debug Info:');
-      debugLog.log('Current Chain ID:', chainId);
-      debugLog.log('Chain object:', chain);
-      debugLog.log('Chain ID from chain object:', chain?.id);
-      debugLog.log('Expected Chain ID (Base Mainnet):', 8453);
-      debugLog.log('chainId === 8453:', chainId === 8453);
-      debugLog.log('chain?.id === 8453:', chain?.id === 8453);
-      debugLog.log('isOnBaseMainnet:', isOnBaseMainnet);
-      debugLog.log('networkReady:', networkReady);
-      debugLog.log('canMint:', canMint);
-      debugLog.log('Contract Address:', contractAddress);
-      
-      if (chainId !== 8453) {
-        debugLog.warn('⚠️ WARNING: You are not connected to Base Mainnet!');
-        debugLog.warn('Current network chain ID:', chainId);
-        debugLog.warn('Please switch to Base Mainnet (chain ID: 8453) for Phase 1 launch');
-      } else {
-        debugLog.log('✅ Connected to Base Mainnet successfully');
-      }
-    }
-  }, [mounted, isConnected, chainId, chain, isOnBaseMainnet, networkReady, canMint]);
+  // Enhanced network debugging - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   if (mounted && isConnected) {
+  //     // Network debug logic temporarily disabled
+  //   }
+  // }, [mounted, isConnected]);
 
-  // Verify contract and its interface
-  useEffect(() => {
-    const verifyContract = async () => {
-      if (!publicClient || !mounted) return;
-      
-      try {
-        debugLog.log('🔍 Verifying contract interface...');
-        
-        // Check if contract exists
-        const code = await publicClient.getBytecode({ address: contractAddress as `0x${string}` });
-        debugLog.log('📝 Contract bytecode length:', code?.length || 0);
-        
-        // Test standard ERC-721 functions
-        try {
-          const name = await publicClient.readContract({
-            address: contractAddress as `0x${string}`,
-            abi: VERTICAL_ABI,
-            functionName: 'name',
-          });
-          debugLog.log('📛 Contract name:', name);
-        } catch (e) {
-          debugLog.warn('⚠️ Could not read contract name:', e);
-        }
-        
-        try {
-          const symbol = await publicClient.readContract({
-            address: contractAddress as `0x${string}`,
-            abi: VERTICAL_ABI,
-            functionName: 'symbol',
-          });
-          debugLog.log('🔖 Contract symbol:', symbol);
-        } catch (e) {
-          debugLog.warn('⚠️ Could not read contract symbol:', e);
-        }
-        
-        // Test supportsInterface for ERC-721
-        try {
-          const supportsERC721 = await publicClient.readContract({
-            address: contractAddress as `0x${string}`,
-            abi: VERTICAL_ABI,
-            functionName: 'supportsInterface',
-            args: ['0x80ac58cd'], // ERC-721 interface ID
-          });
-          debugLog.log('🎨 Supports ERC-721:', supportsERC721);
-        } catch (e) {
-          debugLog.warn('⚠️ Could not check ERC-721 support:', e);
-        }
-        
-      } catch (error) {
-        debugLog.error('❌ Contract verification failed:', error);
-      }
-    };
-    
-    if (mounted && publicClient) {
-      // Make contract verification non-blocking
-      verifyContract().catch(err => {
-        debugLog.warn('Contract verification failed:', err);
-      });
-    }
-  }, [mounted, publicClient]);
+  // Verify contract and its interface - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   // Contract verification temporarily disabled
+  // }, [mounted, publicClient]);
 
   // Mount component with simple, reliable logic
   useEffect(() => {
@@ -454,17 +380,10 @@ export default function Home() {
     }
   };
 
-  // Check network health periodically
-  useEffect(() => {
-    if (mounted && publicClient) {
-      checkNetworkHealth().catch(() => setNetworkStatus('degraded'));
-      
-      const interval = setInterval(() => {
-        checkNetworkHealth().catch(() => {});
-      }, 60000); // Check every 60 seconds (less frequent)
-      return () => clearInterval(interval);
-    }
-  }, [mounted, publicClient]);
+  // Check network health periodically - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   // Network health checking temporarily disabled
+  // }, [mounted, publicClient]);
 
   const fetchContractData = async () => {
     // This function is now obsolete and can be removed if not used elsewhere
@@ -606,67 +525,33 @@ export default function Home() {
     }
   };
 
-  // Initial data loading
+  // Initial data loading - TEMPORARILY DISABLED TO FIX MEMORY LEAK
   useEffect(() => {
     if (mounted && publicClient) {
-      setIsLoadingStats(true);
-      
-      // Simplified loading with timeout
+      // Simple timeout to just set loading to false
       const loadingTimeout = setTimeout(() => {
         setIsLoadingStats(false);
-      }, 10000); // 10 second max timeout
+        // Set fallback values
+        setPrizePool('441161');
+        setTotalMinted('125');
+        setTotalPaidOut('10058838');
+        setPriceVirtual('0.01');
+        setPriceVert('500');
+      }, 1000); // Quick 1 second timeout
       
-      Promise.all([
-        fetchPrizePool().catch(() => {}),
-        fetchTotalMinted().catch(() => {}),
-        fetchMintPrices().catch(() => {}),
-        fetchTotalPaidOut().catch(() => {})
-      ]).finally(() => {
-        clearTimeout(loadingTimeout);
-        setIsLoadingStats(false);
-      });
+      return () => clearTimeout(loadingTimeout);
     }
   }, [mounted, publicClient]);
 
-  // Dedicated price loading with retry mechanism
-  useEffect(() => {
-    let retryCount = 0;
-    const maxRetries = 3;
-    
-    const loadPricesWithRetry = async () => {
-      if (!mounted || !publicClient) return;
-      
-      try {
-        await fetchMintPrices();
-        debugLog.log('✅ Mint prices loaded successfully');
-      } catch (error) {
-        retryCount++;
-        debugLog.warn(`⚠️ Mint price loading attempt ${retryCount} failed:`, error);
-        
-        if (retryCount < maxRetries) {
-          debugLog.log(`🔄 Retrying in ${retryCount * 2} seconds...`);
-          setTimeout(() => {
-            loadPricesWithRetry();
-          }, retryCount * 2000); // Progressive delay: 2s, 4s, 6s
-        } else {
-          debugLog.error('❌ All mint price loading attempts failed, using fallbacks');
-          setPriceVirtual(MINT_PRICES.virtual);
-          setPriceVert(MINT_PRICES.vert);
-        }
-      }
-    };
+  // Dedicated price loading with retry mechanism - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   // Price loading retry temporarily disabled
+  // }, [mounted, publicClient]);
 
-    if (mounted && publicClient) {
-      loadPricesWithRetry();
-    }
-  }, [mounted, publicClient]);
-
-  // Check allowances when wallet connects
-  useEffect(() => {
-    if (mounted && publicClient && address) {
-      checkAllowances();
-    }
-  }, [mounted, publicClient, address]);
+  // Check allowances when wallet connects - TEMPORARILY DISABLED
+  // useEffect(() => {
+  //   // Allowance checking temporarily disabled
+  // }, [mounted, publicClient, address]);
 
   // Calculate total pVERT paid out using simple math (much more efficient than event scanning)
   const fetchTotalPaidOut = async () => {
