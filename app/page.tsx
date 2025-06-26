@@ -285,6 +285,18 @@ export default function Home() {
   const chainId = useChainId();
   const [mounted, setMounted] = useState(false);
   
+  // Emergency fallback to force mounting if component gets stuck
+  useEffect(() => {
+    const emergencyTimeout = setTimeout(() => {
+      if (!mounted) {
+        debugLog.error('🚨 EMERGENCY: Component stuck in loading! Force mounting...');
+        setMounted(true);
+      }
+    }, 5000); // 5 second emergency timeout
+    
+    return () => clearTimeout(emergencyTimeout);
+  }, [mounted]);
+  
   // Enhanced network detection with multiple checks
   const isOnBaseMainnet = chainId === 8453 && chain?.id === 8453;
   const networkReady = mounted && isConnected && chainId === 8453 && chain && chain.id === 8453;
@@ -407,21 +419,24 @@ export default function Home() {
   useEffect(() => {
     debugLog.log('🚀 Component mounting...');
     
-    // Prevent WalletConnect auto-popup immediately
-    preventWalletAutoPopup();
-    
-    // Delay mounting to prevent hydration setState issues
+    // Simple, robust mounting with error handling
     const mountTimeout = setTimeout(() => {
+      debugLog.log('✅ Setting mounted to true');
       setMounted(true);
     }, 100); // Small delay to avoid hydration race conditions
     
-    // Fallback timeout to ensure UI renders in development
+    // Fallback timeout to ensure UI renders even if something goes wrong
     const fallbackTimeout = setTimeout(() => {
-      if (!mounted) {
-        debugLog.log('🚨 Fallback: Setting mounted to true after timeout');
-        setMounted(true);
-      }
-    }, 2000); // 2 second fallback
+      debugLog.log('🚨 Fallback: Force setting mounted to true');
+      setMounted(true);
+    }, 3000); // 3 second fallback
+    
+    // Try to prevent wallet auto-popup but don't let it block mounting
+    try {
+      preventWalletAutoPopup();
+    } catch (error) {
+      debugLog.warn('⚠️ preventWalletAutoPopup failed:', error);
+    }
     
     return () => {
       clearTimeout(mountTimeout);
@@ -1760,15 +1775,23 @@ export default function Home() {
 
   // Don't render anything until mounted to prevent hydration issues
   if (!mounted) {
+    // Add timestamp to help debug if this is the issue
+    const loadingTime = Date.now();
+    debugLog.log('⏳ Still in initial loading state at:', new Date(loadingTime).toISOString());
+    
     return (
       <div className="min-h-screen p-4 md:p-8 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p>Loading...</p>
+          <p>Loading... (mounting: {mounted ? 'true' : 'false'})</p>
+          <p className="text-sm text-gray-500 mt-2">If stuck, check console for errors</p>
         </div>
       </div>
     );
   }
+
+  // Add debug info when mounted
+  debugLog.log('🎯 Component successfully mounted, rendering main UI');
 
   return (
     <>
