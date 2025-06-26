@@ -325,17 +325,46 @@ export default function Home() {
     }
   }, [mounted]);
 
-  // Enhanced network debugging - TEMPORARILY DISABLED
-  // useEffect(() => {
-  //   if (mounted && isConnected) {
-  //     // Network debug logic temporarily disabled
-  //   }
-  // }, [mounted, isConnected]);
+  // Enhanced network debugging
+  useEffect(() => {
+    if (mounted && isConnected) {
+      debugLog.log('🔍 Network Info:');
+      debugLog.log('Chain ID:', chainId);
+      debugLog.log('Expected Chain ID (Base Mainnet):', 8453);
+      debugLog.log('isOnBaseMainnet:', isOnBaseMainnet);
+      debugLog.log('networkReady:', networkReady);
+      
+      if (chainId !== 8453) {
+        debugLog.warn('⚠️ WARNING: Not connected to Base Mainnet!');
+        debugLog.warn('Current network chain ID:', chainId);
+      } else {
+        debugLog.log('✅ Connected to Base Mainnet successfully');
+      }
+    }
+  }, [mounted, isConnected, chainId]);
 
-  // Verify contract and its interface - TEMPORARILY DISABLED
-  // useEffect(() => {
-  //   // Contract verification temporarily disabled
-  // }, [mounted, publicClient]);
+  // Verify contract and its interface
+  useEffect(() => {
+    const verifyContract = async () => {
+      if (!publicClient || !mounted) return;
+      
+      try {
+        // Simple contract verification
+        const name = await publicClient.readContract({
+          address: contractAddress as `0x${string}`,
+          abi: VERTICAL_ABI,
+          functionName: 'name',
+        });
+        debugLog.log('📛 Contract verified:', name);
+      } catch (error) {
+        debugLog.warn('⚠️ Contract verification failed:', error);
+      }
+    };
+    
+    if (mounted && publicClient) {
+      verifyContract();
+    }
+  }, [mounted, publicClient]);
 
   // Mount component with simple, reliable logic
   useEffect(() => {
@@ -380,10 +409,17 @@ export default function Home() {
     }
   };
 
-  // Check network health periodically - TEMPORARILY DISABLED
-  // useEffect(() => {
-  //   // Network health checking temporarily disabled
-  // }, [mounted, publicClient]);
+  // Check network health periodically
+  useEffect(() => {
+    if (mounted && publicClient) {
+      checkNetworkHealth().catch(() => setNetworkStatus('degraded'));
+      
+      const interval = setInterval(() => {
+        checkNetworkHealth().catch(() => {});
+      }, 120000); // Check every 2 minutes (less frequent)
+      return () => clearInterval(interval);
+    }
+  }, [mounted, publicClient]);
 
   const fetchContractData = async () => {
     // This function is now obsolete and can be removed if not used elsewhere
@@ -525,33 +561,56 @@ export default function Home() {
     }
   };
 
-  // Initial data loading - TEMPORARILY DISABLED TO FIX MEMORY LEAK
+  // Initial data loading
   useEffect(() => {
     if (mounted && publicClient) {
-      // Simple timeout to just set loading to false
+      setIsLoadingStats(true);
+      
+      // Load stats with timeout
       const loadingTimeout = setTimeout(() => {
         setIsLoadingStats(false);
-        // Set fallback values
-        setPrizePool('441161');
-        setTotalMinted('125');
-        setTotalPaidOut('10058838');
-        setPriceVirtual('0.01');
-        setPriceVert('500');
-      }, 1000); // Quick 1 second timeout
+      }, 10000); // 10 second max timeout
       
-      return () => clearTimeout(loadingTimeout);
+      Promise.all([
+        fetchPrizePool().catch(() => {}),
+        fetchTotalMinted().catch(() => {}),
+        fetchMintPrices().catch(() => {}),
+        fetchTotalPaidOut().catch(() => {})
+      ]).finally(() => {
+        clearTimeout(loadingTimeout);
+        setIsLoadingStats(false);
+      });
     }
   }, [mounted, publicClient]);
 
-  // Dedicated price loading with retry mechanism - TEMPORARILY DISABLED
-  // useEffect(() => {
-  //   // Price loading retry temporarily disabled
-  // }, [mounted, publicClient]);
+  // Dedicated price loading with retry mechanism
+  useEffect(() => {
+    const loadPrices = async () => {
+      if (!mounted || !publicClient) return;
+      
+      try {
+        await fetchMintPrices();
+        debugLog.log('✅ Mint prices loaded successfully');
+      } catch (error) {
+        debugLog.warn('⚠️ Mint price loading failed, using fallbacks');
+        setPriceVirtual(MINT_PRICES.virtual);
+        setPriceVert(MINT_PRICES.vert);
+      }
+    };
 
-  // Check allowances when wallet connects - TEMPORARILY DISABLED
-  // useEffect(() => {
-  //   // Allowance checking temporarily disabled
-  // }, [mounted, publicClient, address]);
+    if (mounted && publicClient) {
+      loadPrices();
+    }
+  }, [mounted, publicClient]);
+
+  // Check allowances when wallet connects
+  useEffect(() => {
+    if (mounted && publicClient && address) {
+      checkAllowances().catch(() => {
+        // Ignore errors silently
+      });
+    }
+  }, [mounted, publicClient, address]);
 
   // Calculate total pVERT paid out using simple math (much more efficient than event scanning)
   const fetchTotalPaidOut = async () => {
