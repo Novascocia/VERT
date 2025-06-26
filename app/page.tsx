@@ -619,17 +619,25 @@ export default function Home() {
       debugLog.log('🔄 Initial data loading started...');
       setIsLoadingStats(true);
       
+      // Add overall timeout for all stats loading
+      const loadingTimeout = setTimeout(() => {
+        debugLog.warn('⚠️ Stats loading timeout - proceeding anyway');
+        setIsLoadingStats(false);
+      }, 15000); // 15 second max timeout
+      
       Promise.all([
-        checkNetworkHealth(),
+        checkNetworkHealth().catch(err => debugLog.warn('Failed network health check:', err)),
         fetchContractData().catch(err => debugLog.warn('Failed to fetch contract data:', err)),
         fetchPrizePool().catch(err => debugLog.warn('Failed to fetch prize pool:', err)),
         fetchTotalMinted().catch(err => debugLog.warn('Failed to fetch total minted:', err)),
         fetchMintPrices().catch(err => debugLog.warn('Failed to fetch mint prices:', err)),
         fetchTotalPaidOut().catch(err => debugLog.warn('Failed to fetch total paid out:', err))
       ]).then(() => {
+        clearTimeout(loadingTimeout);
         setIsLoadingStats(false);
         debugLog.log('✅ All stats loaded successfully');
       }).catch(err => {
+        clearTimeout(loadingTimeout);
         debugLog.error('❌ Error during initial data loading:', err);
         setIsLoadingStats(false);
       });
@@ -679,23 +687,34 @@ export default function Home() {
   // Calculate total pVERT paid out using simple math (much more efficient than event scanning)
   const fetchTotalPaidOut = async () => {
     try {
-      if (!publicClient) return;
+      if (!publicClient) {
+        debugLog.warn('⚠️ No publicClient available for fetchTotalPaidOut');
+        setTotalPaidOut('0');
+        return;
+      }
       
       debugLog.log('🔍 Calculating total pVERT paid out...');
       
-      // Get current prize pool balance
-      const currentPrizePool = await publicClient.readContract({
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Timeout')), 10000); // 10 second timeout
+      });
+      
+      const contractPromise = publicClient.readContract({
         address: contractAddress as `0x${string}`,
         abi: VERTICAL_ABI,
         functionName: 'getPrizePoolBalance',
-      }) as bigint;
+      });
+      
+      // Race between contract call and timeout
+      const currentPrizePool = await Promise.race([contractPromise, timeoutPromise]) as bigint;
       
       // Total pVERT injected into the system
       const TOTAL_INJECTED = 10_500_000; // 10.5M pVERT injected
       
       // Calculate total paid out: Injected - Current Pool = Paid Out
       const currentPoolEther = parseFloat(formatEther(currentPrizePool));
-      const totalPaidOut = TOTAL_INJECTED - currentPoolEther;
+      const totalPaidOut = Math.max(0, TOTAL_INJECTED - currentPoolEther); // Ensure non-negative
       
       debugLog.log(`💰 Prize pool calculation:`);
       debugLog.log(`   Total injected: ${TOTAL_INJECTED.toLocaleString()} pVERT`);
@@ -708,6 +727,7 @@ export default function Home() {
       debugLog.error('❌ Error calculating total paid out:', error);
       // Fallback: set to 0 instead of crashing
       setTotalPaidOut('0');
+      // Don't throw - let other stats load
     }
   };
 
